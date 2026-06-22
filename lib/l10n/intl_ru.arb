@@ -1,0 +1,12 @@
+{
+  "@@locale": "ru",
+
+  "appTitle": "Бюджетно!",
+  "@appTitle": {
+    "description": "Название приложения на главном экране"
+  },
+  "languageIntroduction": "Это приложение на русском языке",
+  "@languageIntroduction": {
+    "description": "Описание языка интерфейса приложения"
+  }
+}
