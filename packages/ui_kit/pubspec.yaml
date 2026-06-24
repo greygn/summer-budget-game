@@ -1,0 +1,16 @@
+name: ui_kit
+description: "UI Kit for our budget game"
+publish_to: 'none'
+
+version: 1.0.0
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+flutter:
+  generate: true
+  uses-material-design: true
