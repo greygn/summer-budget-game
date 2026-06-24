@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: alpine-latest
 
     steps:
       - name: Checkout
@@ -31,7 +31,7 @@ jobs:
         run: flutter pub get
 
       - name: Build Web
-        run: flutter build web --release
+        run: flutter build web --release --base-href "/summer-budget-game/"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -43,7 +43,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
 
-    runs-on: ubuntu-latest
+    runs-on: alpine-latest
     needs: build
 
     steps:
