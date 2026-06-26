@@ -26,5 +26,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "languageIntroduction": MessageLookupByLibrary.simpleMessage(
       "This app is in English",
     ),
+    "welcome_text": MessageLookupByLibrary.simpleMessage("Welcome!"),
   };
 }
