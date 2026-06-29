@@ -8,5 +8,6 @@
   "languageIntroduction": "Это приложение на русском языке",
   "@languageIntroduction": {
     "description": "Описание языка интерфейса приложения"
-  }
+  },
+  "welcome_text": "Добро пожаловать!"
 }

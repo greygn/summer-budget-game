@@ -13,4 +13,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get languageIntroduction => 'This app is in English';
+
+  @override
+  String get welcome_text => 'Welcome!';
 }
