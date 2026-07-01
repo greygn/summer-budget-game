@@ -4,11 +4,17 @@ import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
 class UITimeBadge extends StatelessWidget {
   final int time;
   final bool isLarge;
+  final double? fontSize;
+  final double? iconSize;
+  final EdgeInsetsGeometry? padding;
 
   const UITimeBadge({
     super.key,
     required this.time,
     this.isLarge = false,
+    this.fontSize,
+    this.iconSize,
+    this.padding,
   });
 
   @override
@@ -19,7 +25,7 @@ class UITimeBadge extends StatelessWidget {
 
     if (isLarge) {
       return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        padding: padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
           color: isLow ? colorScheme.errorContainer : colorScheme.secondaryContainer,
           borderRadius: BorderRadius.circular(20),
@@ -29,7 +35,7 @@ class UITimeBadge extends StatelessWidget {
           children: [
             Icon(
               Icons.access_time_filled_rounded, 
-              size: 20, 
+              size: iconSize ?? 20, 
               color: isLow ? colorScheme.error : colorScheme.onSecondaryContainer
             ),
             const SizedBox(width: 8),
@@ -37,7 +43,7 @@ class UITimeBadge extends StatelessWidget {
               '$time ч.',
               style: TextStyle(
                 fontWeight: FontWeight.w900,
-                fontSize: 16,
+                fontSize: fontSize ?? 16,
                 color: isLow ? colorScheme.error : colorScheme.onSecondaryContainer,
               ),
             ),
@@ -48,7 +54,7 @@ class UITimeBadge extends StatelessWidget {
 
     return Center(
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        padding: padding ?? const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
           color: colorScheme.secondaryContainer,
           borderRadius: BorderRadius.circular(16),
@@ -63,12 +69,13 @@ class UITimeBadge extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(Icons.access_time_filled_rounded, 
-                 size: 18, color: colorScheme.onSecondaryContainer),
+                 size: iconSize ?? 18, color: colorScheme.onSecondaryContainer),
             const SizedBox(width: 8),
             Text(
               '$time ч',
               style: theme.textTheme.titleSmall?.copyWith(
                 fontWeight: FontWeight.w900,
+                fontSize: fontSize,
                 color: colorScheme.onSecondaryContainer,
               ),
             ),

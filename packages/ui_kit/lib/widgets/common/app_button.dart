@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:widgetbook/widgetbook.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
+import '../../adaptive/ui_spacing.dart';
+import '../../adaptive/ui_icon_sizes.dart';
 
 enum ButtonVariant { primary, secondary }
 
@@ -31,8 +33,8 @@ class AppButton extends StatelessWidget {
     final theme = Theme.of(context);
 
     final (height, iconSize, horizontalPadding, textStyle) = switch (size) {
-      ButtonSize.small => (40.0, 18.0, 12.0, theme.textTheme.labelMedium),
-      ButtonSize.medium => (48.0, 20.0, 20.0, theme.textTheme.labelLarge),
+      ButtonSize.small => (40.0, UiIconSizes.expanded, UiSpacing.md, theme.textTheme.labelMedium),
+      ButtonSize.medium => (48.0, UiIconSizes.large, UiSpacing.xl, theme.textTheme.labelLarge),
       ButtonSize.large => (56.0, 24.0, 24.0, theme.textTheme.titleMedium),
     };
 

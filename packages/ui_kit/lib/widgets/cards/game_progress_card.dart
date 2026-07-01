@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:widgetbook/widgetbook.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
+import '../../adaptive/ui_spacing.dart';
 import '../common/time_badge.dart';
 
 class GameProgressCard extends StatelessWidget {
@@ -9,6 +10,14 @@ class GameProgressCard extends StatelessWidget {
   final int time;
   final double progress;
   final String goalText;
+  final double? padding;
+  final TextStyle? modeTitleStyle;
+  final TextStyle? dayTextStyle;
+  final TextStyle? goalTextStyle;
+  final double? progressHeight;
+  final double? timeBadgeFontSize;
+  final double? timeBadgeIconSize;
+  final EdgeInsetsGeometry? timeBadgePadding;
 
   const GameProgressCard({
     super.key,
@@ -17,6 +26,14 @@ class GameProgressCard extends StatelessWidget {
     required this.time,
     required this.progress,
     required this.goalText,
+    this.padding,
+    this.modeTitleStyle,
+    this.dayTextStyle,
+    this.goalTextStyle,
+    this.progressHeight,
+    this.timeBadgeFontSize,
+    this.timeBadgeIconSize,
+    this.timeBadgePadding,
   });
 
   @override
@@ -30,7 +47,7 @@ class GameProgressCard extends StatelessWidget {
         : BorderRadius.circular(24);
 
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(padding ?? UiSpacing.xl),
       decoration: BoxDecoration(
         color: theme.cardTheme.color ?? colorScheme.primaryContainer.withValues(alpha: 0.2),
         borderRadius: themeRadius,
@@ -51,7 +68,7 @@ class GameProgressCard extends StatelessWidget {
                   children: [
                     Text(
                       modeTitle.toUpperCase(),
-                      style: theme.textTheme.labelMedium?.copyWith(
+                      style: (modeTitleStyle ?? theme.textTheme.labelMedium)?.copyWith(
                         color: colorScheme.primary,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1.2,
@@ -59,7 +76,7 @@ class GameProgressCard extends StatelessWidget {
                     ),
                     Text(
                       dayText,
-                      style: theme.textTheme.headlineSmall?.copyWith(
+                      style: (dayTextStyle ?? theme.textTheme.headlineSmall)?.copyWith(
                         fontWeight: FontWeight.w900,
                         color: colorScheme.onSurface,
                       ),
@@ -67,23 +84,29 @@ class GameProgressCard extends StatelessWidget {
                   ],
                 ),
               ),
-              UITimeBadge(time: time, isLarge: true),
+              UITimeBadge(
+                time: time, 
+                isLarge: true,
+                fontSize: timeBadgeFontSize,
+                iconSize: timeBadgeIconSize,
+                padding: timeBadgePadding,
+              ),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: UiSpacing.xl),
           ClipRRect(
             borderRadius: BorderRadius.circular(100),
             child: LinearProgressIndicator(
-              minHeight: 12,
+              minHeight: progressHeight ?? 12,
               value: progress.clamp(0.0, 1.0),
               backgroundColor: colorScheme.primary.withValues(alpha: 0.1),
               valueColor: AlwaysStoppedAnimation(colorScheme.primary),
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: UiSpacing.md),
           Text(
             goalText,
-            style: theme.textTheme.labelLarge?.copyWith(
+            style: (goalTextStyle ?? theme.textTheme.labelLarge)?.copyWith(
               color: colorScheme.onSurfaceVariant,
               fontWeight: FontWeight.w600,
             ),
@@ -99,11 +122,76 @@ class GameProgressCard extends StatelessWidget {
   type: GameProgressCard,
 )
 Widget buildGameProgressCardUseCase(BuildContext context) {
+  final size = context.knobs.object.dropdown<String>(
+    label: 'Size',
+    options: ['Compact', 'Medium', 'Expanded', 'Large'],
+    initialOption: 'Medium',
+  );
+
+  final theme = Theme.of(context);
+  final (padding, modeStyle, dayStyle, goalStyle, progHeight, tbFontSize, tbIconSize, tbPadding, maxWidth) = switch (size) {
+    'Compact' => (
+        UiSpacing.md,
+        theme.textTheme.labelSmall,
+        theme.textTheme.titleMedium,
+        theme.textTheme.labelSmall,
+        8.0,
+        12.0,
+        16.0,
+        const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        360.0
+      ),
+    'Medium' => (
+        UiSpacing.lg,
+        theme.textTheme.labelMedium,
+        theme.textTheme.headlineSmall,
+        theme.textTheme.labelLarge,
+        12.0,
+        16.0,
+        20.0,
+        const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        400.0
+      ),
+    'Expanded' => (
+        UiSpacing.xl,
+        theme.textTheme.labelLarge,
+        theme.textTheme.headlineMedium,
+        theme.textTheme.titleSmall,
+        14.0,
+        18.0,
+        22.0,
+        const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+        480.0
+      ),
+    'Large' => (
+        UiSpacing.xl,
+        theme.textTheme.titleSmall,
+        theme.textTheme.headlineLarge,
+        theme.textTheme.titleMedium,
+        16.0,
+        20.0,
+        24.0,
+        const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+        560.0
+      ),
+    _ => (
+        UiSpacing.lg,
+        theme.textTheme.labelMedium,
+        theme.textTheme.headlineSmall,
+        theme.textTheme.labelLarge,
+        12.0,
+        16.0,
+        20.0,
+        const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        400.0
+      ),
+  };
+
   return Padding(
     padding: const EdgeInsets.all(16),
     child: Center(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 600),
+        constraints: BoxConstraints(maxWidth: maxWidth),
         child: GameProgressCard(
           modeTitle: context.knobs.string(
             label: 'Mode Title',
@@ -129,6 +217,14 @@ Widget buildGameProgressCardUseCase(BuildContext context) {
             label: 'Goal Text',
             initialValue: 'Цель: 100 000 ₽',
           ),
+          padding: padding,
+          modeTitleStyle: modeStyle,
+          dayTextStyle: dayStyle,
+          goalTextStyle: goalStyle,
+          progressHeight: progHeight,
+          timeBadgeFontSize: tbFontSize,
+          timeBadgeIconSize: tbIconSize,
+          timeBadgePadding: tbPadding,
         ),
       ),
     ),

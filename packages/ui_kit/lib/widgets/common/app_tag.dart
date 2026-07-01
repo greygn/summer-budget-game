@@ -5,17 +5,21 @@ import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
 class AppTag extends StatelessWidget {
   final String label;
   final Color color;
+  final double? fontSize;
+  final EdgeInsetsGeometry? padding;
 
   const AppTag({
     super.key,
     required this.label,
     required this.color,
+    this.fontSize,
+    this.padding,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: padding ?? const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
@@ -25,7 +29,7 @@ class AppTag extends StatelessWidget {
         label,
         style: TextStyle(
           color: color,
-          fontSize: 11,
+          fontSize: fontSize ?? 11,
           fontWeight: FontWeight.w900,
           letterSpacing: 0.5,
         ),
