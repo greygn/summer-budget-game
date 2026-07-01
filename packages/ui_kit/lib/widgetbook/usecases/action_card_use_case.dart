@@ -1,24 +1,75 @@
 import 'package:flutter/material.dart';
+import 'package:widgetbook/widgetbook.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart';
 
 import 'package:ui_kit/ui_kit.dart';
 
 @UseCase(
-  name: 'Default',
+  name: 'Adaptive',
   type: ActionCard,
 )
-Widget defaultActionCard(BuildContext context) {
+Widget adaptiveActionCard(BuildContext context) {
   final colorScheme = Theme.of(context).colorScheme;
 
+  final screenSize = context.knobs.object.dropdown<String>(
+    label: 'Screen size',
+    options: const [
+      'compact',
+      'medium',
+      'expanded',
+      'large',
+      'custom',
+    ],
+    initialOption: 'compact',
+  );
+
+  final width = switch (screenSize) {
+    'compact' => 320.0,
+    'medium' => 700.0,
+    'expanded' => 960.0,
+    'large' => 1320.0,
+    _ => context.knobs.double.slider(
+      label: 'Width',
+      initialValue: 360,
+      min: 240,
+      max: 1600,
+      divisions: 68,
+    ),
+  };
+
+  final showLeading = context.knobs.boolean(
+    label: 'Show leading',
+    initialValue: true,
+  );
+
+  final showTrailing = context.knobs.boolean(
+    label: 'Show trailing',
+    initialValue: true,
+  );
+
+  final showTags = context.knobs.boolean(
+    label: 'Show tags',
+    initialValue: true,
+  );
+
+  final subtitle = context.knobs.string(
+    label: 'Subtitle',
+    initialValue: 'Improve your health and energy.',
+  );
+
   return Center(
-    child: SizedBox(
-      width: 360,
-      height: 180,
+    child: AnimatedContainer(
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.easeInOut,
+      width: width,
+      padding: const EdgeInsets.all(16),
+      alignment: Alignment.center,
       child: ActionCard(
         title: 'Morning Workout',
-        subtitle: 'Improve your health and energy.',
+        subtitle: subtitle.isEmpty ? null : subtitle,
         onTap: () {},
-        leading: Container(
+        leading: showLeading
+            ? Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: colorScheme.primaryContainer,
@@ -28,11 +79,15 @@ Widget defaultActionCard(BuildContext context) {
             Icons.fitness_center_rounded,
             color: colorScheme.onPrimaryContainer,
           ),
-        ),
-        trailing: const TimeBadge(
+        )
+            : null,
+        trailing: showTrailing
+            ? const TimeBadge(
           duration: Duration(hours: 2),
-        ),
-        tags: const [
+        )
+            : null,
+        tags: showTags
+            ? const [
           AppTag(
             label: '+200 XP',
             icon: Icons.star_rounded,
@@ -48,7 +103,8 @@ Widget defaultActionCard(BuildContext context) {
             icon: Icons.favorite_rounded,
             color: Colors.red,
           ),
-        ],
+        ]
+            : const [],
       ),
     ),
   );

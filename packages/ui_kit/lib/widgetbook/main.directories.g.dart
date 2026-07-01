@@ -32,9 +32,9 @@ final directories = <_widgetbook.WidgetbookNode>[
         name: 'ActionCard',
         useCases: [
           _widgetbook.WidgetbookUseCase(
-            name: 'Default',
+            name: 'Adaptive',
             builder: _ui_kit_widgetbook_usecases_action_card_use_case
-                .defaultActionCard,
+                .adaptiveActionCard,
           ),
         ],
       ),
@@ -42,16 +42,8 @@ final directories = <_widgetbook.WidgetbookNode>[
         name: 'AppTag',
         useCases: [
           _widgetbook.WidgetbookUseCase(
-            name: 'Default',
-            builder: _ui_kit_widgetbook_usecases_app_tag_use_case.defaultTag,
-          ),
-          _widgetbook.WidgetbookUseCase(
-            name: 'Success',
-            builder: _ui_kit_widgetbook_usecases_app_tag_use_case.successTag,
-          ),
-          _widgetbook.WidgetbookUseCase(
-            name: 'With icon',
-            builder: _ui_kit_widgetbook_usecases_app_tag_use_case.iconTag,
+            name: 'Adaptive',
+            builder: _ui_kit_widgetbook_usecases_app_tag_use_case.adaptiveTag,
           ),
         ],
       ),
@@ -59,9 +51,9 @@ final directories = <_widgetbook.WidgetbookNode>[
         name: 'ExpressiveResultStat',
         useCases: [
           _widgetbook.WidgetbookUseCase(
-            name: 'Default',
+            name: 'Adaptive',
             builder: _ui_kit_widgetbook_usecases_expressive_result_stat_use_case
-                .stat,
+                .adaptiveStat,
           ),
         ],
       ),
@@ -69,9 +61,9 @@ final directories = <_widgetbook.WidgetbookNode>[
         name: 'MenuButton',
         useCases: [
           _widgetbook.WidgetbookUseCase(
-            name: 'Default',
-            builder:
-                _ui_kit_widgetbook_usecases_menu_button_use_case.menuButton,
+            name: 'Adaptive',
+            builder: _ui_kit_widgetbook_usecases_menu_button_use_case
+                .adaptiveMenuButton,
           ),
         ],
       ),
@@ -79,8 +71,9 @@ final directories = <_widgetbook.WidgetbookNode>[
         name: 'ModeItem',
         useCases: [
           _widgetbook.WidgetbookUseCase(
-            name: 'Default',
-            builder: _ui_kit_widgetbook_usecases_mode_item_use_case.mode,
+            name: 'Adaptive',
+            builder:
+                _ui_kit_widgetbook_usecases_mode_item_use_case.adaptiveModeItem,
           ),
         ],
       ),
@@ -88,17 +81,9 @@ final directories = <_widgetbook.WidgetbookNode>[
         name: 'TimeBadge',
         useCases: [
           _widgetbook.WidgetbookUseCase(
-            name: 'Large',
-            builder: _ui_kit_widgetbook_usecases_time_badge_use_case.largeBadge,
-          ),
-          _widgetbook.WidgetbookUseCase(
-            name: 'Medium',
-            builder:
-                _ui_kit_widgetbook_usecases_time_badge_use_case.mediumBadge,
-          ),
-          _widgetbook.WidgetbookUseCase(
-            name: 'Small',
-            builder: _ui_kit_widgetbook_usecases_time_badge_use_case.smallBadge,
+            name: 'Adaptive',
+            builder: _ui_kit_widgetbook_usecases_time_badge_use_case
+                .adaptiveTimeBadge,
           ),
         ],
       ),
