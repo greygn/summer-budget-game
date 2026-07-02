@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../adaptive/ui_widths.dart';
-import '../adaptive/ui_heights.dart';
-import '../adaptive/ui_icon_sizes.dart';
-import '../adaptive/ui_spacing.dart';
+import '../../adaptive/ui_widths.dart';
+import '../../adaptive/ui_heights.dart';
+import '../../adaptive/ui_icon_sizes.dart';
+import '../../adaptive/ui_spacing.dart';
 
 class ExpressiveResultStat extends StatelessWidget {
   final String label;

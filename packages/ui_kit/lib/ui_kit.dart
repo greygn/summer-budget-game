@@ -17,15 +17,13 @@ export 'widgets/cards/game_progress_card.dart';
 export 'widgets/common/app_button.dart';
 export 'widgets/common/app_effect_badge.dart';
 export 'widgets/common/app_hero_icon.dart';
-export 'widgets/common/app_tag.dart';
 export 'widgets/common/time_badge.dart';
 
 // Inputs
 export 'widgets/inputs/app_editor_field.dart';
 export 'widgets/inputs/editor_tile.dart';
-export './widgets/action_card.dart';
-export './widgets/app_tag.dart';
-export './widgets/expressive_result_stat.dart';
-export './widgets/menu_button.dart';
-export './widgets/mode_item.dart';
-export './widgets/time_badge.dart';
+export 'widgets/cards/action_card.dart';
+export 'widgets/common/app_tag.dart';
+export 'widgets/cards/expressive_result_stat.dart';
+export 'widgets/common/menu_button.dart';
+export 'widgets/common/mode_item.dart';

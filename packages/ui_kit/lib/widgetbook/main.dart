@@ -3,8 +3,6 @@ import 'package:ui_kit/theme/app_theme.dart';
 import 'package:widgetbook/widgetbook.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart';
 
-// Это импорт сгенерированного файла.
-// Он появится после запуска build_runner.
 import '../../widgetbook/main.directories.g.dart';
 
 void main() {

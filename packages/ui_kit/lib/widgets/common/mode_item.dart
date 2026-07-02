@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../adaptive/ui_widths.dart';
-import '../adaptive/ui_icon_sizes.dart';
-import '../adaptive/ui_spacing.dart';
+import '../../adaptive/ui_widths.dart';
+import '../../adaptive/ui_icon_sizes.dart';
+import '../../adaptive/ui_spacing.dart';
 
 class ModeItem extends StatelessWidget {
   final String title;

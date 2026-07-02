@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:widgetbook/widgetbook.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart';
+import 'package:ui_kit/widgets/common/time_badge.dart';
 
 import 'package:ui_kit/ui_kit.dart';
 
@@ -82,8 +83,9 @@ Widget adaptiveActionCard(BuildContext context) {
         )
             : null,
         trailing: showTrailing
-            ? const TimeBadge(
-          duration: Duration(hours: 2),
+            ? const UITimeBadge(
+          time: 2,
+          isLarge: true,
         )
             : null,
         tags: showTags
