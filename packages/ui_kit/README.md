@@ -113,14 +113,9 @@ Widget buildDefault(BuildContext context) {
 
 После добавления нового Use Case необходимо обновить сгенерированные файлы:
 
-```bash
-flutter pub run build_runner build --delete-conflicting-outputs
-```
-
-Для автоматической генерации во время разработки:
 
 ```bash
-dart run build_runner watch --delete-conflicting-outputs
+dart run build_runner build --delete-conflicting-outputs
 ```
 
 ---
