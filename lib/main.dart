@@ -1,5 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:summer_budget_game/app_router.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 import 'l10n/app_localizations.dart';
 import 'package:ui_kit/theme/app_theme.dart';
 
@@ -19,6 +22,8 @@ class MyApp extends StatefulWidget {
 
 class MyAppState extends State<MyApp> {
   Locale? _locale;
+  final _appRouter = AppRouter();
+  final talker = Talker();
 
   void setLocale(Locale value) {
     setState(() {
@@ -28,7 +33,10 @@ class MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: _appRouter.config(
+          navigatorObservers: () => [TalkerRouteObserver(talker)]
+      ),
       locale: _locale,
       localizationsDelegates: const [
         AppLocalizations.delegate,

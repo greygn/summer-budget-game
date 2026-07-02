@@ -109,6 +109,12 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Это приложение на русском языке'**
   String get languageIntroduction;
+
+  /// No description provided for @welcome_text.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добро пожаловать!'**
+  String get welcome_text;
 }
 
 class _AppLocalizationsDelegate

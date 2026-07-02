@@ -13,4 +13,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get languageIntroduction => 'Это приложение на русском языке';
+
+  @override
+  String get welcome_text => 'Добро пожаловать!';
 }

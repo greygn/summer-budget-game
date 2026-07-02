@@ -5,8 +5,8 @@
 import FlutterMacOS
 import Foundation
 
-import url_launcher_macos
+import share_plus
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
-  UrlLauncherPlugin.register(with: registry.registrar(forPlugin: "UrlLauncherPlugin"))
+  SharePlusMacosPlugin.register(with: registry.registrar(forPlugin: "SharePlusMacosPlugin"))
 }
