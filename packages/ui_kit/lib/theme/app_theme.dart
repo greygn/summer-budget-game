@@ -21,6 +21,9 @@ class AppTheme {
         displaySmall: TextStyle(fontWeight: FontWeight.w900),
         headlineMedium: TextStyle(fontWeight: FontWeight.w800),
         titleLarge: TextStyle(fontWeight: FontWeight.w700),
+        titleMedium: TextStyle(fontWeight: FontWeight.w900),
+        labelMedium: TextStyle(fontWeight: FontWeight.w700),
+        bodySmall: TextStyle(fontWeight: FontWeight.w800),
       ),
 
       cardTheme: CardThemeData(

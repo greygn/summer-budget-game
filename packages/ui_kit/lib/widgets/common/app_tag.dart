@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ui_kit/adaptive/ui_radius.dart';
 import 'package:ui_kit/adaptive/ui_spacing.dart';
 
 import '../../adaptive/adaptive_layout.dart';
@@ -55,10 +56,9 @@ class AppTag extends StatelessWidget {
           large: UiSpacing.md,
         );
 
-        final textStyle = Theme.of(context).textTheme.labelMedium?.copyWith(
+        final labelStyle = Theme.of(context).textTheme.labelMedium?.copyWith(
           color: foreground,
-          fontWeight: FontWeight.w700,
-          fontSize: layout.isCompact ? 11.5 : layout.isLarge ? 14 : null,
+          fontSize: layout.labelTextSize,
         );
 
         Widget content = Row(
@@ -72,7 +72,7 @@ class AppTag extends StatelessWidget {
               ),
               SizedBox(width: gap),
             ],
-            Text(label, style: textStyle),
+            Text(label, style: labelStyle),
           ],
         );
 
@@ -86,7 +86,7 @@ class AppTag extends StatelessWidget {
 
         if (onTap != null) {
           content = InkWell(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(UiRadius.medium),
             onTap: onTap,
             child: content,
           );
@@ -94,7 +94,7 @@ class AppTag extends StatelessWidget {
 
         return Material(
           color: background,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(UiRadius.medium),
           child: content,
         );
       },

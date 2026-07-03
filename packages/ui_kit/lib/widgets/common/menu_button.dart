@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../adaptive/adaptive_layout.dart';
 import '../../adaptive/ui_spacing.dart';
+import '../../adaptive/ui_radius.dart';
 
 class MenuButton extends StatelessWidget {
   final String label;
@@ -35,15 +36,14 @@ class MenuButton extends StatelessWidget {
         );
 
         final horizontalPadding = layout.value(
-          compact: UiSpacing.lg,
-          medium: UiSpacing.xl,
-          expanded: UiSpacing.xxl,
-          large: UiSpacing.xxxl,
+          compact: UiSpacing.md,
+          medium: UiSpacing.lg,
+          expanded: UiSpacing.xl,
+          large: UiSpacing.xxl,
         );
 
-        final textStyle = theme.textTheme.titleMedium?.copyWith(
-          fontWeight: FontWeight.w900,
-          fontSize: layout.isCompact ? 16 : layout.isLarge ? 20 : 18,
+        final titleStyle = theme.textTheme.titleMedium?.copyWith(
+          fontSize: layout.titleTextSize,
           letterSpacing: 1,
           color: foregroundColor,
         );
@@ -59,7 +59,7 @@ class MenuButton extends StatelessWidget {
               elevation: 0,
               padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
               shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(28)),
+                borderRadius: BorderRadius.all(Radius.circular(UiRadius.extraLarge)),
               ),
             ),
             child: Row(
@@ -67,7 +67,7 @@ class MenuButton extends StatelessWidget {
               children: [
                 Icon(icon, size: layout.iconSize),
                 SizedBox(width: gap),
-                Text(label, style: textStyle),
+                Text(label, style: titleStyle),
               ],
             ),
           ),

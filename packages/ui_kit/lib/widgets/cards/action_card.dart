@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ui_kit/adaptive/ui_radius.dart';
 import 'package:ui_kit/adaptive/ui_spacing.dart';
 
 import '../../adaptive/adaptive_layout.dart';
@@ -34,10 +35,10 @@ class ActionCard extends StatelessWidget {
         final layout = AdaptiveLayout.of(constraints);
 
         final padding = layout.value(
-          compact: EdgeInsets.all(UiSpacing.lg),
-          medium: EdgeInsets.all(UiSpacing.xl),
-          expanded: EdgeInsets.all(UiSpacing.xxl),
-          large: EdgeInsets.all(UiSpacing.xxxl),
+          compact: EdgeInsets.all(UiSpacing.md),
+          medium: EdgeInsets.all(UiSpacing.lg),
+          expanded: EdgeInsets.all(UiSpacing.xl),
+          large: EdgeInsets.all(UiSpacing.xxl),
         );
 
         final innerGap = layout.value(
@@ -62,14 +63,13 @@ class ActionCard extends StatelessWidget {
         );
 
         final titleStyle = theme.textTheme.titleMedium?.copyWith(
-          fontWeight: FontWeight.w900,
-          fontSize: layout.isCompact ? 15 : layout.isLarge ? 18 : null,
+          fontSize: layout.titleTextSize,
         );
 
         return Container(
           decoration: BoxDecoration(
             color: colorScheme.surface,
-            borderRadius: BorderRadius.circular(28),
+            borderRadius: BorderRadius.circular(UiRadius.extraLarge),
             border: Border.all(
               color: colorScheme.outlineVariant.withAlpha(120),
             ),
@@ -83,7 +83,7 @@ class ActionCard extends StatelessWidget {
           ),
           child: Material(
             color: Colors.transparent,
-            borderRadius: BorderRadius.circular(28),
+            borderRadius: BorderRadius.circular(UiRadius.extraLarge),
             clipBehavior: Clip.antiAlias,
             child: InkWell(
               onTap: onTap,

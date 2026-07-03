@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ui_kit/adaptive/ui_radius.dart';
 
 import '../../adaptive/adaptive_layout.dart';
 import '../../adaptive/ui_spacing.dart';
@@ -25,16 +26,14 @@ class ExpressiveResultStat extends StatelessWidget {
       builder: (context, constraints) {
         final layout = AdaptiveLayout.of(constraints);
 
-        final valueStyle = theme.textTheme.headlineMedium?.copyWith(
-          fontWeight: FontWeight.w900,
+        final headlineStyle = theme.textTheme.headlineMedium?.copyWith(
           color: color,
-          fontSize: layout.isCompact ? 24 : layout.isLarge ? 36 : null,
+          fontSize: layout.headlineTextSize,
         );
 
         final labelStyle = theme.textTheme.labelMedium?.copyWith(
           color: color.withAlpha(200),
-          fontWeight: FontWeight.bold,
-          fontSize: layout.isCompact ? 11 : layout.isLarge ? 14 : null,
+          fontSize: layout.labelTextSize,
         );
 
         return Container(
@@ -42,7 +41,7 @@ class ExpressiveResultStat extends StatelessWidget {
           padding: EdgeInsets.all(layout.padding),
           decoration: BoxDecoration(
             color: color.withAlpha(30),
-            borderRadius: BorderRadius.circular(28),
+            borderRadius: BorderRadius.circular(UiRadius.extraLarge),
             border: Border.all(color: color.withAlpha(52)),
           ),
           child: Column(
@@ -52,9 +51,9 @@ class ExpressiveResultStat extends StatelessWidget {
               SizedBox(height: layout.isCompact ? UiSpacing.sm : UiSpacing.md),
               Text(
                 value,
-                style: valueStyle,
+                style: headlineStyle,
               ),
-              SizedBox(height: layout.isCompact ? 2 : 4),
+              SizedBox(height: layout.isCompact ? UiSpacing.xs : UiSpacing.sm),
               Text(
                 label,
                 style: labelStyle,

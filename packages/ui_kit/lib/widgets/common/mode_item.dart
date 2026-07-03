@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ui_kit/adaptive/ui_radius.dart';
 
 import '../../adaptive/adaptive_layout.dart';
 import '../../adaptive/ui_spacing.dart';
@@ -28,10 +29,10 @@ class ModeItem extends StatelessWidget {
         final layout = AdaptiveLayout.of(constraints);
 
         final horizontalPadding = layout.value(
-          compact: UiSpacing.lg,
-          medium: UiSpacing.xl,
-          expanded: UiSpacing.xxl,
-          large: UiSpacing.xxxl,
+          compact: UiSpacing.md,
+          medium: UiSpacing.lg,
+          expanded: UiSpacing.xl,
+          large: UiSpacing.xxl,
         );
 
         final verticalPadding = layout.value(
@@ -56,27 +57,18 @@ class ModeItem extends StatelessWidget {
         );
 
         final titleStyle = theme.textTheme.titleMedium?.copyWith(
-          fontWeight: FontWeight.w900,
-          fontSize: layout.isCompact ? 16 : layout.isLarge ? 22 : 20,
+          fontSize: layout.titleTextSize,
           color: color,
         );
 
-        final subtitleStyle = theme.textTheme.bodySmall?.copyWith(
-          fontWeight: FontWeight.bold,
+        final bodyTextStyle = theme.textTheme.bodySmall?.copyWith(
           color: color.withAlpha(153),
-          fontSize: layout.isCompact ? 11.5 : layout.isLarge ? 14 : null,
-        );
-
-        final chevronSize = layout.value(
-          compact: 20.0,
-          medium: 22.0,
-          expanded: 24.0,
-          large: 26.0,
+          fontSize: layout.bodyTextSize,
         );
 
         return Material(
           color: color.withAlpha(26),
-          borderRadius: BorderRadius.circular(32),
+          borderRadius: BorderRadius.circular(UiRadius.extraLargeIncr),
           clipBehavior: Clip.antiAlias,
           child: InkWell(
             onTap: onTap,
@@ -91,7 +83,7 @@ class ModeItem extends StatelessWidget {
                     padding: EdgeInsets.all(iconContainerPadding),
                     decoration: BoxDecoration(
                       color: color,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(UiRadius.largeIncreased),
                     ),
                     child: Icon(icon, color: Colors.white, size: layout.iconSize),
                   ),
@@ -101,14 +93,14 @@ class ModeItem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(title, style: titleStyle),
-                        Text(subtitle, style: subtitleStyle),
+                        Text(subtitle, style: bodyTextStyle),
                       ],
                     ),
                   ),
                   Icon(
                     Icons.chevron_right_rounded,
                     color: color,
-                    size: chevronSize,
+                    size: layout.iconSize,
                   ),
                 ],
               ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ui_kit/adaptive/ui_text_sizes.dart';
 
 import 'ui_heights.dart';
 import 'ui_icon_sizes.dart';
@@ -79,5 +80,33 @@ class AdaptiveLayout {
     medium: UiSpacing.lg,
     expanded: UiSpacing.xl,
     large: UiSpacing.xxl,
+  );
+
+  double get headlineTextSize => value(
+    compact: UiTextSizes.headlineSmall,
+    medium: UiTextSizes.headlineMedium,
+    expanded: UiTextSizes.headlineLarge,
+    large: UiTextSizes.headlineLarge,
+  );
+
+  double get labelTextSize => value(
+    compact: UiTextSizes.labelSmall,
+    medium: UiTextSizes.labelMedium,
+    expanded: UiTextSizes.labelLarge,
+    large: UiTextSizes.labelLarge,
+  );
+
+  double get titleTextSize => value(
+    compact: UiTextSizes.titleSmall,
+    medium: UiTextSizes.titleMedium,
+    expanded: UiTextSizes.titleLarge,
+    large: UiTextSizes.titleLarge,
+  );
+
+  double get bodyTextSize => value(
+    compact: UiTextSizes.bodySmall,
+    medium: UiTextSizes.bodyMedium,
+    expanded: UiTextSizes.bodyLarge,
+    large: UiTextSizes.bodyLarge,
   );
 }
