@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ui_kit/adaptive/ui_widths.dart';
 import 'package:ui_kit/adaptive/ui_spacing.dart';
+
+import '../../adaptive/adaptive_layout.dart';
 
 class ActionCard extends StatelessWidget {
   const ActionCard({
@@ -30,50 +31,39 @@ class ActionCard extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final width = constraints.maxWidth;
+        final layout = AdaptiveLayout.of(constraints);
 
-        final isCompact = width < UiWidths.compact;
-        final isMedium =
-            width >= UiWidths.compact && width < UiWidths.medium;
-        final isExpanded =
-            width >= UiWidths.medium && width < UiWidths.expanded;
-        final isLarge = width >= UiWidths.expanded;
+        final padding = layout.value(
+          compact: EdgeInsets.all(UiSpacing.lg),
+          medium: EdgeInsets.all(UiSpacing.xl),
+          expanded: EdgeInsets.all(UiSpacing.xxl),
+          large: EdgeInsets.all(UiSpacing.xxxl),
+        );
 
-        final padding = switch (true) {
-          _ when isCompact => EdgeInsets.all(UiSpacing.lg),
-          _ when isMedium => EdgeInsets.all(UiSpacing.xl),
-          _ when isExpanded => EdgeInsets.all(24),
-          _ when isLarge => EdgeInsets.all(28),
-          _ => EdgeInsets.all(UiSpacing.xl),
-        };
+        final innerGap = layout.value(
+          compact: UiSpacing.md,
+          medium: UiSpacing.lg,
+          expanded: UiSpacing.lg,
+          large: UiSpacing.xl,
+        );
 
-        final innerGap = switch (true) {
-          _ when isCompact => UiSpacing.md,
-          _ when isMedium => UiSpacing.lg,
-          _ when isExpanded => UiSpacing.lg,
-          _ when isLarge => UiSpacing.xl,
-          _ => UiSpacing.lg,
-        };
+        final subtitleGap = layout.value(
+          compact: UiSpacing.xs,
+          medium: UiSpacing.sm,
+          expanded: UiSpacing.sm,
+          large: UiSpacing.md,
+        );
 
-        final subtitleGap = switch (true) {
-          _ when isCompact => UiSpacing.xs,
-          _ when isMedium => UiSpacing.sm,
-          _ when isExpanded => UiSpacing.sm,
-          _ when isLarge => UiSpacing.md,
-          _ => UiSpacing.sm,
-        };
-
-        final tagsGap = switch (true) {
-          _ when isCompact => UiSpacing.md,
-          _ when isMedium => UiSpacing.md,
-          _ when isExpanded => UiSpacing.lg,
-          _ when isLarge => UiSpacing.xl,
-          _ => UiSpacing.lg,
-        };
+        final tagsGap = layout.value(
+          compact: UiSpacing.md,
+          medium: UiSpacing.md,
+          expanded: UiSpacing.lg,
+          large: UiSpacing.xl,
+        );
 
         final titleStyle = theme.textTheme.titleMedium?.copyWith(
           fontWeight: FontWeight.w900,
-          fontSize: isCompact ? 15 : isLarge ? 18 : null,
+          fontSize: layout.isCompact ? 15 : layout.isLarge ? 18 : null,
         );
 
         return Container(

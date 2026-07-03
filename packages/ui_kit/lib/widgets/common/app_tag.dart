@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ui_kit/adaptive/ui_spacing.dart';
 
-import '../../adaptive/ui_widths.dart';
-import '../../adaptive/ui_icon_sizes.dart';
+import '../../adaptive/adaptive_layout.dart';
 
 class AppTag extends StatelessWidget {
   const AppTag({
@@ -33,51 +32,33 @@ class AppTag extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final width = constraints.maxWidth;
-        final isCompact = width < UiWidths.compact;
-        final isMedium = width >= UiWidths.compact
-            && width < UiWidths.medium;
-        final isExpanded = width >= UiWidths.medium
-            && width < UiWidths.expanded;
-        final isLarge = width >= UiWidths.expanded
-            && width < UiWidths.large;
+        final layout = AdaptiveLayout.of(constraints);
 
-        final horizontalPadding = switch (true) {
-          _ when isCompact => UiSpacing.sm,
-          _ when isMedium => UiSpacing.md,
-          _ when isExpanded => UiSpacing.lg,
-          _ when isLarge => UiSpacing.xl,
-          _ => UiSpacing.md,
-        };
+        final horizontalPadding = layout.value(
+          compact: UiSpacing.sm,
+          medium: UiSpacing.md,
+          expanded: UiSpacing.lg,
+          large: UiSpacing.xl,
+        );
 
-        final verticalPadding = switch (true) {
-          _ when isCompact => UiSpacing.xs,
-          _ when isMedium => UiSpacing.sm,
-          _ when isExpanded => UiSpacing.sm,
-          _ when isLarge => UiSpacing.md,
-          _ => UiSpacing.sm,
-        };
+        final verticalPadding = layout.value(
+          compact: UiSpacing.xs,
+          medium: UiSpacing.sm,
+          expanded: UiSpacing.sm,
+          large: UiSpacing.md,
+        );
 
-        final iconSize = switch (true) {
-          _ when isCompact => UiIconSizes.compact,
-          _ when isMedium => UiIconSizes.medium,
-          _ when isExpanded => UiIconSizes.expanded,
-          _ when isLarge => UiIconSizes.large,
-          _ => UiIconSizes.medium,
-        };
-
-        final gap = switch (true) {
-          _ when isCompact => UiSpacing.xs,
-          _ when isMedium => UiSpacing.sm,
-          _ when isExpanded => UiSpacing.sm,
-          _ when isLarge => UiSpacing.md,
-          _ => UiSpacing.sm,
-        };
+        final gap = layout.value(
+          compact: UiSpacing.xs,
+          medium: UiSpacing.sm,
+          expanded: UiSpacing.sm,
+          large: UiSpacing.md,
+        );
 
         final textStyle = Theme.of(context).textTheme.labelMedium?.copyWith(
           color: foreground,
           fontWeight: FontWeight.w700,
-          fontSize: isCompact ? 11.5 : isLarge ? 14 : null,
+          fontSize: layout.isCompact ? 11.5 : layout.isLarge ? 14 : null,
         );
 
         Widget content = Row(
@@ -86,7 +67,7 @@ class AppTag extends StatelessWidget {
             if (icon != null) ...[
               Icon(
                 icon,
-                size: iconSize,
+                size: layout.iconSize,
                 color: foreground,
               ),
               SizedBox(width: gap),

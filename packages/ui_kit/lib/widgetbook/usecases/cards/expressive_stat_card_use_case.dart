@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:widgetbook/widgetbook.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
 
-import '../../widgets/cards/expressive_stat_card.dart';
-import '../../adaptive/ui_heights.dart';
-import '../../adaptive/ui_spacing.dart';
+import '../../../widgets/cards/expressive_stat_card.dart';
+import '../../../adaptive/ui_heights.dart';
+import '../../../adaptive/ui_spacing.dart';
 
 @widgetbook.UseCase(name: 'Happiness', type: ExpressiveStatCard)
 Widget buildExpressiveStatCardUseCase(BuildContext context) {

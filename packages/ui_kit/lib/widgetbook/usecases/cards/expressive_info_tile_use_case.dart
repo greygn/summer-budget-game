@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:widgetbook/widgetbook.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
 
-import '../../widgets/cards/expressive_info_tile.dart';
-import '../../adaptive/ui_icon_sizes.dart';
-import '../../adaptive/ui_spacing.dart';
+import '../../../widgets/cards/expressive_info_tile.dart';
+import '../../../adaptive/ui_icon_sizes.dart';
+import '../../../adaptive/ui_spacing.dart';
 
 @widgetbook.UseCase(name: 'Wallet', type: ExpressiveInfoTile)
 Widget buildExpressiveInfoTileUseCase(BuildContext context) {

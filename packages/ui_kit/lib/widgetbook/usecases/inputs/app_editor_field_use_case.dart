@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:widgetbook/widgetbook.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
 
-import '../../widgets/inputs/app_editor_field.dart';
+import '../../../widgets/inputs/app_editor_field.dart';
 
 @widgetbook.UseCase(name: 'Default', type: AppEditorField)
 Widget buildAppEditorFieldUseCase(BuildContext context) {

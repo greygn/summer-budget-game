@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:widgetbook/widgetbook.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
 
-import '../../adaptive/ui_spacing.dart';
-import '../../widgets/banners/passive_income_banner.dart';
+import '../../../adaptive/ui_spacing.dart';
+import '../../../widgets/banners/passive_income_banner.dart';
 
 @widgetbook.UseCase(name: 'Default', type: PassiveIncomeBanner)
 Widget buildPassiveIncomeBannerUseCase(BuildContext context) {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:widgetbook/widgetbook.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
 
-import '../../widgets/common/app_hero_icon.dart';
+import '../../../widgets/common/app_hero_icon.dart';
 
 
 @widgetbook.UseCase(name: 'Event Success', type: AppHeroIcon)

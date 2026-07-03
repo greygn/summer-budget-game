@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../adaptive/ui_widths.dart';
-import '../../adaptive/ui_heights.dart';
-import '../../adaptive/ui_icon_sizes.dart';
+import '../../adaptive/adaptive_layout.dart';
 import '../../adaptive/ui_spacing.dart';
 
 class MenuButton extends StatelessWidget {
@@ -27,57 +25,32 @@ class MenuButton extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final width = constraints.maxWidth;
+        final layout = AdaptiveLayout.of(constraints);
 
-        final isCompact = width < UiWidths.compact;
-        final isMedium =
-            width >= UiWidths.compact && width < UiWidths.medium;
-        final isExpanded =
-            width >= UiWidths.medium && width < UiWidths.expanded;
-        final isLarge = width >= UiWidths.expanded;
+        final gap = layout.value(
+          compact: UiSpacing.sm,
+          medium: UiSpacing.md,
+          expanded: UiSpacing.lg,
+          large: UiSpacing.xl,
+        );
 
-        final buttonHeight = switch (true) {
-          _ when isCompact => UiHeights.compact,
-          _ when isMedium => UiHeights.medium,
-          _ when isExpanded => UiHeights.expanded,
-          _ when isLarge => UiHeights.large,
-          _ => UiHeights.medium,
-        };
-
-        final iconSize = switch (true) {
-          _ when isCompact => UiIconSizes.compact,
-          _ when isMedium => UiIconSizes.medium,
-          _ when isExpanded => UiIconSizes.expanded,
-          _ when isLarge => UiIconSizes.large,
-          _ => UiIconSizes.medium,
-        };
-
-        final gap = switch (true) {
-          _ when isCompact => UiSpacing.sm,
-          _ when isMedium => UiSpacing.md,
-          _ when isExpanded => UiSpacing.lg,
-          _ when isLarge => UiSpacing.xl,
-          _ => UiSpacing.md,
-        };
-
-        final horizontalPadding = switch (true) {
-          _ when isCompact => UiSpacing.lg,
-          _ when isMedium => UiSpacing.xl,
-          _ when isExpanded => UiSpacing.xxl,
-          _ when isLarge => UiSpacing.xxxl,
-          _ => UiSpacing.xl,
-        };
+        final horizontalPadding = layout.value(
+          compact: UiSpacing.lg,
+          medium: UiSpacing.xl,
+          expanded: UiSpacing.xxl,
+          large: UiSpacing.xxxl,
+        );
 
         final textStyle = theme.textTheme.titleMedium?.copyWith(
           fontWeight: FontWeight.w900,
-          fontSize: isCompact ? 16 : isLarge ? 20 : 18,
+          fontSize: layout.isCompact ? 16 : layout.isLarge ? 20 : 18,
           letterSpacing: 1,
           color: foregroundColor,
         );
 
         return SizedBox(
           width: double.infinity,
-          height: buttonHeight,
+          height: layout.cardHeight,
           child: FilledButton(
             onPressed: onPressed,
             style: FilledButton.styleFrom(
@@ -92,7 +65,7 @@ class MenuButton extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(icon, size: iconSize),
+                Icon(icon, size: layout.iconSize),
                 SizedBox(width: gap),
                 Text(label, style: textStyle),
               ],

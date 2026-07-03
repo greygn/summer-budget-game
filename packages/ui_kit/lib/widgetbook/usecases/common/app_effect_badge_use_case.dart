@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:widgetbook/widgetbook.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
 
-import '../../widgets/common/app_effect_badge.dart';
+import '../../../widgets/common/app_effect_badge.dart';
 
 @widgetbook.UseCase(name: 'Positive', type: AppEffectBadge)
 Widget buildAppEffectBadgePositiveUseCase(BuildContext context) {

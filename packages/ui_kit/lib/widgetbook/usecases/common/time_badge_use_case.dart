@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
 
-import '../../widgets/common/time_badge.dart';
+import '../../../widgets/common/time_badge.dart';
 
 @widgetbook.UseCase(name: 'Large (Low Time)', type: UITimeBadge)
 Widget buildUITimeBadgeLargeLowUseCase(BuildContext context) {
