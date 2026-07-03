@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import '../../adaptive/ui_icon_sizes.dart';
+import '../../adaptive/ui_radius.dart';
+import '../../adaptive/ui_spacing.dart';
+import '../../adaptive/ui_text_sizes.dart';
+import '../../theme/app_theme.dart';
 
 class AppEffectBadge extends StatelessWidget {
   final String label;
@@ -31,23 +36,26 @@ class AppEffectBadge extends StatelessWidget {
         (isPositive ? defaultPositiveColor : theme.colorScheme.error);
 
     return Container(
-      padding: padding ?? const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: padding ?? const EdgeInsets.symmetric(
+        horizontal: UiSpacing.md, 
+        vertical: UiSpacing.sm,
+      ),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.withValues(alpha: 0.2)),
+        color: color.withValues(alpha: AppTheme.surfaceAlpha),
+        borderRadius: BorderRadius.circular(UiRadius.large),
+        border: Border.all(color: color.withValues(alpha: AppTheme.strokeAlpha)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: iconSize ?? 16, color: color),
-          const SizedBox(width: 8),
+          Icon(icon, size: iconSize ?? UiIconSizes.medium, color: color),
+          const SizedBox(width: UiSpacing.sm),
           Text(
             label,
             style: TextStyle(
               color: color,
               fontWeight: FontWeight.w900,
-              fontSize: fontSize ?? 12,
+              fontSize: fontSize ?? UiTextSizes.labelMedium,
             ),
           ),
         ],
@@ -55,4 +63,3 @@ class AppEffectBadge extends StatelessWidget {
     );
   }
 }
-

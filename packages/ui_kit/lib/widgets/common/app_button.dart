@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../adaptive/ui_radius.dart';
 import '../../adaptive/ui_spacing.dart';
 import '../../adaptive/ui_icon_sizes.dart';
 
@@ -31,9 +32,9 @@ class AppButton extends StatelessWidget {
     final theme = Theme.of(context);
 
     final (height, iconSize, horizontalPadding, textStyle) = switch (size) {
-      ButtonSize.small => (40.0, UiIconSizes.expanded, UiSpacing.md, theme.textTheme.labelMedium),
-      ButtonSize.medium => (48.0, UiIconSizes.large, UiSpacing.xl, theme.textTheme.labelLarge),
-      ButtonSize.large => (56.0, 24.0, 24.0, theme.textTheme.titleMedium),
+      ButtonSize.small => (UiSpacing.sm * 5, UiIconSizes.expanded, UiSpacing.md, theme.textTheme.labelMedium),
+      ButtonSize.medium => (UiSpacing.sm * 6, UiIconSizes.large, UiSpacing.xl, theme.textTheme.labelLarge),
+      ButtonSize.large => (UiSpacing.sm * 7, UiSpacing.xl, UiSpacing.xl, theme.textTheme.titleMedium),
     };
 
     final buttonStyle = FilledButton.styleFrom(
@@ -44,9 +45,12 @@ class AppButton extends StatelessWidget {
       textStyle: textStyle,
       minimumSize: Size(isFullWidth ? double.infinity : 0, height),
       alignment: alignment,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(UiRadius.largeIncreased),
+      ),
       padding: EdgeInsets.symmetric(
         vertical: 0,
-        horizontal: icon != null ? horizontalPadding : horizontalPadding + 8,
+        horizontal: icon != null ? horizontalPadding : horizontalPadding + UiSpacing.sm,
       ),
     );
 
@@ -93,4 +97,3 @@ class AppButton extends StatelessWidget {
     return button;
   }
 }
-

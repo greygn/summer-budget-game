@@ -1,7 +1,10 @@
 import 'package:animated_digit/animated_digit.dart';
 import 'package:flutter/material.dart';
+import '../../adaptive/adaptive_layout.dart';
 import '../../adaptive/ui_spacing.dart';
 import '../../adaptive/ui_icon_sizes.dart';
+import '../../adaptive/ui_radius.dart';
+import '../../theme/app_theme.dart';
 
 class ExpressiveInfoTile extends StatelessWidget {
   final String title;
@@ -50,65 +53,71 @@ class ExpressiveInfoTile extends StatelessWidget {
     final shape = theme.cardTheme.shape;
     final themeRadius = shape is RoundedRectangleBorder && shape.borderRadius is BorderRadius
         ? shape.borderRadius as BorderRadius
-        : BorderRadius.circular(24);
+        : BorderRadius.circular(UiRadius.largeIncreased);
 
-    return Container(
-      height: height,
-      padding: padding ?? const EdgeInsets.all(UiSpacing.lg),
-      decoration: BoxDecoration(
-        color: effectiveColor.withValues(alpha: 0.1),
-        borderRadius: borderRadius ?? themeRadius,
-        border: Border.all(
-          color: effectiveColor.withValues(alpha: 0.2),
-        ),
-      ),
-      child: Row(
-        children: [
-          if (icon != null)
-            Container(
-              padding: iconPadding ?? const EdgeInsets.all(UiIconSizes.compact),
-              decoration: BoxDecoration(
-                color: effectiveColor,
-                borderRadius: (borderRadius as BorderRadius? ?? themeRadius),
-              ),
-              child: Icon(
-                icon,
-                size: iconSize ?? 24,
-                color: ThemeData.estimateBrightnessForColor(effectiveColor) == Brightness.dark
-                    ? Colors.white
-                    : Colors.black87,
-              ),
-            ),
-          if (icon != null) const SizedBox(width: UiSpacing.lg),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: (titleStyle ?? theme.textTheme.labelLarge)?.copyWith(
-                    color: effectiveColor,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                _buildValue(context, effectiveColor),
-                if (subtitle != null)
-                  Text(
-                    subtitle!,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: (subtitleStyle ?? theme.textTheme.labelSmall)?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-              ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final layout = AdaptiveLayout.of(constraints);
+
+        return Container(
+          height: height,
+          padding: padding ?? EdgeInsets.all(layout.padding),
+          decoration: BoxDecoration(
+            color: effectiveColor.withValues(alpha: AppTheme.surfaceAlpha),
+            borderRadius: borderRadius ?? themeRadius,
+            border: Border.all(
+              color: effectiveColor.withValues(alpha: AppTheme.strokeAlpha),
             ),
           ),
-        ],
-      ),
+          child: Row(
+            children: [
+              if (icon != null)
+                Container(
+                  padding: iconPadding ?? const EdgeInsets.all(UiIconSizes.compact),
+                  decoration: BoxDecoration(
+                    color: effectiveColor,
+                    borderRadius: (borderRadius as BorderRadius? ?? themeRadius),
+                  ),
+                  child: Icon(
+                    icon,
+                    size: iconSize ?? layout.iconSize,
+                    color: ThemeData.estimateBrightnessForColor(effectiveColor) == Brightness.dark
+                        ? Colors.white
+                        : Colors.black87,
+                  ),
+                ),
+              if (icon != null) const SizedBox(width: UiSpacing.lg),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: (titleStyle ?? theme.textTheme.labelLarge)?.copyWith(
+                        color: effectiveColor,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    _buildValue(context, effectiveColor),
+                    if (subtitle != null)
+                      Text(
+                        subtitle!,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: (subtitleStyle ?? theme.textTheme.labelSmall)?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -116,8 +125,7 @@ class ExpressiveInfoTile extends StatelessWidget {
     final theme = Theme.of(context);
     final style = (valueStyle ?? theme.textTheme.headlineSmall)?.copyWith(
       fontWeight: FontWeight.w900,
-      color: color,
-      letterSpacing: -0.5,
+      color: color
     );
 
     if (enableAnimation) {

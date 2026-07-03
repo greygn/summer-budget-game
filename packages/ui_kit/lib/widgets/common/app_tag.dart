@@ -3,6 +3,7 @@ import 'package:ui_kit/adaptive/ui_radius.dart';
 import 'package:ui_kit/adaptive/ui_spacing.dart';
 
 import '../../adaptive/adaptive_layout.dart';
+import '../../theme/app_theme.dart';
 
 class AppTag extends StatelessWidget {
   const AppTag({
@@ -29,7 +30,7 @@ class AppTag extends StatelessWidget {
     final foreground = color ?? colorScheme.primary;
 
     final background =
-        backgroundColor ?? foreground.withAlpha(35);
+        backgroundColor ?? foreground.withValues(alpha: AppTheme.surfaceAlpha);
 
     return LayoutBuilder(
       builder: (context, constraints) {

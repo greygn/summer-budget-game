@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
 
+import '../adaptive/ui_radius.dart';
+import '../adaptive/ui_spacing.dart';
+import '../adaptive/ui_text_sizes.dart';
+
 class AppTheme {
   static const _seedColor = Colors.deepPurple;
+
+  static const double surfaceAlpha = 0.1;
+  static const double strokeAlpha = 0.2;
+  static const double inputAlpha = 0.3;
+  static const double emphasisAlpha = 0.5;
+  static const double lineHeightDefault = 1.5;
 
   static ThemeData get light => _buildTheme(Brightness.light);
   static ThemeData get dark => _buildTheme(Brightness.dark);
@@ -28,18 +38,18 @@ class AppTheme {
 
       cardTheme: CardThemeData(
         elevation: 0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(UiRadius.largeIncreased)),
         color: colorScheme.surfaceContainerLow,
       ),
 
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+        fillColor: colorScheme.surfaceContainerHighest.withValues(alpha: inputAlpha),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(UiRadius.largeIncreased),
           borderSide: BorderSide.none,
         ),
-        contentPadding: const EdgeInsets.all(20),
+        contentPadding: const EdgeInsets.all(UiSpacing.xl),
       ),
 
       appBarTheme: AppBarTheme(
@@ -48,7 +58,7 @@ class AppTheme {
         elevation: 0,
         titleTextStyle: TextStyle(
           color: colorScheme.onSurface,
-          fontSize: 20,
+          fontSize: UiTextSizes.titleLarge,
           fontWeight: FontWeight.w900,
         ),
       ),

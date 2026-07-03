@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../adaptive/adaptive_layout.dart';
 import '../../adaptive/ui_spacing.dart';
+import '../../adaptive/ui_radius.dart';
+import '../../theme/app_theme.dart';
 
 class AppInfoCard extends StatelessWidget {
   final String text;
@@ -20,28 +23,35 @@ class AppInfoCard extends StatelessWidget {
     final theme = Theme.of(context);
 
     final shape = theme.cardTheme.shape;
-    final themeRadius = shape is RoundedRectangleBorder && shape.borderRadius is BorderRadius
-        ? shape.borderRadius as BorderRadius
-        : BorderRadius.circular(24);
+    final themeRadius =
+        shape is RoundedRectangleBorder && shape.borderRadius is BorderRadius
+            ? shape.borderRadius as BorderRadius
+            : BorderRadius.circular(UiRadius.largeIncreased);
 
-    return Container(
-      padding: EdgeInsets.all(padding ?? UiSpacing.xl),
-      decoration: BoxDecoration(
-        color: theme.cardTheme.color ?? theme.colorScheme.surface,
-        borderRadius: themeRadius,
-        border: Border.all(
-          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
-        ),
-      ),
-      child: Text(
-        text,
-        style: (textStyle ?? theme.textTheme.bodyLarge)?.copyWith(
-          height: 1.5,
-          color: theme.colorScheme.onSurfaceVariant,
-        ),
-        textAlign: textAlign,
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final layout = AdaptiveLayout.of(constraints);
+
+        return Container(
+          padding: EdgeInsets.all(padding ?? layout.padding),
+          decoration: BoxDecoration(
+            color: theme.cardTheme.color ?? theme.colorScheme.surface,
+            borderRadius: themeRadius,
+            border: Border.all(
+              color: theme.colorScheme.outlineVariant
+                  .withValues(alpha: AppTheme.emphasisAlpha),
+            ),
+          ),
+          child: Text(
+            text,
+            style: (textStyle ?? theme.textTheme.bodyLarge)?.copyWith(
+              height: AppTheme.lineHeightDefault,
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+            textAlign: textAlign,
+          ),
+        );
+      },
     );
   }
 }
-

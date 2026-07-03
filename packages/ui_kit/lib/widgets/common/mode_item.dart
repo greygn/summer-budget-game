@@ -3,6 +3,7 @@ import 'package:ui_kit/adaptive/ui_radius.dart';
 
 import '../../adaptive/adaptive_layout.dart';
 import '../../adaptive/ui_spacing.dart';
+import '../../theme/app_theme.dart';
 
 class ModeItem extends StatelessWidget {
   final String title;
@@ -62,12 +63,12 @@ class ModeItem extends StatelessWidget {
         );
 
         final bodyTextStyle = theme.textTheme.bodySmall?.copyWith(
-          color: color.withAlpha(153),
+          color: color.withValues(alpha: AppTheme.emphasisAlpha),
           fontSize: layout.bodyTextSize,
         );
 
         return Material(
-          color: color.withAlpha(26),
+          color: color.withValues(alpha: AppTheme.surfaceAlpha),
           borderRadius: BorderRadius.circular(UiRadius.extraLargeIncr),
           clipBehavior: Clip.antiAlias,
           child: InkWell(

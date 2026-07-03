@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../adaptive/ui_radius.dart';
+import '../../adaptive/ui_spacing.dart';
+import '../../theme/app_theme.dart';
 
 class AppHeroIcon extends StatelessWidget {
   final IconData icon;
@@ -19,21 +22,21 @@ class AppHeroIcon extends StatelessWidget {
     return Hero(
       tag: heroTag,
       child: Container(
-        padding: const EdgeInsets.all(32),
+        padding: const EdgeInsets.all(UiSpacing.xxl),
         decoration: BoxDecoration(
           color: color,
-          borderRadius: BorderRadius.circular(40),
+          borderRadius: BorderRadius.circular(UiRadius.extraLargeIncr),
           boxShadow: [
             BoxShadow(
-              color: color.withValues(alpha: 0.3),
-              blurRadius: 20,
-              offset: const Offset(0, 10),
+              color: color.withValues(alpha: AppTheme.inputAlpha),
+              blurRadius: UiRadius.largeIncreased,
+              offset: const Offset(0, UiSpacing.md),
             ),
           ],
         ),
         child: Icon(
           icon,
-          size: 64,
+          size: UiRadius.extraLargeIncr + UiRadius.extraLargeIncr,
           color: onColor,
         ),
       ),

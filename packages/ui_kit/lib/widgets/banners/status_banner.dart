@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../adaptive/adaptive_layout.dart';
+import '../../adaptive/ui_radius.dart';
+import '../../adaptive/ui_spacing.dart';
+import '../../theme/app_theme.dart';
+
 class StatusBanner extends StatelessWidget {
   final String message;
   final IconData icon;
@@ -25,29 +30,44 @@ class StatusBanner extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    final effectiveBgColor = backgroundColor ?? colorScheme.errorContainer.withValues(alpha: 0.5);
+    final effectiveBgColor = backgroundColor ??
+        colorScheme.errorContainer.withValues(alpha: AppTheme.emphasisAlpha);
     final effectiveFgColor = foregroundColor ?? colorScheme.onErrorContainer;
 
-    return Container(
-      padding: EdgeInsets.all(padding ?? 16),
-      decoration: BoxDecoration(
-        color: effectiveBgColor,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, color: effectiveFgColor, size: iconSize),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Text(
-              message,
-              style: (textStyle ?? const TextStyle(fontWeight: FontWeight.bold)).copyWith(
-                color: effectiveFgColor,
-              ),
-            ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final layout = AdaptiveLayout.of(constraints);
+
+        return Container(
+          padding: EdgeInsets.all(padding ?? layout.padding),
+          decoration: BoxDecoration(
+            color: effectiveBgColor,
+            borderRadius: BorderRadius.circular(UiRadius.largeIncreased),
           ),
-        ],
-      ),
+          child: Row(
+            children: [
+              Icon(
+                icon,
+                color: effectiveFgColor,
+                size: iconSize ?? layout.iconSize,
+              ),
+              SizedBox(width: layout.isCompact ? UiSpacing.md : UiSpacing.lg),
+              Expanded(
+                child: Text(
+                  message,
+                  style: (textStyle ??
+                          theme.textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ))
+                      ?.copyWith(
+                    color: effectiveFgColor,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

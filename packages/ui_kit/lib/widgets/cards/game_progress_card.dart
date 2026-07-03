@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../adaptive/ui_radius.dart';
 import '../../adaptive/ui_spacing.dart';
+import '../../theme/app_theme.dart';
 import '../common/time_badge.dart';
 
 class GameProgressCard extends StatelessWidget {
@@ -42,15 +44,15 @@ class GameProgressCard extends StatelessWidget {
     final shape = theme.cardTheme.shape;
     final themeRadius = shape is RoundedRectangleBorder && shape.borderRadius is BorderRadius
         ? shape.borderRadius as BorderRadius
-        : BorderRadius.circular(24);
+        : BorderRadius.circular(UiRadius.largeIncreased);
 
     return Container(
       padding: EdgeInsets.all(padding ?? UiSpacing.xl),
       decoration: BoxDecoration(
-        color: theme.cardTheme.color ?? colorScheme.primaryContainer.withValues(alpha: 0.2),
+        color: theme.cardTheme.color ?? colorScheme.primaryContainer.withValues(alpha: AppTheme.strokeAlpha),
         borderRadius: themeRadius,
         border: Border.all(
-          color: colorScheme.primary.withValues(alpha: 0.1),
+          color: colorScheme.primary.withValues(alpha: AppTheme.surfaceAlpha),
         ),
       ),
       child: Column(
@@ -93,11 +95,11 @@ class GameProgressCard extends StatelessWidget {
           ),
           const SizedBox(height: UiSpacing.xl),
           ClipRRect(
-            borderRadius: BorderRadius.circular(100),
+            borderRadius: BorderRadius.circular(UiRadius.extraLargeIncr),
             child: LinearProgressIndicator(
-              minHeight: progressHeight ?? 12,
+              minHeight: progressHeight ?? UiSpacing.md,
               value: progress.clamp(0.0, 1.0),
-              backgroundColor: colorScheme.primary.withValues(alpha: 0.1),
+              backgroundColor: colorScheme.primary.withValues(alpha: AppTheme.surfaceAlpha),
               valueColor: AlwaysStoppedAnimation(colorScheme.primary),
             ),
           ),
@@ -114,4 +116,3 @@ class GameProgressCard extends StatelessWidget {
     );
   }
 }
-

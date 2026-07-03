@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../ui_kit.dart';
+import '../../adaptive/ui_radius.dart';
 import '../../adaptive/ui_spacing.dart';
 
 class EditorTile extends StatelessWidget {
@@ -34,16 +35,16 @@ class EditorTile extends StatelessWidget {
       margin: EdgeInsets.only(bottom: margin ?? UiSpacing.md),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(UiRadius.largeIncreased),
         border: Border.all(
-          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.4),
+          color: theme.colorScheme.outlineVariant.withValues(alpha: AppTheme.emphasisAlpha),
         ),
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(UiRadius.largeIncreased),
           child: Padding(
             padding: EdgeInsets.all(padding ?? UiSpacing.lg),
             child: Row(

@@ -6,19 +6,12 @@ import '../../../widgets/inputs/app_editor_field.dart';
 
 @widgetbook.UseCase(name: 'Default', type: AppEditorField)
 Widget buildAppEditorFieldUseCase(BuildContext context) {
-  final size = context.knobs.object.dropdown<String>(
+  final size = context.knobs.object.dropdown<AppEditorFieldSize>(
     label: 'Size',
-    options: ['Compact', 'Medium', 'Expanded', 'Large'],
-    initialOption: 'Medium',
+    options: AppEditorFieldSize.values,
+    initialOption: AppEditorFieldSize.medium,
+    labelBuilder: (value) => value.name[0].toUpperCase() + value.name.substring(1),
   );
-
-  final (fontSize, iconSize) = switch (size) {
-    'Compact' => (14.0, 20.0),
-    'Medium' => (16.0, 24.0),
-    'Expanded' => (18.0, 26.0),
-    'Large' => (20.0, 28.0),
-    _ => (16.0, 24.0),
-  };
 
   return Padding(
     padding: const EdgeInsets.all(20.0),
@@ -42,8 +35,7 @@ Widget buildAppEditorFieldUseCase(BuildContext context) {
           min: 1,
           max: 5,
         ),
-        fontSize: fontSize,
-        iconSize: iconSize,
+        size: size,
       ),
     ),
   );

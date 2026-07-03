@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../adaptive/ui_icon_sizes.dart';
+import '../../adaptive/ui_spacing.dart';
+import '../../adaptive/ui_text_sizes.dart';
+
+enum AppEditorFieldSize { compact, medium, expanded, large }
 
 class AppEditorField extends StatelessWidget {
   final TextEditingController? controller;
@@ -11,6 +16,7 @@ class AppEditorField extends StatelessWidget {
   final String? initialValue;
   final double? fontSize;
   final double? iconSize;
+  final AppEditorFieldSize size;
 
   const AppEditorField({
     super.key,
@@ -23,6 +29,7 @@ class AppEditorField extends StatelessWidget {
     this.initialValue,
     this.fontSize,
     this.iconSize,
+    this.size = AppEditorFieldSize.medium,
   });
 
   @override
@@ -30,10 +37,17 @@ class AppEditorField extends StatelessWidget {
     final theme = Theme.of(context);
     final baseTextStyle = theme.textTheme.bodyLarge;
 
+    final (effectiveFontSize, effectiveIconSize) = switch (size) {
+      AppEditorFieldSize.compact => (UiTextSizes.bodyMedium, UiIconSizes.large),
+      AppEditorFieldSize.medium => (UiTextSizes.bodyLarge, UiSpacing.xl),
+      AppEditorFieldSize.expanded => (UiIconSizes.expanded, UiSpacing.xl),
+      AppEditorFieldSize.large => (UiIconSizes.large, UiTextSizes.headlineMedium),
+    };
+
     return TextFormField(
       controller: controller,
       initialValue: initialValue,
-      style: baseTextStyle?.copyWith(fontSize: fontSize),
+      style: baseTextStyle?.copyWith(fontSize: fontSize ?? effectiveFontSize),
       keyboardType: isNumber
           ? const TextInputType.numberWithOptions(
         signed: true,
@@ -47,11 +61,9 @@ class AppEditorField extends StatelessWidget {
       onChanged: onChanged,
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: TextStyle(fontSize: fontSize),
-        prefixIcon: icon != null ? Icon(icon, size: iconSize) : null,
+        labelStyle: TextStyle(fontSize: fontSize ?? effectiveFontSize),
+        prefixIcon: icon != null ? Icon(icon, size: iconSize ?? effectiveIconSize) : null,
       ),
     );
   }
 }
-
-

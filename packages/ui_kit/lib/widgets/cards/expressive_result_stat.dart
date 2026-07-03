@@ -3,6 +3,7 @@ import 'package:ui_kit/adaptive/ui_radius.dart';
 
 import '../../adaptive/adaptive_layout.dart';
 import '../../adaptive/ui_spacing.dart';
+import '../../theme/app_theme.dart';
 
 class ExpressiveResultStat extends StatelessWidget {
   final String label;
@@ -32,7 +33,7 @@ class ExpressiveResultStat extends StatelessWidget {
         );
 
         final labelStyle = theme.textTheme.labelMedium?.copyWith(
-          color: color.withAlpha(200),
+          color: color.withValues(alpha: AppTheme.emphasisAlpha),
           fontSize: layout.labelTextSize,
         );
 
@@ -40,9 +41,9 @@ class ExpressiveResultStat extends StatelessWidget {
           height: layout.cardHeight,
           padding: EdgeInsets.all(layout.padding),
           decoration: BoxDecoration(
-            color: color.withAlpha(30),
+            color: color.withValues(alpha: AppTheme.surfaceAlpha),
             borderRadius: BorderRadius.circular(UiRadius.extraLarge),
-            border: Border.all(color: color.withAlpha(52)),
+            border: Border.all(color: color.withValues(alpha: AppTheme.strokeAlpha)),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

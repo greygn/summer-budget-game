@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ui_kit/adaptive/ui_radius.dart';
 import 'package:ui_kit/adaptive/ui_spacing.dart';
+import 'package:ui_kit/theme/app_theme.dart';
 
 import '../../adaptive/adaptive_layout.dart';
 
@@ -71,11 +72,11 @@ class ActionCard extends StatelessWidget {
             color: colorScheme.surface,
             borderRadius: BorderRadius.circular(UiRadius.extraLarge),
             border: Border.all(
-              color: colorScheme.outlineVariant.withAlpha(120),
+              color: colorScheme.outlineVariant.withValues(alpha: AppTheme.emphasisAlpha),
             ),
             boxShadow: [
               BoxShadow(
-                color: colorScheme.shadow.withAlpha(15),
+                color: colorScheme.shadow.withValues(alpha: AppTheme.surfaceAlpha),
                 blurRadius: 12,
                 offset: const Offset(0, 6),
               ),
