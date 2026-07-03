@@ -19,10 +19,19 @@ ui_kit/
 ├── lib/
 │   ├── ui_kit.dart
 │     ├── widgets/      ← сами компоненты
-│     └── adaptive/     ← адаптивные компоненты
-├── widgetbook/
-│    ├── usecases/      ← usecase компонентов для widgetbook
-│   └── main.dart
+│           banners/
+│           cards/
+│           common/
+│           inputs/ 
+│     ├── adaptive/     ← адаптивные компоненты
+│     ├── widgetbook/      ← виджетбук с юз кейсами
+│            usecases/
+│                banners/
+│                cards/
+│                common/
+│                inputs/
+│     └── theme/ 
+│ 
 ├── pubspec.yaml
 └── README.md
 ```
@@ -74,12 +83,6 @@ Widgetbook — это каталог компонентов.
 
 ```bash
 cd packages/ui_kit
-```
-
-Запустить Widgetbook:
-
-```bash
-flutter run -t widgetbook/main.dart
 ```
 
 ---
@@ -158,23 +161,6 @@ UI Kit следует рекомендациям Material 3 Adaptive Design.
 | Medium         | 600–840dp |
 | Expanded       | > 840dp   |
 
-Пример:
-
-```dart
-final width = MediaQuery.sizeOf(context).width;
-
-if (width < 600) {
-  return const MobileLayout();
-}
-
-if (width < 840) {
-  return const TabletLayout();
-}
-
-return const DesktopLayout();
-```
-
----
 
 # Пример компонента
 
