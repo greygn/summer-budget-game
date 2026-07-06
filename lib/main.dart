@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:summer_budget_game/app_router.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'l10n/app_localizations.dart';
+import 'package:ui_kit/theme/app_theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -45,7 +46,56 @@ class MyAppState extends State<MyApp> {
       ],
       supportedLocales: AppLocalizations.supportedLocales,
       title: 'Flutter Demo',
-      theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
+      themeMode: ThemeMode.system,
+      home: const MyHomePage(title: 'Summer Budget Game'),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
+
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  @override
+  Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
+
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text(widget.title),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: .center,
+          children: [
+            Text(
+              t.languageIntroduction,
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                MyApp.of(context)?.setLocale(const Locale('en'));
+              },
+              child: Text("English"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                MyApp.of(context)?.setLocale(const Locale('ru'));
+              },
+              child: Text("Русский"),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

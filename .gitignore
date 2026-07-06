@@ -43,3 +43,10 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# UI Kit
+packages/ui_kit/build
+packages/ui_kit/.dart_tool
+packages/ui_kit/.flutter-plugins-dependencies
+packages/ui_kit/pubspec.lock
+packages/ui_kit/lib/widgetbook/main.directories.g.dart
