@@ -5,6 +5,7 @@ import 'package:summer_budget_game/domain/entity/job_entity.dart';
 
 import '../repository/game_repository.dart';
 
+//Получение списка работ
 class GetJobsUseCase extends UseCaseNoPrarms<List<JobEntity>>{
   final GameRepository gameRepository;
 

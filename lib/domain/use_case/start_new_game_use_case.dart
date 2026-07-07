@@ -10,13 +10,21 @@ import 'package:summer_budget_game/domain/entity/save_record_entity.dart';
 
 import '../repository/game_repository.dart';
 
-class StartNewGameUseCase extends UseCase<SaveRecordEntity, GameMode> {
+class StartNewGameParams {
+  final String name;
+  final GameMode mode;
+
+  StartNewGameParams({required this.name, required this.mode});
+}
+
+//Начало игры, создание сохранения
+class StartNewGameUseCase extends UseCase<SaveRecordEntity, StartNewGameParams> {
   final GameRepository gameRepository;
 
   StartNewGameUseCase({required this.gameRepository});
 
   @override
-  Future<Either<Failure, SaveRecordEntity>> call(GameMode mode) {
+  Future<Either<Failure, SaveRecordEntity>> call(StartNewGameParams params) {
     CharacterRecordEntity basicCharacter = CharacterRecordEntity(
       balance: 15000,
       energy: 60,
@@ -28,14 +36,18 @@ class StartNewGameUseCase extends UseCase<SaveRecordEntity, GameMode> {
     );
     GameRecordEntity basicGame = GameRecordEntity(
       currentDay: 0,
-      allowedDays: mode == .standard ? 30 : 0,
-      gameMode: mode,
+      allowedDays: params.mode == GameMode.standard ? 30 : 0,
+      gameMode: params.mode,
       inflationLevel: 1.0,
       timeLeft: 12,
       currentEvent: GameEventEntity(ID: 0),
     );
     return gameRepository.writeSaveRecord(
-      SaveRecordEntity(characterRecord: basicCharacter, gameRecord: basicGame),
+      SaveRecordEntity(
+        name: params.name,
+        characterRecord: basicCharacter,
+        gameRecord: basicGame,
+      ),
     );
   }
 }

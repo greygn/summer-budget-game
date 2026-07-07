@@ -6,6 +6,8 @@ import 'package:summer_budget_game/domain/entity/game_failure.dart';
 import 'package:summer_budget_game/domain/entity/job_entity.dart';
 import 'package:summer_budget_game/domain/entity/save_record_entity.dart';
 
+import '../entity/leaderboard_record_entity.dart';
+
 abstract class GameRepository {
   Future<Either<GameFailure, SaveRecordEntity>> readSaveRecord();
 
@@ -21,5 +23,7 @@ abstract class GameRepository {
 
   Future<Either<GameFailure, List<GameEventOptionEntity>>> readGameEventOptions(GameEventEntity event);
 
+  Future<Either<GameFailure, List<LeaderboardRecordEntity>>> readLeaderboard();
 
+  Future<Either<GameFailure, void>> writeLeaderboard(LeaderboardRecordEntity record);
 }

@@ -6,10 +6,15 @@ import 'package:summer_budget_game/domain/use_case/check_state_use_case.dart';
 
 import '../repository/game_repository.dart';
 
+//Завершение дня, увеличение счётчика дней, увеличение энергии, проверка состояния
 class EndDayUseCase extends UseCaseNoPrarms<SaveRecordEntity> {
   final GameRepository gameRepository;
+  final CheckStateUseCase checkStateUseCase;
 
-  EndDayUseCase({required this.gameRepository});
+  EndDayUseCase({
+    required this.gameRepository,
+    required this.checkStateUseCase,
+  });
 
   @override
   Future<Either<Failure, SaveRecordEntity>> call() async {
@@ -27,9 +32,11 @@ class EndDayUseCase extends UseCaseNoPrarms<SaveRecordEntity> {
         ),
       );
 
-      checkStateUseCase();
+      await gameRepository.writeSaveRecord(nextDayRecord);
 
-      return await gameRepository.writeSaveRecord(nextDayRecord);
+      await checkStateUseCase();
+
+      return await gameRepository.readSaveRecord();
     });
   }
 }

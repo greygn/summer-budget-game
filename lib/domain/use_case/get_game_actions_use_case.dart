@@ -5,6 +5,7 @@ import 'package:summer_budget_game/domain/entity/game_action_entity.dart';
 
 import '../repository/game_repository.dart';
 
+//Получение списка действий
 class GetGameActionsUseCase extends UseCaseNoPrarms<List<GameActionEntity>> {
   final GameRepository gameRepository;
 
