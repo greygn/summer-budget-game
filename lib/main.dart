@@ -49,7 +49,6 @@ class MyAppState extends State<MyApp> {
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
       themeMode: ThemeMode.system,
-      home: const MyHomePage(title: 'Summer Budget Game'),
     );
   }
 }
