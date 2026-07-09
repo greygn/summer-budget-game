@@ -2,22 +2,29 @@ import 'package:dartz/dartz.dart';
 import 'package:summer_budget_game/core/failure/failure.dart';
 import 'package:summer_budget_game/core/use_case/use_case.dart';
 import 'package:summer_budget_game/domain/entity/game_event_entity.dart';
+import 'package:summer_budget_game/domain/failure/unfolding_failure.dart';
 import 'dart:math';
 
+import '../failure/writing_failure.dart';
 import '../repository/game_repository.dart';
+import 'check_state_use_case.dart';
 
 //Случайным образом выпадает GameEvent, применяется эффект, если нет options
 class ReciveEventUseCase extends UseCaseNoPrarms<GameEventEntity> {
   final GameRepository gameRepository;
+  final CheckStateUseCase checkStateUseCase;
 
-  ReciveEventUseCase({required this.gameRepository});
+  static const positiveEventRollCap = 0.15;
+  static const negativeEventRollCap = 0.3;
+
+  ReciveEventUseCase({required this.gameRepository, required this.checkStateUseCase});
 
   @override
   Future<Either<Failure, GameEventEntity>> call() async {
     final eventsResult = await gameRepository.readGameEvents();
 
     return await eventsResult.fold(
-      (failure) async => Left(failure),
+      (failure) async => Left(UnfoldingFailure()),
       (events) async {
         final random = Random();
         final roll = random.nextDouble();
@@ -43,30 +50,35 @@ class ReciveEventUseCase extends UseCaseNoPrarms<GameEventEntity> {
         }
 
         GameEventEntity selectedEvent;
-        if (roll <= 0.7) {
-          selectedEvent = const GameEventEntity(ID: 0);
-        } else if (roll <= 0.85) {
+        if (roll <= positiveEventRollCap) {
           selectedEvent = positiveEvents.isEmpty
               ? const GameEventEntity(ID: 0)
               : positiveEvents[random.nextInt(positiveEvents.length)];
-        } else {
+        } else if (roll <= negativeEventRollCap) {
           selectedEvent = negativeEvents.isEmpty
               ? const GameEventEntity(ID: 0)
               : negativeEvents[random.nextInt(negativeEvents.length)];
+        } else {
+          selectedEvent = const GameEventEntity(ID: 0);
         }
 
         final saveRecordResult = await gameRepository.readSaveRecord();
         return await saveRecordResult.fold(
-          (failure) async => Left(failure),
+          (failure) async => Left(UnfoldingFailure()),
           (record) async {
+            final inflation = record.gameRecord.inflationLevel;
             var updatedRecord = record.copyWith(
               gameRecord: record.gameRecord.copyWith(currentEvent: selectedEvent),
             );
 
             if (selectedEvent.ID != 0 && selectedEvent.options.isEmpty) {
+              final effectiveMoneyDelta = selectedEvent.moneyDelta < 0 
+                  ? (selectedEvent.moneyDelta * inflation).round() 
+                  : selectedEvent.moneyDelta;
+
               updatedRecord = updatedRecord.copyWith(
                 characterRecord: updatedRecord.characterRecord.copyWith(
-                  balance: updatedRecord.characterRecord.balance + selectedEvent.moneyDelta,
+                  balance: updatedRecord.characterRecord.balance + effectiveMoneyDelta,
                   happiness: updatedRecord.characterRecord.happiness + selectedEvent.happinessDelta,
                   finIQ: updatedRecord.characterRecord.finIQ + selectedEvent.finIQDelta,
                   score: updatedRecord.characterRecord.score + selectedEvent.pointsDelta,
@@ -74,9 +86,11 @@ class ReciveEventUseCase extends UseCaseNoPrarms<GameEventEntity> {
               );
             }
 
+            await checkStateUseCase();
+
             final writeResult = await gameRepository.writeSaveRecord(updatedRecord);
             return writeResult.fold(
-              (f) => Left(f),
+              (f) => Left(WritingFailure()),
               (_) => Right(selectedEvent),
             );
           },
@@ -85,7 +99,7 @@ class ReciveEventUseCase extends UseCaseNoPrarms<GameEventEntity> {
     );
   }
 
-  bool _isAnyDeltaNegative(int m, int h, int f, int p) {
-    return m < 0 || h < 0 || f < 0 || p < 0;
+  bool _isAnyDeltaNegative(int moneyDelta, int happinessDelta, int finIQDelta, int pointsDelta) {
+    return moneyDelta < 0 || happinessDelta < 0 || finIQDelta < 0 || pointsDelta < 0;
   }
 }

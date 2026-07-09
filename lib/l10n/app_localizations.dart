@@ -115,6 +115,36 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Добро пожаловать!'**
   String get welcome_text;
+
+  /// No description provided for @insufficientTimeFailure.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не хватает времени для выполнения действия'**
+  String get insufficientTimeFailure;
+
+  /// No description provided for @unfoldingFailure.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ошибка обработки данных'**
+  String get unfoldingFailure;
+
+  /// No description provided for @insufficientJobSkillsFailure.
+  ///
+  /// In ru, this message translates to:
+  /// **'Недостаточно: {skills}'**
+  String insufficientJobSkillsFailure(Object skills);
+
+  /// No description provided for @finIQ.
+  ///
+  /// In ru, this message translates to:
+  /// **'Фин. IQ'**
+  String get finIQ;
+
+  /// No description provided for @score.
+  ///
+  /// In ru, this message translates to:
+  /// **'Очки'**
+  String get score;
 }
 
 class _AppLocalizationsDelegate

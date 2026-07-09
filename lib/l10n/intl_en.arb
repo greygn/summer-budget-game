@@ -3,5 +3,11 @@
 
   "appTitle": "Cheapy!",
   "languageIntroduction": "This app is in English",
-  "welcome_text": "Welcome!"
+  "welcome_text": "Welcome!",
+  "insufficientTimeFailure": "Not enough time to complete the action",
+  "unfoldingFailure": "Error processing data",
+  "writingFailure": "Error writing data",
+  "insufficientJobSkillsFailure": "Insufficient: {skills}",
+  "finIQ": "Financial IQ",
+  "score": "Score"
 }

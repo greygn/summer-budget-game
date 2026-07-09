@@ -73,6 +73,56 @@ class S {
   String get welcome_text {
     return Intl.message('Welcome!', name: 'welcome_text', desc: '', args: []);
   }
+
+  /// `Not enough time to complete the action`
+  String get insufficientTimeFailure {
+    return Intl.message(
+      'Not enough time to complete the action',
+      name: 'insufficientTimeFailure',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error processing data`
+  String get unfoldingFailure {
+    return Intl.message(
+      'Error processing data',
+      name: 'unfoldingFailure',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error writing data`
+  String get writingFailure {
+    return Intl.message(
+      'Error writing data',
+      name: 'writingFailure',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Insufficient: {skills}`
+  String insufficientJobSkillsFailure(Object skills) {
+    return Intl.message(
+      'Insufficient: $skills',
+      name: 'insufficientJobSkillsFailure',
+      desc: '',
+      args: [skills],
+    );
+  }
+
+  /// `Financial IQ`
+  String get finIQ {
+    return Intl.message('Financial IQ', name: 'finIQ', desc: '', args: []);
+  }
+
+  /// `Score`
+  String get score {
+    return Intl.message('Score', name: 'score', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

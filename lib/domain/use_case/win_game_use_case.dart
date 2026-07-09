@@ -5,6 +5,8 @@ import 'package:summer_budget_game/domain/entity/leaderboard_record_entity.dart'
 import 'package:summer_budget_game/domain/entity/save_record_entity.dart';
 import 'package:summer_budget_game/domain/repository/game_repository.dart';
 
+import '../failure/unfolding_failure.dart';
+
 //Запись информации об игроке в таблицу рекордов
 class WinGameUseCase extends UseCase<SaveRecordEntity, void> {
   final GameRepository gameRepository;
@@ -16,7 +18,7 @@ class WinGameUseCase extends UseCase<SaveRecordEntity, void> {
     final saveRecordResult = await gameRepository.readSaveRecord();
 
     return await saveRecordResult.fold(
-      (failure) async => Left(failure),
+      (failure) async => Left(UnfoldingFailure()),
       (record) async {
         final leaderboardRecord = LeaderboardRecordEntity(
           name: record.name,
@@ -29,7 +31,7 @@ class WinGameUseCase extends UseCase<SaveRecordEntity, void> {
         final result = await gameRepository.writeLeaderboard(leaderboardRecord);
 
         return result.fold(
-          (failure) => Left(failure),
+          (failure) => Left(UnfoldingFailure()),
           (_) => Right(record),
         );
       },

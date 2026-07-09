@@ -20,11 +20,22 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'ru';
 
+  static String m0(skills) => "Недостаточно: ${skills}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "appTitle": MessageLookupByLibrary.simpleMessage("Бюджетно!"),
+    "finIQ": MessageLookupByLibrary.simpleMessage("Фин. IQ"),
+    "insufficientJobSkillsFailure": m0,
+    "insufficientTimeFailure": MessageLookupByLibrary.simpleMessage(
+      "Не хватает времени для выполнения действия",
+    ),
     "languageIntroduction": MessageLookupByLibrary.simpleMessage(
       "Это приложение на русском языке",
+    ),
+    "score": MessageLookupByLibrary.simpleMessage("Очки"),
+    "unfoldingFailure": MessageLookupByLibrary.simpleMessage(
+      "Ошибка обработки данных",
     ),
     "welcome_text": MessageLookupByLibrary.simpleMessage("Добро пожаловать!"),
   };

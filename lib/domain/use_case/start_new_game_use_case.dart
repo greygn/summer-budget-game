@@ -21,25 +21,38 @@ class StartNewGameParams {
 class StartNewGameUseCase extends UseCase<SaveRecordEntity, StartNewGameParams> {
   final GameRepository gameRepository;
 
+  static const defaultBalance = 15000;
+  static const defaultEnergy = 60;
+  static const defaultFinIQ = 0;
+  static const defaultHappiness = 50;
+  static const defaultSavings = 0;
+  static const defaultScore = 0;
+  static const defaultCurrentDay = 0;
+  static const defaultInflationLevel = 1.0;
+  static const defaultTimeLeft = 12;
+
+  static const standardAllowedDays = 30;
+  static const marathonAllowedDays = 0;
+
   StartNewGameUseCase({required this.gameRepository});
 
   @override
   Future<Either<Failure, SaveRecordEntity>> call(StartNewGameParams params) {
     CharacterRecordEntity basicCharacter = CharacterRecordEntity(
-      balance: 15000,
-      energy: 60,
-      finIQ: 0,
-      happiness: 50,
-      savings: 0,
-      score: 0,
+      balance: defaultBalance,
+      energy: defaultEnergy,
+      finIQ: defaultFinIQ,
+      happiness: defaultHappiness,
+      savings: defaultSavings,
+      score: defaultScore,
       job: JobEntity(ID: 0),
     );
     GameRecordEntity basicGame = GameRecordEntity(
-      currentDay: 0,
-      allowedDays: params.mode == GameMode.standard ? 30 : 0,
+      currentDay: defaultCurrentDay,
+      allowedDays: params.mode == GameMode.standard ? standardAllowedDays : marathonAllowedDays,
       gameMode: params.mode,
-      inflationLevel: 1.0,
-      timeLeft: 12,
+      inflationLevel: defaultInflationLevel,
+      timeLeft: defaultTimeLeft,
       currentEvent: GameEventEntity(ID: 0),
     );
     return gameRepository.writeSaveRecord(
