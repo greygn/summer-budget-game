@@ -63,3 +63,4 @@ lib/core/database/dao/game_events_dao.g.dart
 lib/core/database/dao/jobs_dao.g.dart
 lib/core/database/dao/leaderboard_dao.g.dart
 lib/core/database/dao/save_record_dao.g.dart
+lib/core/di/injection.config.dart

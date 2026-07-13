@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:injectable/injectable.dart';
 
 import '../../domain/entity/game_action_entity.dart';
 import '../../domain/entity/game_event_entity.dart';
@@ -10,6 +11,7 @@ import '../../domain/entity/save_record_entity.dart';
 import '../../domain/repository/game_repository.dart';
 import '../datasource/local/local_data_source.dart';
 
+@LazySingleton(as: GameRepository)
 class GameRepositoryImpl implements GameRepository {
   final LocalDataSource _local;
   GameRepositoryImpl(this._local);

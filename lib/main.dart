@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:summer_budget_game/app_router.dart';
 import 'package:talker_flutter/talker_flutter.dart';
-import 'core/di/service_locator.dart';
+import 'core/di/injection.dart';
 import 'l10n/app_localizations.dart';
 import 'package:ui_kit/theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await setupLocator();
+  await configureDependencies();
 
   runApp(const MyApp());
 }

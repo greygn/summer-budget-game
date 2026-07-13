@@ -1,10 +1,12 @@
 import 'package:drift/drift.dart';
+import 'package:injectable/injectable.dart';
 
 import '../app_database.dart';
 import '../tables/jobs_table.dart';
 
 part 'jobs_dao.g.dart';
 
+@lazySingleton
 @DriftAccessor(tables: [Jobs])
 class JobsDao extends DatabaseAccessor<AppDatabase>
     with _$JobsDaoMixin {

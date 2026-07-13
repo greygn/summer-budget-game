@@ -138,7 +138,7 @@ build_runner
 drift_dev
 ```
 
-DI реализован через **GetIt**.
+DI реализован через **GetIt** + **Injectable**.
 
 ---
 
@@ -302,21 +302,96 @@ dart run build_runner build --delete-conflicting-outputs
 
 После этого новая таблица будет доступна во всем приложении.
 
-## Dependency Injection (GetIt)
+## Dependency Injection (GetIt + Injectable)
 
-Для управления зависимостями используется библиотека **GetIt**.
+Для управления зависимостями в проекте используются библиотеки **GetIt** и **Injectable**.
 
-В отличие от `injectable`, регистрация выполняется **вручную**, поэтому весь граф зависимостей хорошо виден в одном месте.
+- **GetIt** — контейнер зависимостей.
+- **Injectable** — генератор кода, автоматически регистрирующий зависимости в GetIt.
 
-Все зависимости регистрируются в файле
+Такой подход избавляет от ручной регистрации объектов и уменьшает количество шаблонного кода.
+
+---
+
+### Регистрация зависимостей
+
+Все зависимости автоматически регистрируются в файле
 
 ```
-lib/core/di/service_locator.dart
+lib/core/di/injection.dart
 ```
 
-### Порядок регистрации
+```dart
+import 'package:get_it/get_it.dart';
+import 'package:injectable/injectable.dart';
 
-Зависимости регистрируются от нижнего уровня к верхнему.
+import 'injection.config.dart';
+
+final getIt = GetIt.instance;
+
+@InjectableInit()
+Future<void> configureDependencies() async {
+  await getIt.init();
+}
+```
+
+После генерации `injectable` создаёт файл
+
+```
+injection.config.dart
+```
+
+в котором содержится весь код регистрации зависимостей.
+
+Этот файл изменять вручную нельзя.
+
+---
+
+### Регистрация классов
+
+Вместо ручной регистрации используются аннотации.
+
+Например, репозиторий:
+
+```dart
+@LazySingleton(as: GameRepository)
+class GameRepositoryImpl implements GameRepository {
+
+  ...
+
+}
+```
+
+LocalDataSource:
+
+```dart
+@LazySingleton(as: LocalDataSource)
+class LocalDataSourceImpl implements LocalDataSource {
+
+    ...
+
+}
+```
+
+DAO:
+
+```dart
+@lazySingleton
+class JobsDao extends DatabaseAccessor<AppDatabase>
+    with _$JobsDaoMixin {
+
+  JobsDao(super.db);
+
+}
+```
+
+Injectable автоматически анализирует конструкторы классов и создает необходимые зависимости.
+
+---
+
+### Граф зависимостей
+
+После генерации получается следующая цепочка зависимостей:
 
 ```
 AppDatabase
@@ -331,129 +406,66 @@ LocalDataSource
 Repository
 ```
 
-Пример регистрации:
-
-```dart
-final sl = GetIt.instance;
-
-Future<void> setupLocator() async {
-
-  // Database
-  sl.registerLazySingleton<AppDatabase>(
-    () => AppDatabase(),
-  );
-
-  // DAO
-  sl.registerLazySingleton(
-    () => JobsDao(sl()),
-  );
-
-  sl.registerLazySingleton(
-    () => GameActionsDao(sl()),
-  );
-
-  sl.registerLazySingleton(
-    () => GameEventsDao(sl()),
-  );
-
-  // DataSource
-  sl.registerLazySingleton<LocalDataSource>(
-    () => LocalDataSourceImpl(
-      jobsDao: sl(),
-      actionsDao: sl(),
-      eventsDao: sl(),
-      ...
-    ),
-  );
-
-  // Repository
-  sl.registerLazySingleton<GameRepository>(
-    () => GameRepositoryImpl(sl()),
-  );
-}
-```
-
----
-
-### Как это работает
-
-При регистрации
-
-```dart
-sl.registerLazySingleton(
-  () => JobsDao(sl()),
-);
-```
-
-происходит следующее:
-
-1. GetIt видит, что `JobsDao` требует `AppDatabase`.
-
-```dart
-JobsDao(
-    AppDatabase database,
-)
-```
-
-2. Вызов
-
-```dart
-sl()
-```
-
-означает
-
-```dart
-sl<AppDatabase>()
-```
-
-3. GetIt находит ранее зарегистрированный `AppDatabase`.
-
-4. Создает `JobsDao`.
-
-Таким образом зависимости автоматически передаются через конструктор.
-
----
-
-### Почему используется `registerLazySingleton`
-
-Большинство объектов приложения создаются один раз и используются повторно.
-
-```dart
-sl.registerLazySingleton(
-    () => AppDatabase(),
-);
-```
-
-означает:
-
-- объект **не создается сразу**;
-- он будет создан **только при первом обращении**;
-- затем GetIt будет возвращать один и тот же экземпляр.
-
-Это особенно важно для:
-
-- базы данных;
-- DAO;
-- репозиториев.
-
-Создавать несколько экземпляров этих классов не требуется.
+Все зависимости создаются автоматически.
 
 ---
 
 ### Инициализация
 
-Перед запуском приложения необходимо зарегистрировать все зависимости.
+Перед запуском приложения необходимо инициализировать контейнер зависимостей.
 
 В `main()` вызывается:
 
 ```dart
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await setupLocator();
+
+  await configureDependencies();
 
   runApp(const MyApp());
 }
 ```
 
-После этого любая зарегистрированная зависимость доступна через GetIt во всем приложении.
+После этого все зарегистрированные зависимости будут доступны через GetIt.
+
+---
+
+### Генерация Injectable
+
+После добавления нового класса или изменения аннотаций необходимо пересоздать сгенерированный код.
+
+Используйте команду
+
+```bash
+dart run build_runner build --delete-conflicting-outputs
+```
+
+---
+
+### Добавление нового сервиса
+
+Чтобы зарегистрировать новый класс в контейнере зависимостей необходимо:
+
+1. Создать класс.
+2. Добавить одну из аннотаций:
+    - `@injectable`
+    - `@singleton`
+    - `@lazySingleton`
+3. Если класс реализует интерфейс, использовать параметр `as`.
+
+Например:
+
+```dart
+@LazySingleton(as: GameRepository)
+class GameRepositoryImpl implements GameRepository {
+  ...
+}
+```
+
+4. Выполнить генерацию:
+
+```bash
+dart run build_runner build --delete-conflicting-outputs
+```
+
+После этого класс автоматически станет доступен через GetIt.

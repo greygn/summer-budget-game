@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:injectable/injectable.dart';
 
 import '../app_database.dart';
 import '../tables/game_action_categories_table.dart';
@@ -6,6 +7,7 @@ import '../tables/game_actions_table.dart';
 
 part 'game_actions_dao.g.dart';
 
+@lazySingleton
 @DriftAccessor(
   tables: [
     GameActions,

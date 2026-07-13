@@ -1,3 +1,4 @@
+import 'package:injectable/injectable.dart';
 import 'package:summer_budget_game/domain/entity/game_action_category_entity.dart';
 import 'package:summer_budget_game/domain/entity/game_action_entity.dart';
 import 'package:summer_budget_game/domain/entity/game_event_entity.dart';
@@ -23,6 +24,7 @@ import '../../mapper/leaderboard_mapper.dart';
 import '../../mapper/save_record_mapper.dart';
 import 'local_data_source.dart';
 
+@LazySingleton(as: LocalDataSource)
 class LocalDataSourceImpl implements LocalDataSource {
 
   final JobsDao jobsDao;

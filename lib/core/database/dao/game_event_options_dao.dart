@@ -1,10 +1,12 @@
 import 'package:drift/drift.dart';
+import 'package:injectable/injectable.dart';
 
 import '../app_database.dart';
 import '../tables/game_event_options_table.dart';
 
 part 'game_event_options_dao.g.dart';
 
+@lazySingleton
 @DriftAccessor(tables: [GameEventOptions])
 class GameEventOptionsDao extends DatabaseAccessor<AppDatabase>
     with _$GameEventOptionsDaoMixin {
