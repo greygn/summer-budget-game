@@ -109,4 +109,6 @@ class AdaptiveLayout {
     expanded: UiTextSizes.bodyLarge,
     large: UiTextSizes.bodyLarge,
   );
+
+  int get statGridColumns => isCompact ? 2 : 4;
 }

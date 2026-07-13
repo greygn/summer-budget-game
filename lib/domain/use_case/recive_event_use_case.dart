@@ -79,7 +79,7 @@ class ReciveEventUseCase extends UseCaseNoPrarms<GameEventEntity> {
               updatedRecord = updatedRecord.copyWith(
                 characterRecord: updatedRecord.characterRecord.copyWith(
                   balance: updatedRecord.characterRecord.balance + effectiveMoneyDelta,
-                  happiness: updatedRecord.characterRecord.happiness + selectedEvent.happinessDelta,
+                  happiness: (updatedRecord.characterRecord.happiness + selectedEvent.happinessDelta).clamp(-1, 100),
                   finIQ: updatedRecord.characterRecord.finIQ + selectedEvent.finIQDelta,
                   score: updatedRecord.characterRecord.score + selectedEvent.pointsDelta,
                 ),

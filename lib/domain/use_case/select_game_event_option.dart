@@ -31,7 +31,7 @@ class SelectGameEventOption extends UseCase<SaveRecordEntity, GameEventOptionEnt
         final updatedRecord = record.copyWith(
           characterRecord: record.characterRecord.copyWith(
             balance: record.characterRecord.balance + effectiveMoneyDelta,
-            happiness: record.characterRecord.happiness + params.happinessDelta,
+            happiness: (record.characterRecord.happiness + params.happinessDelta).clamp(-1, 100),
             finIQ: record.characterRecord.finIQ + params.finIQDelta,
             score: record.characterRecord.score + params.pointsDelta,
           ),

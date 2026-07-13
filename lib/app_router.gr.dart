@@ -10,13 +10,20 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i8;
-import 'package:summer_budget_game/ui/screens/action_chooser_page.dart' as _i1;
-import 'package:summer_budget_game/ui/screens/dashboard_page.dart' as _i2;
-import 'package:summer_budget_game/ui/screens/event_page.dart' as _i3;
-import 'package:summer_budget_game/ui/screens/home_page.dart' as _i4;
-import 'package:summer_budget_game/ui/screens/job_chooser_page.dart' as _i5;
-import 'package:summer_budget_game/ui/screens/records_page.dart' as _i6;
-import 'package:summer_budget_game/ui/screens/results_page.dart' as _i7;
+import 'package:summer_budget_game/presentation/ui/screens/action_chooser_page.dart'
+    as _i1;
+import 'package:summer_budget_game/presentation/ui/screens/dashboard_page.dart'
+    as _i2;
+import 'package:summer_budget_game/presentation/ui/screens/event_page.dart'
+    as _i3;
+import 'package:summer_budget_game/presentation/ui/screens/home_page.dart'
+    as _i4;
+import 'package:summer_budget_game/presentation/ui/screens/job_chooser_page.dart'
+    as _i5;
+import 'package:summer_budget_game/presentation/ui/screens/records_page.dart'
+    as _i6;
+import 'package:summer_budget_game/presentation/ui/screens/results_page.dart'
+    as _i7;
 
 /// generated route for
 /// [_i1.ActionChooserPage]

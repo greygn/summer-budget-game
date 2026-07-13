@@ -38,9 +38,10 @@ class SelectGameActionUseCase extends UseCase<SaveRecordEntity, GameActionEntity
           characterRecord: record.characterRecord.copyWith(
             balance: record.characterRecord.balance + effectiveMoneyDelta,
             savings: record.characterRecord.savings + gameAction.savingsDelta,
-            happiness: record.characterRecord.happiness + gameAction.happinessDelta,
+            happiness: (record.characterRecord.happiness + gameAction.happinessDelta).clamp(-1, 100),
             finIQ: record.characterRecord.finIQ + gameAction.finIQDelta,
             score: record.characterRecord.score + gameAction.pointsForAction,
+            energy: (record.characterRecord.energy + gameAction.energyDelta).clamp(-1, 100)
           ),
           gameRecord: record.gameRecord.copyWith(
             timeLeft: record.gameRecord.timeLeft - gameAction.timeCost,
