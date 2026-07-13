@@ -24,17 +24,19 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m1(count) => "Left: ${count}";
 
-  static String m2(amount) => "-${amount} energy";
+  static String m2(count) => "Goal: ${count} days";
 
-  static String m3(amount) => "+${amount} happiness";
+  static String m3(amount) => "-${amount} energy";
 
-  static String m4(skills) => "Insufficient: ${skills}";
+  static String m4(amount) => "+${amount} happiness";
 
-  static String m5(goal) => "Goal: ${goal}";
+  static String m5(skills) => "Insufficient: ${skills}";
 
-  static String m6(amount) => "${amount} h.";
+  static String m6(goal) => "Goal: ${goal}";
 
-  static String m7(amount) => "Total Assets: ${amount}";
+  static String m7(amount) => "${amount} h.";
+
+  static String m8(amount) => "Total Assets: ${amount}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -54,18 +56,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "continue_game": MessageLookupByLibrary.simpleMessage("Continue Game"),
     "day_count": m0,
     "day_left": m1,
+    "days_goal": m2,
     "defeat_desc": MessageLookupByLibrary.simpleMessage(
       "Unfortunately, it didn\'t work out this time. Try again!",
     ),
     "defeat_title": MessageLookupByLibrary.simpleMessage("Game Over"),
     "energy": MessageLookupByLibrary.simpleMessage("Energy"),
-    "energy_cost": m2,
+    "energy_cost": m3,
+    "enter_name": MessageLookupByLibrary.simpleMessage("Enter your name"),
     "event_title": MessageLookupByLibrary.simpleMessage("Event"),
     "finIQ": MessageLookupByLibrary.simpleMessage("Financial IQ"),
     "final_stats": MessageLookupByLibrary.simpleMessage("Final Stats"),
     "happiness": MessageLookupByLibrary.simpleMessage("Happiness"),
-    "happiness_gain": m3,
-    "insufficientJobSkillsFailure": m4,
+    "happiness_gain": m4,
+    "insufficientJobSkillsFailure": m5,
     "insufficientTimeFailure": MessageLookupByLibrary.simpleMessage(
       "Not enough time to complete the action",
     ),
@@ -89,16 +93,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "no_jobs_available": MessageLookupByLibrary.simpleMessage(
       "No jobs available",
     ),
+    "record_result": MessageLookupByLibrary.simpleMessage("Record Result"),
     "savings": MessageLookupByLibrary.simpleMessage("Savings"),
-    "savings_goal": m5,
+    "savings_goal": m6,
     "score": MessageLookupByLibrary.simpleMessage("Score"),
     "sprint_mode": MessageLookupByLibrary.simpleMessage("Sprint"),
     "sprint_mode_desc": MessageLookupByLibrary.simpleMessage(
       "Earn 100,000 in 30 days",
     ),
     "start_new_game": MessageLookupByLibrary.simpleMessage("Start New Game"),
-    "time_cost": m6,
-    "total_assets": m7,
+    "time_cost": m7,
+    "total_assets": m8,
     "unfoldingFailure": MessageLookupByLibrary.simpleMessage(
       "Error processing data",
     ),

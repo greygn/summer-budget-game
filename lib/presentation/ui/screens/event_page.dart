@@ -86,7 +86,7 @@ class EventPage extends StatelessWidget {
                                   context,
                                   adaptive,
                                   '${event.moneyDelta > 0 ? '+' : ''}${event.moneyDelta} ₽',
-                                  Icons.currency_ruble,
+                                  Icons.payments_outlined,
                                   color: event.moneyDelta > 0
                                       ? Colors.green
                                       : Colors.red,

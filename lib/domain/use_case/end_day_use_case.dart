@@ -47,7 +47,7 @@ class EndDayUseCase extends UseCaseNoPrarms<SaveRecordEntity> {
           inflationLevel: effectiveInflationLevel
         ),
         characterRecord: record.characterRecord.copyWith(
-          energy: record.characterRecord.energy + emergyIncrement,
+          energy: (record.characterRecord.energy + emergyIncrement).clamp(-1, 100),
           savings: record.characterRecord.savings + savingsIncrement,
         ),
       );

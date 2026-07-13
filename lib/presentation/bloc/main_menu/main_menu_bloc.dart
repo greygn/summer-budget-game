@@ -46,7 +46,7 @@ class MainMenuBloc extends Bloc<MainMenuEvent, MainMenuState> {
       (save) => emit(
         state.copyWith(
           isLoading: false,
-          hasSave: true,
+          hasSave: !save.gameRecord.isOver,
         ),
       ),
     );

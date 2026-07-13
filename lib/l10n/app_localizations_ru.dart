@@ -146,6 +146,11 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String days_goal(Object count) {
+    return 'Цель: $count дн.';
+  }
+
+  @override
   String day_left(Object count) {
     return 'Осталось: $count';
   }
@@ -182,4 +187,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get final_stats => 'Финальная статистика';
+
+  @override
+  String get enter_name => 'Введите ваше имя';
+
+  @override
+  String get record_result => 'Записать результат';
 }

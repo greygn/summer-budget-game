@@ -5,6 +5,6 @@ sealed class LeaderboardEvent {}
 final class LeaderboardOpened extends LeaderboardEvent {}
 
 final class AddLeaderboardRecord extends LeaderboardEvent {
-  final LeaderboardRecordEntity record;
-  AddLeaderboardRecord(this.record);
+  final String name;
+  AddLeaderboardRecord(this.name);
 }

@@ -47,7 +47,7 @@ class GameProgressCard extends StatelessWidget {
         : BorderRadius.circular(UiRadius.largeIncreased);
 
     return Container(
-      padding: EdgeInsets.all(padding ?? UiSpacing.xl),
+      padding: EdgeInsets.all(padding ?? UiSpacing.lg),
       decoration: BoxDecoration(
         color: theme.cardTheme.color ?? colorScheme.primaryContainer.withValues(alpha: AppTheme.strokeAlpha),
         borderRadius: themeRadius,
@@ -93,7 +93,7 @@ class GameProgressCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: UiSpacing.xl),
+          const SizedBox(height: UiSpacing.lg),
           ClipRRect(
             borderRadius: BorderRadius.circular(UiRadius.extraLargeIncr),
             child: LinearProgressIndicator(

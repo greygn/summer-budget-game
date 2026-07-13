@@ -350,6 +350,12 @@ abstract class AppLocalizations {
   /// **'День {day}'**
   String day_count(Object day);
 
+  /// No description provided for @days_goal.
+  ///
+  /// In ru, this message translates to:
+  /// **'Цель: {count} дн.'**
+  String days_goal(Object count);
+
   /// No description provided for @day_left.
   ///
   /// In ru, this message translates to:
@@ -409,6 +415,18 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Финальная статистика'**
   String get final_stats;
+
+  /// No description provided for @enter_name.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите ваше имя'**
+  String get enter_name;
+
+  /// No description provided for @record_result.
+  ///
+  /// In ru, this message translates to:
+  /// **'Записать результат'**
+  String get record_result;
 }
 
 class _AppLocalizationsDelegate

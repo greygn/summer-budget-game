@@ -146,6 +146,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String days_goal(Object count) {
+    return 'Goal: $count days';
+  }
+
+  @override
   String day_left(Object count) {
     return 'Left: $count';
   }
@@ -182,4 +187,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get final_stats => 'Final Stats';
+
+  @override
+  String get enter_name => 'Enter your name';
+
+  @override
+  String get record_result => 'Record Result';
 }

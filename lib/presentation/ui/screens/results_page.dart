@@ -2,14 +2,30 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui_kit.dart';
+import '../../../domain/entity/game_mode.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../app_router.gr.dart';
 import '../../bloc/game/game_bloc.dart';
 import '../../bloc/game/game_state.dart';
+import '../../bloc/leaderboard/leaderboard_bloc.dart';
+import '../../bloc/leaderboard/leaderboard_event.dart';
 
 @RoutePage()
-class ResultsPage extends StatelessWidget {
+class ResultsPage extends StatefulWidget {
   const ResultsPage({super.key});
+
+  @override
+  State<ResultsPage> createState() => _ResultsPageState();
+}
+
+class _ResultsPageState extends State<ResultsPage> {
+  final _nameController = TextEditingController();
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +41,14 @@ class ResultsPage extends StatelessWidget {
           }
 
           final char = save.characterRecord;
+          final game = save.gameRecord;
           final totalAssets = char.balance + char.savings;
-          final isVictory = totalAssets >= state.goal;
+          
+          final moneyGoal = game.gameMode == GameMode.standard 
+              ? 100000 // CheckStateUseCase.standardBalanceGoal
+              : 1000000; // CheckStateUseCase.marathonBalanceGoal
+          
+          final isVictory = totalAssets >= moneyGoal && char.happiness >= 0 && char.balance >= -10000;
           final color = isVictory ? Colors.green : Colors.red;
 
           return LayoutBuilder(
@@ -51,11 +73,10 @@ class ResultsPage extends StatelessWidget {
                   child: Center(
                     child: ConstrainedBox(
                       constraints: BoxConstraints(maxWidth: UiWidths.expanded),
-                      child: Padding(
+                      child: SingleChildScrollView(
                         padding: EdgeInsets.all(padding),
                         child: Column(
                           children: [
-                            const Spacer(),
                             AppHeroIcon(
                               icon: isVictory
                                   ? Icons.emoji_events_rounded
@@ -78,6 +99,14 @@ class ResultsPage extends StatelessWidget {
                             AppInfoCard(
                               text: isVictory ? t.victory_desc : t.defeat_desc,
                             ),
+                            if (isVictory) ...[
+                              SizedBox(height: UiSpacing.xl),
+                              AppEditorField(
+                                controller: _nameController,
+                                label: t.enter_name,
+                                icon: Icons.person_outline,
+                              ),
+                            ],
                             SizedBox(height: adaptive.size == AdaptiveSize.compact
                                 ? UiSpacing.xl
                                 : UiSpacing.xxl),
@@ -87,7 +116,7 @@ class ResultsPage extends StatelessWidget {
                                 color: theme.colorScheme.onSurfaceVariant,
                                 letterSpacing: 1.2,
                                 fontWeight: FontWeight.bold,
-                                fontSize: adaptive.labelTextSize,
+                                fontSize: adaptive.titleTextSize,
                               ),
                             ),
                             SizedBox(height: UiSpacing.md),
@@ -116,13 +145,29 @@ class ResultsPage extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            const Spacer(),
+                            SizedBox(height: UiSpacing.xxl),
+                            if (isVictory) ...[
+                              AppButton(
+                                label: t.record_result,
+                                onPressed: () {
+                                  if (_nameController.text.isNotEmpty) {
+                                    context.read<LeaderboardBloc>().add(
+                                      AddLeaderboardRecord(_nameController.text),
+                                    );
+                                    context.router.replaceAll([const HomeRoute()]);
+                                  }
+                                },
+                                isFullWidth: true,
+                              ),
+                              SizedBox(height: UiSpacing.md),
+                            ],
                             AppButton(
                               label: t.back_to_menu,
                               onPressed: () {
                                 context.router.replaceAll([const HomeRoute()]);
                               },
                               isFullWidth: true,
+                              style: ButtonVariant.secondary,
                               size: switch (adaptive.size) {
                                 AdaptiveSize.compact ||
                                 AdaptiveSize.medium =>

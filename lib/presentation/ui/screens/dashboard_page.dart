@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui_kit.dart';
 import '../../../domain/entity/game_mode.dart';
+import '../../../domain/use_case/check_state_use_case.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../bloc/game/game_bloc.dart';
 import '../../bloc/game/game_event.dart';
@@ -100,7 +101,9 @@ class _DashboardPageState extends State<DashboardPage> {
                             balance: char.balance,
                             savings: char.savings,
                             totalAssets: totalAssets,
-                            goal: goal,
+                            moneyGoal: game.gameMode == GameMode.standard
+                                ? CheckStateUseCase.standardBalanceGoal.toDouble()
+                                : CheckStateUseCase.marathonBalanceGoal.toDouble(),
                           ),
                           SizedBox(height: UiSpacing.lg),
                           GridView.count(
@@ -169,12 +172,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                   label: t.choose_job,
                                   icon: Icons.work_outline,
                                   style: ButtonVariant.secondary,
-                                  size: switch (adaptive.size) {
-                                    AdaptiveSize.compact ||
-                                    AdaptiveSize.medium =>
-                                      ButtonSize.medium,
-                                    _ => ButtonSize.large,
-                                  },
+                                  size: ButtonSize.large,
                                   onPressed: () =>
                                       context.router.pushPath('/job-chooser'),
                                 ),
@@ -185,12 +183,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                   label: t.choose_action,
                                   icon: Icons.local_activity_outlined,
                                   style: ButtonVariant.secondary,
-                                  size: switch (adaptive.size) {
-                                    AdaptiveSize.compact ||
-                                    AdaptiveSize.medium =>
-                                      ButtonSize.medium,
-                                    _ => ButtonSize.large,
-                                  },
+                                  size: ButtonSize.large,
                                   onPressed: () =>
                                       context.router.pushPath('/action-chooser'),
                                 ),
@@ -198,18 +191,15 @@ class _DashboardPageState extends State<DashboardPage> {
                             ],
                           ),
                           SizedBox(height: UiSpacing.lg),
-                          AppButton(
-                            label: t.next_day,
-                            icon: Icons.skip_next_outlined,
-                            onPressed: () =>
-                                context.read<GameBloc>().add(EndDayPressed()),
-                            size: switch (adaptive.size) {
-                              AdaptiveSize.compact ||
-                              AdaptiveSize.medium =>
-                                ButtonSize.medium,
-                              _ => ButtonSize.large,
-                            },
-                            isFullWidth: true,
+                          _BouncingButton(
+                            child: AppButton(
+                              label: t.next_day,
+                              icon: Icons.skip_next_outlined,
+                              onPressed: () =>
+                                  context.read<GameBloc>().add(EndDayPressed()),
+                              size: ButtonSize.medium,
+                              isFullWidth: true,
+                            ),
                           ),
                         ],
                       ),
@@ -225,13 +215,45 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 }
 
+class _BouncingButton extends StatefulWidget {
+  final Widget child;
+  const _BouncingButton({required this.child});
+
+  @override
+  State<_BouncingButton> createState() => _BouncingButtonState();
+}
+
+class _BouncingButtonState extends State<_BouncingButton> {
+  double _scale = 1.0;
+
+  void _onTapDown(TapDownDetails details) => setState(() => _scale = 0.96);
+  void _onTapUp(TapUpDetails details) => setState(() => _scale = 1.0);
+  void _onTapCancel() => setState(() => _scale = 1.0);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: _onTapDown,
+      onTapUp: _onTapUp,
+      onTapCancel: _onTapCancel,
+      behavior: HitTestBehavior.translucent,
+      child: AnimatedScale(
+        scale: _scale,
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.easeOutCubic,
+        child: widget.child,
+      ),
+    );
+  }
+}
+
 class _AdaptiveInfoTiles extends StatelessWidget {
   final AdaptiveLayout adaptive;
   final AppLocalizations t;
   final int balance;
   final int savings;
   final int totalAssets;
-  final double goal;
+  final double moneyGoal;
 
   const _AdaptiveInfoTiles({
     required this.adaptive,
@@ -239,7 +261,7 @@ class _AdaptiveInfoTiles extends StatelessWidget {
     required this.balance,
     required this.savings,
     required this.totalAssets,
-    required this.goal,
+    required this.moneyGoal,
   });
 
   @override
@@ -255,7 +277,6 @@ class _AdaptiveInfoTiles extends StatelessWidget {
           subtitle: t.total_assets(totalAssets.toString()),
           icon: Icons.account_balance_wallet_rounded,
           color: Colors.teal,
-          suffix: ' ₽',
         ),
       ),
       if (isStackMode)
@@ -267,10 +288,9 @@ class _AdaptiveInfoTiles extends StatelessWidget {
         child: ExpressiveInfoTile(
           title: t.savings,
           value: savings,
-          subtitle: t.savings_goal(goal.toInt().toString()),
+          subtitle: t.savings_goal(moneyGoal.toInt().toString()),
           icon: Icons.savings_rounded,
           color: Colors.blue,
-          suffix: ' ₽',
         ),
       ),
     ];

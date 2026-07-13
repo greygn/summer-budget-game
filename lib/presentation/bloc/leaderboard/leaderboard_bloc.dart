@@ -39,7 +39,7 @@ class LeaderboardBloc extends Bloc<LeaderboardEvent, LeaderboardState> {
       ) async {
     emit(state.copyWith(isLoading: true));
 
-    final result = await winGameUseCase(null);
+    final result = await winGameUseCase(event.name);
 
     await result.fold(
           (failure) async => emit(state.copyWith(isLoading: false, failure: failure)),

@@ -38,54 +38,77 @@ class JobChooserPage extends StatelessWidget {
                     separatorBuilder: (context, index) => const SizedBox(height: UiSpacing.md),
                     itemBuilder: (context, index) {
                       final job = state.jobs[index];
-                      return ActionCard(
-                        title: job.name,
-                        leading: Container(
-                          padding: const EdgeInsets.all(UiSpacing.sm),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primary.withValues(alpha: AppTheme.surfaceAlpha),
-                            borderRadius: BorderRadius.circular(UiRadius.medium),
+                      final char = state.saveRecord?.characterRecord;
+                      final hasFinIQ = (char?.finIQ ?? 0) >= job.minFinIQ;
+                      final hasPoints = (char?.score ?? 0) >= job.minPoints;
+                      final canAfford = hasFinIQ && hasPoints;
+
+                      return Opacity(
+                        opacity: canAfford ? 1.0 : 0.5,
+                        child: ActionCard(
+                          title: job.name,
+                          leading: Container(
+                            padding: const EdgeInsets.all(UiSpacing.sm),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.primary.withValues(alpha: AppTheme.surfaceAlpha),
+                              borderRadius: BorderRadius.circular(UiRadius.medium),
+                            ),
+                            child: Icon(
+                              Icons.work_rounded,
+                              color: Theme.of(context).colorScheme.primary,
+                              size: adaptive.iconSize,
+                            ),
                           ),
-                          child: Icon(
-                            Icons.work_rounded,
-                            color: Theme.of(context).colorScheme.primary,
-                            size: adaptive.iconSize,
-                          ),
-                        ),
-                        tags: [
-                          _buildTag(
-                            context,
-                            adaptive,
-                            '${job.salary}',
-                            Icons.currency_ruble,
-                            color: Colors.green,
-                          ),
-                          _buildTag(
-                            context,
-                            adaptive,
-                            t.time_cost(job.timeCost.toString()),
-                            Icons.access_time,
-                          ),
-                          _buildTag(
-                            context,
-                            adaptive,
-                            t.energy_cost(job.energyCost.toString()),
-                            Icons.bolt,
-                            color: Colors.blue,
-                          ),
-                          if (job.minFinIQ > 0)
+                          tags: [
                             _buildTag(
                               context,
                               adaptive,
-                              'IQ: ${job.minFinIQ}',
-                              Icons.psychology,
-                              color: Colors.purple,
+                              '+${job.salary}',
+                              Icons.currency_ruble,
+                              color: Colors.green,
                             ),
-                        ],
-                        onTap: () {
-                          context.read<GameBloc>().add(JobSelected(job));
-                          context.router.maybePop();
-                        },
+                            _buildTag(
+                              context,
+                              adaptive,
+                              t.time_cost(job.timeCost.toString()),
+                              Icons.access_time,
+                            ),
+                            _buildTag(
+                              context,
+                              adaptive,
+                              '–${job.happinessCost}',
+                              Icons.sentiment_satisfied_alt,
+                              color: Colors.orange,
+                            ),
+                            _buildTag(
+                              context,
+                              adaptive,
+                              '–${job.energyCost}',
+                              Icons.bolt,
+                              color: Colors.blue,
+                            ),
+                            if (job.minFinIQ > 0)
+                              _buildTag(
+                                context,
+                                adaptive,
+                                '${job.minFinIQ}',
+                                Icons.psychology,
+                                color: hasFinIQ ? Colors.purple : Colors.red,
+                              ),
+                            if (job.minPoints > 0)
+                              _buildTag(
+                                context,
+                                adaptive,
+                                '${job.minPoints}',
+                                Icons.star_outline,
+                                color: hasPoints ? Colors.amber : Colors.red,
+                              ),
+                          ],
+                          onTap: canAfford ? () {
+                            context.read<GameBloc>().add(JobSelected(job));
+                            context.router.maybePop();
+                          } : null,
+                        ),
                       );
                     },
                   ),

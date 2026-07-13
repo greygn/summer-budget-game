@@ -19,6 +19,17 @@ class ActionChooserPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(t.choose_action),
+        actions: [
+          BlocBuilder<GameBloc, GameState>(
+            builder: (context, state) {
+              final timeLeft = state.saveRecord?.gameRecord.timeLeft ?? 0;
+              return Padding(
+                padding: const EdgeInsets.only(right: UiSpacing.md),
+                child: UITimeBadge(time: timeLeft, isLarge: false,),
+              );
+            },
+          ),
+        ],
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -34,64 +45,110 @@ class ActionChooserPage extends StatelessWidget {
                 return Center(child: Text(t.no_actions_available));
               }
 
+              final groupedActions = <String, List<GameActionEntity>>{};
+              for (final action in state.actions) {
+                final category = action.category.name;
+                groupedActions.putIfAbsent(category, () => []).add(action);
+              }
+
+              final categories = groupedActions.keys.toList();
+
               return Center(
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: UiWidths.medium),
-                  child: ListView.separated(
+                  child: ListView.builder(
                     padding: EdgeInsets.all(adaptive.padding),
-                    itemCount: state.actions.length,
-                    separatorBuilder: (context, index) => const SizedBox(height: UiSpacing.md),
-                    itemBuilder: (context, index) {
-                      final action = state.actions[index];
-                      final isPositive = action.moneyDelta >= 0;
+                    itemCount: categories.length,
+                    itemBuilder: (context, catIndex) {
+                      final categoryKey = categories[catIndex];
+                      final actions = groupedActions[categoryKey]!;
 
-                      return ActionCard(
-                        title: action.name,
-                        leading: Container(
-                          padding: const EdgeInsets.all(UiSpacing.sm),
-                          decoration: BoxDecoration(
-                            color: (isPositive ? Colors.green : Colors.orange).withValues(alpha: AppTheme.surfaceAlpha),
-                            borderRadius: BorderRadius.circular(UiRadius.medium),
-                          ),
-                          child: Icon(
-                            _getActionIcon(action),
-                            color: isPositive ? Colors.green : Colors.orange,
-                            size: adaptive.iconSize,
-                          ),
-                        ),
-                        tags: [
-                          _buildTag(
-                            context,
-                            adaptive,
-                            '${action.moneyDelta > 0 ? '+' : ''}${action.moneyDelta}',
-                            Icons.currency_ruble,
-                            color: Colors.red,
-                          ),
-                          if (action.happinessDelta != 0)
-                            _buildTag(
-                              context, 
-                              adaptive,
-                              t.happiness_gain(action.happinessDelta.toString()), 
-                              Icons.sentiment_satisfied_alt, 
-                              color: Colors.orange
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: UiSpacing.md),
+                            child: Text(
+                              _getCategoryName(context, categoryKey),
+                              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context).colorScheme.primary,
+                                  ),
                             ),
-                          _buildTag(
-                            context, 
-                            adaptive,
-                            t.time_cost(action.timeCost.toString()), 
-                            Icons.access_time
                           ),
-                          _buildTag(
-                            context, 
-                            adaptive,
-                            _getCategoryName(context, action.category.name), 
-                            Icons.category_outlined
-                          ),
+                          ...actions.map((action) {
+                            final timeLeft = state.saveRecord?.gameRecord.timeLeft ?? 0;
+                            final canAfford = timeLeft >= action.timeCost;
+                            final isPositive = action.moneyDelta >= 0;
+
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: UiSpacing.md),
+                              child: Opacity(
+                                opacity: canAfford ? 1.0 : 0.5,
+                                child: ActionCard(
+                                  title: action.name,
+                                  leading: Container(
+                                    padding: const EdgeInsets.all(UiSpacing.sm),
+                                    decoration: BoxDecoration(
+                                      color: (isPositive ? Colors.green : Colors.orange)
+                                          .withValues(alpha: AppTheme.surfaceAlpha),
+                                      borderRadius: BorderRadius.circular(UiRadius.medium),
+                                    ),
+                                    child: Icon(
+                                      _getActionIcon(action),
+                                      color: isPositive ? Colors.green : Colors.orange,
+                                      size: adaptive.iconSize,
+                                    ),
+                                  ),
+                                  tags: [
+                                    _buildTag(
+                                      context,
+                                      adaptive,
+                                      '${action.moneyDelta > 0 ? '+' : ''}${action.moneyDelta}',
+                                      Icons.payments_outlined,
+                                      color: Colors.red,
+                                    ),
+                                    if (action.happinessDelta != 0)
+                                      _buildTag(
+                                        context,
+                                        adaptive,
+                                        '${action.happinessDelta > 0 ? '+' : ''}${action.happinessDelta}',
+                                        Icons.sentiment_satisfied_alt,
+                                        color: Colors.orange,
+                                      ),
+                                    if (action.finIQDelta != 0)
+                                      _buildTag(
+                                        context,
+                                        adaptive,
+                                        '+${action.finIQDelta}',
+                                        Icons.psychology,
+                                        color: Colors.purple,
+                                      ),
+                                    _buildTag(
+                                      context,
+                                      adaptive,
+                                      t.time_cost(action.timeCost.toString()),
+                                      Icons.access_time,
+                                      color: canAfford ? null : Colors.red,
+                                    ),
+                                    _buildTag(
+                                      context,
+                                      adaptive,
+                                      _getCategoryName(context, action.category.name),
+                                      Icons.category_outlined,
+                                    ),
+                                  ],
+                                  onTap: canAfford
+                                      ? () {
+                                          context.read<GameBloc>().add(GameActionSelected(action));
+                                          context.router.maybePop();
+                                        }
+                                      : null,
+                                ),
+                              ),
+                            );
+                          }),
                         ],
-                        onTap: () {
-                          context.read<GameBloc>().add(GameActionSelected(action));
-                          context.router.maybePop();
-                        },
                       );
                     },
                   ),

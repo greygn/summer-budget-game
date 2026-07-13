@@ -101,93 +101,110 @@ class _HomePageState extends State<HomePage> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: theme.colorScheme.inversePrimary,
-        ),
+        backgroundColor: theme.colorScheme.surface,
         body: LayoutBuilder(
           builder: (context, constraints) {
             final adaptive = AdaptiveLayout.of(constraints);
             
-            return Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: UiWidths.compact),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: adaptive.padding),
-                  child: BlocBuilder<MainMenuBloc, MainMenuState>(
-                    builder: (context, state) {
-                      if (state.isLoading) {
-                        return const CircularProgressIndicator();
-                      }
+            return SafeArea(
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: UiWidths.compact),
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: adaptive.padding,
+                      vertical: UiSpacing.xxl,
+                    ),
+                    child: BlocBuilder<MainMenuBloc, MainMenuState>(
+                      builder: (context, state) {
+                        if (state.isLoading) {
+                          return const Center(child: CircularProgressIndicator());
+                        }
 
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            t.welcome_text,
-                            style: theme.textTheme.headlineMedium?.copyWith(
-                              fontSize: adaptive.headlineTextSize,
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const SizedBox(height: UiSpacing.xxl),
+                            Text(
+                              t.appTitle.toUpperCase(),
+                              style: theme.textTheme.displayLarge?.copyWith(
+                                fontWeight: FontWeight.w900,
+                                color: theme.colorScheme.primary,
+                                fontSize: adaptive.headlineTextSize * 2.5,
+                                letterSpacing: -2,
+                                height: 0.9,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: UiSpacing.xxl),
-                          if (state.hasSave) ...[
+                            const SizedBox(height: UiSpacing.xxl),
+                            if (state.hasSave) ...[
+                              MenuButton(
+                                label: t.continue_game,
+                                icon: Icons.play_arrow_rounded,
+                                onPressed: () {
+                                  context.read<MainMenuBloc>().add(ContinueGamePressed());
+                                },
+                                backgroundColor: theme.colorScheme.primary,
+                                foregroundColor: theme.colorScheme.onPrimary,
+                              ),
+                              const SizedBox(height: UiSpacing.lg),
+                            ],
                             MenuButton(
-                              label: t.continue_game,
-                              icon: Icons.play_arrow,
-                              onPressed: () {
-                                context.read<MainMenuBloc>().add(ContinueGamePressed());
-                              },
-                              backgroundColor: theme.colorScheme.primary,
-                              foregroundColor: theme.colorScheme.onPrimary,
+                              label: t.start_new_game,
+                              icon: Icons.add_rounded,
+                              onPressed: () => _showModeSelection(context),
+                              backgroundColor: state.hasSave
+                                  ? theme.colorScheme.secondaryContainer
+                                  : theme.colorScheme.primary,
+                              foregroundColor: state.hasSave
+                                  ? theme.colorScheme.onSecondaryContainer
+                                  : theme.colorScheme.onPrimary,
                             ),
                             const SizedBox(height: UiSpacing.lg),
+                            MenuButton(
+                              label: t.leaderboard,
+                              icon: Icons.leaderboard_rounded,
+                              onPressed: () => context.router.pushPath('/records'),
+                              backgroundColor: theme.colorScheme.secondaryContainer,
+                              foregroundColor: theme.colorScheme.onSecondaryContainer,
+                            ),
+                            const SizedBox(height: UiSpacing.xxl),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                TextButton(
+                                  onPressed: () => MyApp.of(context)?.setLocale(const Locale('en')),
+                                  child: Text(
+                                    "EN",
+                                    style: TextStyle(
+                                      fontSize: adaptive.bodyTextSize,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  "•",
+                                  style: TextStyle(
+                                    fontSize: adaptive.bodyTextSize,
+                                    color: theme.colorScheme.outlineVariant,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () => MyApp.of(context)?.setLocale(const Locale('ru')),
+                                  child: Text(
+                                    "RU",
+                                    style: TextStyle(
+                                      fontSize: adaptive.bodyTextSize,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
-                          MenuButton(
-                            label: t.start_new_game,
-                            icon: Icons.add,
-                            onPressed: () => _showModeSelection(context),
-                            backgroundColor: state.hasSave
-                                ? theme.colorScheme.secondaryContainer
-                                : theme.colorScheme.primary,
-                            foregroundColor: state.hasSave
-                                ? theme.colorScheme.onSecondaryContainer
-                                : theme.colorScheme.onPrimary,
-                          ),
-                          const SizedBox(height: UiSpacing.lg),
-                          MenuButton(
-                            label: t.leaderboard,
-                            icon: Icons.leaderboard,
-                            onPressed: () => context.router.pushPath('/records'),
-                            backgroundColor: theme.colorScheme.secondaryContainer,
-                            foregroundColor: theme.colorScheme.onSecondaryContainer,
-                          ),
-                          const SizedBox(height: UiSpacing.xxl),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              TextButton(
-                                onPressed: () => MyApp.of(context)?.setLocale(const Locale('en')),
-                                child: Text(
-                                  "English",
-                                  style: TextStyle(fontSize: adaptive.bodyTextSize),
-                                ),
-                              ),
-                              Text(
-                                "|",
-                                style: TextStyle(fontSize: adaptive.bodyTextSize),
-                              ),
-                              TextButton(
-                                onPressed: () => MyApp.of(context)?.setLocale(const Locale('ru')),
-                                child: Text(
-                                  "Русский",
-                                  style: TextStyle(fontSize: adaptive.bodyTextSize),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),

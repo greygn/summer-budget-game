@@ -8,20 +8,20 @@ import 'package:summer_budget_game/domain/repository/game_repository.dart';
 import '../failure/unfolding_failure.dart';
 
 //Запись информации об игроке в таблицу рекордов
-class WinGameUseCase extends UseCase<SaveRecordEntity, void> {
+class WinGameUseCase extends UseCase<SaveRecordEntity, String> {
   final GameRepository gameRepository;
 
   WinGameUseCase({required this.gameRepository});
 
   @override
-  Future<Either<Failure, SaveRecordEntity>> call(void params) async {
+  Future<Either<Failure, SaveRecordEntity>> call(String name) async {
     final saveRecordResult = await gameRepository.readSaveRecord();
 
     return await saveRecordResult.fold(
       (failure) async => Left(UnfoldingFailure()),
       (record) async {
         final leaderboardRecord = LeaderboardRecordEntity(
-          name: record.name,
+          name: name,
           score: record.characterRecord.score,
           days: record.gameRecord.currentDay,
           finIQ: record.characterRecord.finIQ,

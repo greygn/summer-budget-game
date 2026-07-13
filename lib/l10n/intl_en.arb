@@ -44,6 +44,7 @@
   "accept": "Accept",
   "event_title": "Event",
   "day_count": "Day {day}",
+  "days_goal": "Goal: {count} days",
   "day_left": "Left: {count}",
   "savings_goal": "Goal: {goal}",
   "wallet": "In Wallet",
@@ -53,5 +54,7 @@
   "victory_desc": "Congratulations! You reached your goal and saved enough money.",
   "defeat_desc": "Unfortunately, it didn't work out this time. Try again!",
   "back_to_menu": "Back to Menu",
-  "final_stats": "Final Stats"
+  "final_stats": "Final Stats",
+  "enter_name": "Enter your name",
+  "record_result": "Record Result"
 }

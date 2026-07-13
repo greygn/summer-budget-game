@@ -58,10 +58,16 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         final game = saveRecord.gameRecord;
         final char = saveRecord.characterRecord;
 
-        final double goal = game.gameMode == GameMode.standard
-            ? CheckStateUseCase.standardBalanceGoal.toDouble()
-            : CheckStateUseCase.marathonBalanceGoal.toDouble();
-        final double progress = char.savings / goal;
+        final double goal;
+        final double progress;
+
+        if (game.gameMode == GameMode.standard) {
+          goal = CheckStateUseCase.standardBalanceGoal.toDouble();
+          progress = goal > 0 ? (game.currentDay / game.allowedDays).clamp(0.0, 1.0) : 0;
+        } else {
+          goal = CheckStateUseCase.marathonBalanceGoal.toDouble();
+          progress = goal > 0 ? ((char.balance + char.savings) / goal).clamp(0.0, 1.0) : 0;
+        }
 
         final event = game.currentEvent;
         final bool isEventBad = event.moneyDelta < 0 ||
