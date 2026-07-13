@@ -19,10 +19,14 @@ import 'package:summer_budget_game/presentation/bloc/game/game_bloc.dart';
 import 'package:summer_budget_game/presentation/bloc/leaderboard/leaderboard_bloc.dart';
 import 'package:summer_budget_game/presentation/bloc/main_menu/main_menu_bloc.dart';
 import 'package:talker_flutter/talker_flutter.dart';
+import 'core/di/injection.dart';
 import 'l10n/app_localizations.dart';
 import 'package:ui_kit/theme/app_theme.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await configureDependencies();
+  
   final gameRepository = MockGameRepository();
 
   // Use cases initialization
