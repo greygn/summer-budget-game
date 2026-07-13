@@ -32,6 +32,8 @@ migrate_working_dir/
 .pub/
 /build/
 /coverage/
+*.freezed.dart
+*.g.dart
 
 # Symbolication related
 app.*.symbols
@@ -50,3 +52,14 @@ packages/ui_kit/.dart_tool
 packages/ui_kit/.flutter-plugins-dependencies
 packages/ui_kit/pubspec.lock
 packages/ui_kit/lib/widgetbook/main.directories.g.dart
+/lib/generated
+
+# Data layer
+lib/core/database/app_database.g.dart
+lib/core/database/dao/game_action_categories_dao.g.dart
+lib/core/database/dao/game_actions_dao.g.dart
+lib/core/database/dao/game_event_options_dao.g.dart
+lib/core/database/dao/game_events_dao.g.dart
+lib/core/database/dao/jobs_dao.g.dart
+lib/core/database/dao/leaderboard_dao.g.dart
+lib/core/database/dao/save_record_dao.g.dart

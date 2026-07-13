@@ -16,4 +16,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get welcome_text => 'Welcome!';
+
+  @override
+  String get insufficientTimeFailure =>
+      'Not enough time to complete the action';
+
+  @override
+  String get unfoldingFailure => 'Error processing data';
+
+  @override
+  String insufficientJobSkillsFailure(Object skills) {
+    return 'Insufficient: $skills';
+  }
+
+  @override
+  String get finIQ => 'Financial IQ';
+
+  @override
+  String get score => 'Score';
 }

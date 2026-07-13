@@ -9,5 +9,10 @@
   "@languageIntroduction": {
     "description": "Описание языка интерфейса приложения"
   },
-  "welcome_text": "Добро пожаловать!"
+  "welcome_text": "Добро пожаловать!",
+  "insufficientTimeFailure": "Не хватает времени для выполнения действия",
+  "unfoldingFailure": "Ошибка обработки данных",
+  "insufficientJobSkillsFailure": "Недостаточно: {skills}",
+  "finIQ": "Фин. IQ",
+  "score": "Очки"
 }

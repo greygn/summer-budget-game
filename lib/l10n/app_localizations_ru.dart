@@ -16,4 +16,22 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get welcome_text => 'Добро пожаловать!';
+
+  @override
+  String get insufficientTimeFailure =>
+      'Не хватает времени для выполнения действия';
+
+  @override
+  String get unfoldingFailure => 'Ошибка обработки данных';
+
+  @override
+  String insufficientJobSkillsFailure(Object skills) {
+    return 'Недостаточно: $skills';
+  }
+
+  @override
+  String get finIQ => 'Фин. IQ';
+
+  @override
+  String get score => 'Очки';
 }

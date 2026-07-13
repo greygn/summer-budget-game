@@ -20,12 +20,26 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
+  static String m0(skills) => "Insufficient: ${skills}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "appTitle": MessageLookupByLibrary.simpleMessage("Cheapy!"),
+    "finIQ": MessageLookupByLibrary.simpleMessage("Financial IQ"),
+    "insufficientJobSkillsFailure": m0,
+    "insufficientTimeFailure": MessageLookupByLibrary.simpleMessage(
+      "Not enough time to complete the action",
+    ),
     "languageIntroduction": MessageLookupByLibrary.simpleMessage(
       "This app is in English",
     ),
+    "score": MessageLookupByLibrary.simpleMessage("Score"),
+    "unfoldingFailure": MessageLookupByLibrary.simpleMessage(
+      "Error processing data",
+    ),
     "welcome_text": MessageLookupByLibrary.simpleMessage("Welcome!"),
+    "writingFailure": MessageLookupByLibrary.simpleMessage(
+      "Error writing data",
+    ),
   };
 }

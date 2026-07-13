@@ -14,5 +14,6 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: ActionChooserRoute.page, path: '/action-chooser'),
     AutoRoute(page: JobChooserRoute.page, path: '/job-chooser'),
     AutoRoute(page: ResultsRoute.page, path: '/results'),
+    AutoRoute(page: RecordsRoute.page, path: '/records'),
   ];
 }
