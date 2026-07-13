@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 import 'package:summer_budget_game/presentation/bloc/main_menu/main_menu_event.dart';
 import 'package:summer_budget_game/presentation/bloc/main_menu/main_menu_state.dart';
 
@@ -6,6 +7,7 @@ import '../../../domain/failure/unfolding_failure.dart';
 import '../../../domain/use_case/get_save_info_use_case.dart';
 import '../../../domain/use_case/start_new_game_use_case.dart';
 
+@injectable
 class MainMenuBloc extends Bloc<MainMenuEvent, MainMenuState> {
   final GetSaveInfoUseCase getSaveInfoUseCase;
   final StartNewGameUseCase startNewGameUseCase;

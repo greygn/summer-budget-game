@@ -95,10 +95,16 @@ class _RecordsPageState extends State<RecordsPage> {
                     rankIcon = Icons.military_tech;
                   }
 
+                  String dateStr = record.time;
+                  try {
+                    final date = DateTime.parse(record.time);
+                    dateStr = '${date.day}.${date.month}.${date.year}';
+                  } catch (_) {}
+
                   return ExpressiveInfoTile(
                     title: record.name.isEmpty ? 'Player' : record.name,
                     value: record.score,
-                    subtitle: '${t.finIQ}: ${record.finIQ} | ${record.time}',
+                    subtitle: '${t.wallet}: ${record.balance} | ${t.finIQ}: ${record.finIQ}\n$dateStr',
                     icon: rankIcon,
                     color: rankColor,
                   );

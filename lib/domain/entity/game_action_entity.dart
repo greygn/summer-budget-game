@@ -10,7 +10,8 @@ abstract class GameActionEntity with _$GameActionEntity{
 
   const factory GameActionEntity({
     required int ID,
-    @Default('') String name,
+    @Default('') String nameRu,
+    @Default('') String nameEn,
     required GameActionCategoryEntity category,
     @Default(0) int moneyDelta,
     @Default(0) int happinessDelta,

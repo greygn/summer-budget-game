@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:injectable/injectable.dart';
 import 'package:summer_budget_game/domain/entity/game_action_category_entity.dart';
 import 'package:summer_budget_game/domain/entity/game_action_entity.dart';
 import 'package:summer_budget_game/domain/entity/game_event_entity.dart';
@@ -32,24 +33,27 @@ class MockGameRepository implements GameRepository {
     return Right([
       const GameActionEntity(
         ID: 1,
-        name: 'Buy Coffee', 
-        category: GameActionCategoryEntity(ID: 1, name: 'Food'),
+        nameRu: 'Buy Coffee', 
+        nameEn: 'Buy Coffee',
+        category: GameActionCategoryEntity(ID: 1, nameRu: 'Food', nameEn: 'Food'),
         moneyDelta: -250,
         happinessDelta: 5,
         timeCost: 0,
       ),
       const GameActionEntity(
         ID: 2,
-        name: 'Go to Gym',
-        category: GameActionCategoryEntity(ID: 2, name: 'Health'),
+        nameRu: 'Go to Gym',
+        nameEn: 'Go to Gym',
+        category: GameActionCategoryEntity(ID: 2, nameRu: 'Health', nameEn: 'Health'),
         moneyDelta: -500,
         happinessDelta: 10,
         timeCost: 2,
       ),
       const GameActionEntity(
         ID: 3,
-        name: 'Watch Movie',
-        category: GameActionCategoryEntity(ID: 3, name: 'Leisure'),
+        nameRu: 'Watch Movie',
+        nameEn: 'Watch Movie',
+        category: GameActionCategoryEntity(ID: 3, nameRu: 'Leisure', nameEn: 'Leisure'),
         moneyDelta: -400,
         happinessDelta: 15,
         timeCost: 3,
@@ -62,21 +66,24 @@ class MockGameRepository implements GameRepository {
     return Right([
       const JobEntity(
         ID: 1,
-        name: 'Courier',
+        nameRu: 'Courier',
+        nameEn: 'Courier',
         salary: 1500,
         energyCost: 20,
         timeCost: 6,
       ),
       const JobEntity(
         ID: 2,
-        name: 'Waiter',
+        nameRu: 'Waiter',
+        nameEn: 'Waiter',
         salary: 2000,
         energyCost: 25,
         timeCost: 8,
       ),
       const JobEntity(
         ID: 3,
-        name: 'Intern Programmer',
+        nameRu: 'Intern Programmer',
+        nameEn: 'Intern Programmer',
         salary: 3000,
         energyCost: 15,
         timeCost: 8,
@@ -90,32 +97,36 @@ class MockGameRepository implements GameRepository {
     return const Right([
       GameEventEntity(
         ID: 1,
-        title: 'Находка на улице',
-        description: 'Вы гуляли по парку и нашли купюру в 1000 рублей! Сегодня явно ваш день.',
         moneyDelta: 1000,
         happinessDelta: 10,
       ),
       GameEventEntity(
         ID: 2,
-        title: 'Неожиданная поломка',
-        description: 'Ваш телефон упал и экран разбился. Ремонт обойдется в 3000 рублей.',
+        titleRu: 'Неожиданная поломка',
+        titleEn: 'Unexpected Breakdown',
+        descriptionRu: 'Ваш телефон упал и экран разбился. Ремонт обойдется в 3000 рублей.',
+        descriptionEn: 'Your phone broke. Repair will cost 3000 rubles.',
         moneyDelta: -3000,
         happinessDelta: -15,
       ),
       GameEventEntity(
         ID: 3,
-        title: 'Премия!',
-        description: 'Ваш начальник доволен вашей работой и выписал вам небольшую премию.',
+        titleRu: 'Премия!',
+        titleEn: 'Bonus!',
+        descriptionRu: 'Ваш начальник доволен вашей работой и выписал вам небольшую премию.',
+        descriptionEn: 'Your boss is happy with your work and gave you a bonus.',
         moneyDelta: 5000,
         happinessDelta: 20,
         options: [
           GameEventOptionEntity(
-            description: 'Положить в копилку',
+            descriptionRu: 'Положить в копилку',
+            descriptionEn: 'Save it',
             moneyDelta: 0,
             happinessDelta: 5,
           ),
           GameEventOptionEntity(
-            description: 'Отпраздновать в ресторане',
+            descriptionRu: 'Отпраздновать в ресторане',
+            descriptionEn: 'Celebrate at restaurant',
             moneyDelta: -2000,
             happinessDelta: 25,
           ),

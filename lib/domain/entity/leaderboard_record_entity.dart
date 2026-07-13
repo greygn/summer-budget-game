@@ -11,6 +11,7 @@ abstract class LeaderboardRecordEntity with _$LeaderboardRecordEntity{
     @Default(0) int score,
     @Default(0) int days,
     @Default(0) int finIQ,
+    @Default(0) int balance,
     required String time
   }) = _LeaderboardRecordEntity;
 }

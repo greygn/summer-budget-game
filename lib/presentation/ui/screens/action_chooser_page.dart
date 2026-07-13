@@ -7,6 +7,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../bloc/game/game_bloc.dart';
 import '../../bloc/game/game_event.dart';
 import '../../bloc/game/game_state.dart';
+import '../utils/entity_localization.dart';
 
 @RoutePage()
 class ActionChooserPage extends StatelessWidget {
@@ -45,9 +46,9 @@ class ActionChooserPage extends StatelessWidget {
                 return Center(child: Text(t.no_actions_available));
               }
 
-              final groupedActions = <String, List<GameActionEntity>>{};
+              final groupedActions = <int, List<GameActionEntity>>{};
               for (final action in state.actions) {
-                final category = action.category.name;
+                final category = action.category.ID;
                 groupedActions.putIfAbsent(category, () => []).add(action);
               }
 
@@ -60,8 +61,9 @@ class ActionChooserPage extends StatelessWidget {
                     padding: EdgeInsets.all(adaptive.padding),
                     itemCount: categories.length,
                     itemBuilder: (context, catIndex) {
-                      final categoryKey = categories[catIndex];
-                      final actions = groupedActions[categoryKey]!;
+                      final categoryId = categories[catIndex];
+                      final actions = groupedActions[categoryId]!;
+                      final firstAction = actions.first;
 
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,7 +71,7 @@ class ActionChooserPage extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: UiSpacing.md),
                             child: Text(
-                              _getCategoryName(context, categoryKey),
+                              firstAction.category.getName(context),
                               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                     fontWeight: FontWeight.bold,
                                     color: Theme.of(context).colorScheme.primary,
@@ -78,15 +80,46 @@ class ActionChooserPage extends StatelessWidget {
                           ),
                           ...actions.map((action) {
                             final timeLeft = state.saveRecord?.gameRecord.timeLeft ?? 0;
-                            final canAfford = timeLeft >= action.timeCost;
-                            final isPositive = action.moneyDelta >= 0;
+                            final char = state.saveRecord?.characterRecord;
+                            final job = char?.job;
+
+                            int displayMoney = action.moneyDelta;
+                            int displayTime = action.timeCost;
+                            int displayHappiness = action.happinessDelta;
+                            int displayEnergy = action.energyDelta;
+
+                            if (action.ID >= 100 && action.ID <= 102 && job != null) {
+                              double timeMult = 1.0;
+                              double moneyMult = 1.0;
+                              double effortMult = 1.0;
+
+                              if (action.ID == 100) {
+                                timeMult = 0.5;
+                                moneyMult = 0.4;
+                                effortMult = 0.4;
+                              } else if (action.ID == 102) {
+                                timeMult = 1.5;
+                                moneyMult = 2.0;
+                                effortMult = 1.5;
+                              }
+
+                              displayTime = (job.timeCost * timeMult).round();
+                              displayMoney = (job.salary * moneyMult).round();
+                              displayHappiness = (job.happinessCost * effortMult).round();
+                              displayEnergy = (job.energyCost * effortMult).round();
+                            }
+
+                            final hasEnoughMoney = (char?.balance ?? 0) + displayMoney >= 0;
+                            final hasEnoughSavings = (char?.savings ?? 0) + action.savingsDelta >= 0;
+                            final canAfford = timeLeft >= displayTime && hasEnoughMoney && hasEnoughSavings;
+                            final isPositive = displayMoney >= 0;
 
                             return Padding(
                               padding: const EdgeInsets.only(bottom: UiSpacing.md),
                               child: Opacity(
                                 opacity: canAfford ? 1.0 : 0.5,
                                 child: ActionCard(
-                                  title: action.name,
+                                  title: action.getName(context),
                                   leading: Container(
                                     padding: const EdgeInsets.all(UiSpacing.sm),
                                     decoration: BoxDecoration(
@@ -101,20 +134,37 @@ class ActionChooserPage extends StatelessWidget {
                                     ),
                                   ),
                                   tags: [
-                                    _buildTag(
-                                      context,
-                                      adaptive,
-                                      '${action.moneyDelta > 0 ? '+' : ''}${action.moneyDelta}',
-                                      Icons.payments_outlined,
-                                      color: Colors.red,
-                                    ),
-                                    if (action.happinessDelta != 0)
+                                    if (displayMoney != 0)
                                       _buildTag(
                                         context,
                                         adaptive,
-                                        '${action.happinessDelta > 0 ? '+' : ''}${action.happinessDelta}',
+                                        '${displayMoney > 0 ? '+' : ''}$displayMoney',
+                                        Icons.payments_outlined,
+                                        color: isPositive ? Colors.green : (hasEnoughMoney ? Colors.red : Colors.grey),
+                                      ),
+                                    if (action.savingsDelta != 0)
+                                      _buildTag(
+                                        context,
+                                        adaptive,
+                                        '${action.savingsDelta > 0 ? '+' : ''}${action.savingsDelta}',
+                                        Icons.savings_outlined,
+                                        color: action.savingsDelta > 0 ? Colors.teal : (hasEnoughSavings ? Colors.red : Colors.grey),
+                                      ),
+                                    if (displayHappiness != 0)
+                                      _buildTag(
+                                        context,
+                                        adaptive,
+                                        '${displayHappiness > 0 ? '+' : ''}$displayHappiness',
                                         Icons.sentiment_satisfied_alt,
                                         color: Colors.orange,
+                                      ),
+                                    if (displayEnergy != 0)
+                                      _buildTag(
+                                        context,
+                                        adaptive,
+                                        '${displayEnergy > 0 ? '+' : ''}$displayEnergy',
+                                        Icons.bolt,
+                                        color: Colors.blue,
                                       ),
                                     if (action.finIQDelta != 0)
                                       _buildTag(
@@ -127,14 +177,14 @@ class ActionChooserPage extends StatelessWidget {
                                     _buildTag(
                                       context,
                                       adaptive,
-                                      t.time_cost(action.timeCost.toString()),
+                                      t.time_cost(displayTime.toString()),
                                       Icons.access_time,
                                       color: canAfford ? null : Colors.red,
                                     ),
                                     _buildTag(
                                       context,
                                       adaptive,
-                                      _getCategoryName(context, action.category.name),
+                                      action.category.getName(context),
                                       Icons.category_outlined,
                                     ),
                                   ],
@@ -161,25 +211,15 @@ class ActionChooserPage extends StatelessWidget {
     );
   }
 
-  String _getCategoryName(BuildContext context, String categoryKey) {
-    final t = AppLocalizations.of(context)!;
-    return switch (categoryKey.toLowerCase()) {
-      'leisure' => t.action_category_leisure,
-      'food' => t.action_category_food,
-      'health' => t.action_category_health,
-      _ => categoryKey,
-    };
-  }
-
   IconData _getActionIcon(GameActionEntity action) {
-    final category = action.category.name.toLowerCase();
-    if (category == 'food') return Icons.restaurant_rounded;
-    if (category == 'health') return Icons.fitness_center_rounded;
-    
-    // Fallback to simple keyword check if category is not enough
-    final name = action.name.toLowerCase();
-    if (name.contains('кофе') || name.contains('coffee')) return Icons.coffee_rounded;
-    if (name.contains('кино') || name.contains('movie')) return Icons.movie_creation_outlined;
+    final categoryId = action.category.ID;
+    if (categoryId == 1) return Icons.restaurant_rounded;
+    if (categoryId == 2) return Icons.fitness_center_rounded;
+    if (categoryId == 5 || action.ID >= 100) return Icons.work_history_rounded;
+    if (categoryId == 8) return Icons.account_balance_rounded;
+    if (categoryId == 3) return Icons.movie_creation_outlined;
+    if (categoryId == 4) return Icons.school_rounded;
+    if (categoryId == 6) return Icons.style_rounded;
     
     return Icons.star_border_rounded;
   }

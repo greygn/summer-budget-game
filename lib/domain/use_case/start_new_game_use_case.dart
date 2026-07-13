@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:injectable/injectable.dart';
 import 'package:summer_budget_game/core/failure/failure.dart';
 import 'package:summer_budget_game/core/use_case/use_case.dart';
 import 'package:summer_budget_game/domain/entity/character_record_entity.dart';
@@ -18,6 +19,7 @@ class StartNewGameParams {
 }
 
 //Начало игры, создание сохранения
+@lazySingleton
 class StartNewGameUseCase extends UseCase<SaveRecordEntity, StartNewGameParams> {
   final GameRepository gameRepository;
 

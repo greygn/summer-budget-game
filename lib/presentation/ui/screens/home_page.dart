@@ -99,6 +99,14 @@ class _HomePageState extends State<HomePage> {
         if (state.gameStarted) {
           context.router.pushPath('/dashboard');
         }
+        if (state.unfoldingFailure != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.unfoldingFailure!.message),
+              backgroundColor: theme.colorScheme.error,
+            ),
+          );
+        }
       },
       child: Scaffold(
         backgroundColor: theme.colorScheme.surface,

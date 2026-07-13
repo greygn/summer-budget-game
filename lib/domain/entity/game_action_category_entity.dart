@@ -8,6 +8,7 @@ abstract class GameActionCategoryEntity with _$GameActionCategoryEntity{
 
   const factory GameActionCategoryEntity({
     required int ID,
-    @Default('') String name
+    @Default('') String nameRu,
+    @Default('') String nameEn
   }) = _GameActionCategoryEntity;
 }

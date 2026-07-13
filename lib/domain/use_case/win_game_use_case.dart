@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:injectable/injectable.dart';
 import 'package:summer_budget_game/core/failure/failure.dart';
 import 'package:summer_budget_game/core/use_case/use_case.dart';
 import 'package:summer_budget_game/domain/entity/leaderboard_record_entity.dart';
@@ -8,6 +9,7 @@ import 'package:summer_budget_game/domain/repository/game_repository.dart';
 import '../failure/unfolding_failure.dart';
 
 //Запись информации об игроке в таблицу рекордов
+@lazySingleton
 class WinGameUseCase extends UseCase<SaveRecordEntity, String> {
   final GameRepository gameRepository;
 
@@ -25,6 +27,7 @@ class WinGameUseCase extends UseCase<SaveRecordEntity, String> {
           score: record.characterRecord.score,
           days: record.gameRecord.currentDay,
           finIQ: record.characterRecord.finIQ,
+          balance: record.characterRecord.balance + record.characterRecord.savings,
           time: DateTime.now().toIso8601String(),
         );
 

@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 import 'package:summer_budget_game/domain/use_case/check_state_use_case.dart';
 import 'package:summer_budget_game/domain/use_case/end_day_use_case.dart';
 import 'package:summer_budget_game/domain/use_case/get_game_actions_use_case.dart';
@@ -12,6 +13,7 @@ import 'package:summer_budget_game/domain/entity/game_mode.dart';
 import 'package:summer_budget_game/presentation/bloc/game/game_event.dart';
 import 'package:summer_budget_game/presentation/bloc/game/game_state.dart';
 
+@injectable
 class GameBloc extends Bloc<GameEvent, GameState> {
   final GetSaveInfoUseCase getSaveInfoUseCase;
   final GetGameActionsUseCase getGameActionsUseCase;

@@ -14,5 +14,8 @@ class LeaderboardRecords extends Table {
   IntColumn get finIQ =>
       integer().withDefault(const Constant(0))();
 
+  IntColumn get balance =>
+      integer().withDefault(const Constant(0))();
+
   TextColumn get time => text()();
 }

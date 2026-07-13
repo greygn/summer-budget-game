@@ -10,6 +10,7 @@ extension LeaderboardMapper on LeaderboardRecord {
       score: score,
       days: days,
       finIQ: finIQ,
+      balance: balance,
       time: time,
     );
   }
@@ -22,6 +23,7 @@ extension LeaderboardEntityMapper on LeaderboardRecordEntity {
       score: drift.Value(score),
       days: drift.Value(days),
       finIQ: drift.Value(finIQ),
+      balance: drift.Value(balance),
       time: time,
     );
   }

@@ -6,6 +6,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../bloc/game/game_bloc.dart';
 import '../../bloc/game/game_event.dart';
 import '../../bloc/game/game_state.dart';
+import '../utils/entity_localization.dart';
 
 @RoutePage()
 class JobChooserPage extends StatelessWidget {
@@ -46,7 +47,7 @@ class JobChooserPage extends StatelessWidget {
                       return Opacity(
                         opacity: canAfford ? 1.0 : 0.5,
                         child: ActionCard(
-                          title: job.name,
+                          title: job.getName(context),
                           leading: Container(
                             padding: const EdgeInsets.all(UiSpacing.sm),
                             decoration: BoxDecoration(
@@ -73,20 +74,22 @@ class JobChooserPage extends StatelessWidget {
                               t.time_cost(job.timeCost.toString()),
                               Icons.access_time,
                             ),
-                            _buildTag(
-                              context,
-                              adaptive,
-                              '–${job.happinessCost}',
-                              Icons.sentiment_satisfied_alt,
-                              color: Colors.orange,
-                            ),
-                            _buildTag(
-                              context,
-                              adaptive,
-                              '–${job.energyCost}',
-                              Icons.bolt,
-                              color: Colors.blue,
-                            ),
+                            if (job.happinessCost != 0)
+                              _buildTag(
+                                context,
+                                adaptive,
+                                '${job.happinessCost > 0 ? '+' : ''}${job.happinessCost}',
+                                Icons.sentiment_satisfied_alt,
+                                color: Colors.orange,
+                              ),
+                            if (job.energyCost != 0)
+                              _buildTag(
+                                context,
+                                adaptive,
+                                '${job.energyCost > 0 ? '+' : ''}${job.energyCost}',
+                                Icons.bolt,
+                                color: Colors.blue,
+                              ),
                             if (job.minFinIQ > 0)
                               _buildTag(
                                 context,

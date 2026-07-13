@@ -1,9 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 import 'package:summer_budget_game/domain/use_case/get_leaderboard_use_case.dart';
 import 'package:summer_budget_game/domain/use_case/win_game_use_case.dart';
 import 'package:summer_budget_game/presentation/bloc/leaderboard/leaderboard_event.dart';
 import 'package:summer_budget_game/presentation/bloc/leaderboard/leaderboard_state.dart';
 
+@injectable
 class LeaderboardBloc extends Bloc<LeaderboardEvent, LeaderboardState> {
   final GetLeaderboardUseCase getLeaderboardUseCase;
   final WinGameUseCase winGameUseCase;
