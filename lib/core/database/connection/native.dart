@@ -7,14 +7,27 @@ import 'package:path_provider/path_provider.dart';
 
 QueryExecutor openConnection() {
   return LazyDatabase(() async {
-    final dbFolder = await getApplicationDocumentsDirectory();
+    final supportDir = await getApplicationSupportDirectory();
+    await supportDir.create(recursive: true);
 
     final file = File(
       p.join(
-        dbFolder.path,
+        supportDir.path,
         'summer_budget_game.sqlite',
       ),
     );
+
+    final legacyDir = await getApplicationDocumentsDirectory();
+    final legacyFile = File(
+      p.join(
+        legacyDir.path,
+        'summer_budget_game.sqlite',
+      ),
+    );
+
+    if (!await file.exists() && await legacyFile.exists()) {
+      await legacyFile.copy(file.path);
+    }
 
     return NativeDatabase.createInBackground(
       file,

@@ -54,12 +54,9 @@ class AppDatabase extends _$AppDatabase {
     },
 
     onUpgrade: (Migrator m, int from, int to) async {
-      await m.drop(jobs);
-      await m.drop(gameActions);
-      await m.drop(gameActionCategories);
-      await m.drop(gameEvents);
-      await m.drop(gameEventOptions);
-      await m.createAll();
+      if (from < 6) {
+        await m.createAll();
+      }
     },
 
     beforeOpen: (details) async {
