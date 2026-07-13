@@ -86,6 +86,7 @@ class MainMenuBloc extends Bloc<MainMenuEvent, MainMenuState> {
         state.copyWith(
           isLoading: false,
           gameStarted: true,
+          hasSave: true,
         ),
       ),
     );

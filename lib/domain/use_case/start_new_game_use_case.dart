@@ -55,6 +55,7 @@ class StartNewGameUseCase extends UseCase<SaveRecordEntity, StartNewGameParams> 
       gameMode: params.mode,
       inflationLevel: defaultInflationLevel,
       timeLeft: defaultTimeLeft,
+      isOver: false,
       currentEvent: GameEventEntity(ID: 0),
     );
     return gameRepository.writeSaveRecord(

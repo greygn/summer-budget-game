@@ -48,11 +48,15 @@ class ActionChooserPage extends StatelessWidget {
 
               final groupedActions = <int, List<GameActionEntity>>{};
               for (final action in state.actions) {
-                final category = action.category.ID;
-                groupedActions.putIfAbsent(category, () => []).add(action);
+                final categoryId = action.category.ID;
+                groupedActions.putIfAbsent(categoryId, () => []).add(action);
               }
 
-              final categories = groupedActions.keys.toList();
+              final categories = groupedActions.keys.toList()..sort((a, b) {
+                if (a == 5) return -1;
+                if (b == 5) return 1;
+                return a.compareTo(b);
+              });
 
               return Center(
                 child: ConstrainedBox(
@@ -87,8 +91,11 @@ class ActionChooserPage extends StatelessWidget {
                             int displayTime = action.timeCost;
                             int displayHappiness = action.happinessDelta;
                             int displayEnergy = action.energyDelta;
+                            String actionName = action.getName(context);
 
                             if (action.ID >= 100 && action.ID <= 102 && job != null) {
+                              actionName = "$actionName (${job.getName(context)})";
+                              
                               double timeMult = 1.0;
                               double moneyMult = 1.0;
                               double effortMult = 1.0;
@@ -119,7 +126,7 @@ class ActionChooserPage extends StatelessWidget {
                               child: Opacity(
                                 opacity: canAfford ? 1.0 : 0.5,
                                 child: ActionCard(
-                                  title: action.getName(context),
+                                  title: actionName,
                                   leading: Container(
                                     padding: const EdgeInsets.all(UiSpacing.sm),
                                     decoration: BoxDecoration(

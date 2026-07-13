@@ -45,7 +45,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(openConnection());
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -54,14 +54,12 @@ class AppDatabase extends _$AppDatabase {
     },
 
     onUpgrade: (Migrator m, int from, int to) async {
-      if (from < 5) {
-        await m.deleteTable('jobs');
-        await m.deleteTable('game_actions');
-        await m.deleteTable('game_action_categories');
-        await m.deleteTable('game_events');
-        await m.deleteTable('game_event_options');
-        await m.createAll();
-      }
+      await m.drop(jobs);
+      await m.drop(gameActions);
+      await m.drop(gameActionCategories);
+      await m.drop(gameEvents);
+      await m.drop(gameEventOptions);
+      await m.createAll();
     },
 
     beforeOpen: (details) async {
@@ -111,7 +109,7 @@ class AppDatabase extends _$AppDatabase {
             const GameActionCategoriesCompanion(id: Value(4), nameRu: Value('Образование'), nameEn: Value('Education')),
             const GameActionCategoriesCompanion(id: Value(5), nameRu: Value('Работа'), nameEn: Value('Work')),
             const GameActionCategoriesCompanion(id: Value(6), nameRu: Value('Стиль'), nameEn: Value('Style')),
-            const GameActionCategoriesCompanion(id: Value(8), nameRu: Value('Финансы'), nameEn: Value('Finance')),
+            const GameActionCategoriesCompanion(id: Value(7), nameRu: Value('Финансы'), nameEn: Value('Finance')),
           ]);
 
           // 2. ПРОФЕССИИ
@@ -170,10 +168,10 @@ class AppDatabase extends _$AppDatabase {
             const GameActionsCompanion(id: Value(22), nameRu: Value('Костюм-тройка для собеседований'), nameEn: Value('Three-piece Suit'), categoryId: Value(6), timeCost: Value(4), moneyDelta: Value(-35000), energyDelta: Value(-10), happinessDelta: Value(25), finIQDelta: Value(10), pointsForAction: Value(250)),
 
             // Финансы
-            const GameActionsCompanion(id: Value(23), nameRu: Value('Положить 1 000 руб. на вклад'), nameEn: Value('Deposit 1,000 ₽'), categoryId: Value(8), timeCost: Value(0), moneyDelta: Value(-1000), savingsDelta: Value(1000)),
-            const GameActionsCompanion(id: Value(24), nameRu: Value('Положить 5 000 руб. на вклад'), nameEn: Value('Deposit 5,000 ₽'), categoryId: Value(8), timeCost: Value(0), moneyDelta: Value(-5000), savingsDelta: Value(5000)),
-            const GameActionsCompanion(id: Value(25), nameRu: Value('Положить 20 000 руб. на вклад'), nameEn: Value('Deposit 20,000 ₽'), categoryId: Value(8), timeCost: Value(0), moneyDelta: Value(-20000), savingsDelta: Value(20000)),
-            const GameActionsCompanion(id: Value(26), nameRu: Value('Снять 5 000 руб. со вклада'), nameEn: Value('Withdraw 5,000 ₽'), categoryId: Value(8), timeCost: Value(0), moneyDelta: Value(5000), savingsDelta: Value(-5000)),
+            const GameActionsCompanion(id: Value(23), nameRu: Value('Положить 1 000 на вклад'), nameEn: Value('Deposit 1,000'), categoryId: Value(7), timeCost: Value(0), moneyDelta: Value(-1000), savingsDelta: Value(1000)),
+            const GameActionsCompanion(id: Value(24), nameRu: Value('Положить 5 000 на вклад'), nameEn: Value('Deposit 5,000'), categoryId: Value(7), timeCost: Value(0), moneyDelta: Value(-5000), savingsDelta: Value(5000)),
+            const GameActionsCompanion(id: Value(25), nameRu: Value('Положить 20 000 на вклад'), nameEn: Value('Deposit 20,000'), categoryId: Value(7), timeCost: Value(0), moneyDelta: Value(-20000), savingsDelta: Value(20000)),
+            const GameActionsCompanion(id: Value(26), nameRu: Value('Снять 5 000 со вклада'), nameEn: Value('Withdraw 5,000'), categoryId: Value(7), timeCost: Value(0), moneyDelta: Value(5000), savingsDelta: Value(-5000)),
           ]);
 
           // 4. СОБЫТИЯ

@@ -7,6 +7,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../bloc/leaderboard/leaderboard_bloc.dart';
 import '../../bloc/leaderboard/leaderboard_event.dart';
 import '../../bloc/leaderboard/leaderboard_state.dart';
+import '../utils/entity_localization.dart';
 
 @RoutePage()
 class RecordsPage extends StatefulWidget {
@@ -48,7 +49,7 @@ class _RecordsPageState extends State<RecordsPage> {
                   child: Padding(
                     padding: EdgeInsets.all(padding),
                     child: Text(
-                      'Error: ${state.failure}',
+                      state.failure!.getLocalizedMessage(context),
                       textAlign: TextAlign.center,
                       style: theme.textTheme.bodyLarge?.copyWith(
                         color: theme.colorScheme.error,

@@ -40,6 +40,8 @@ class JobChooserPage extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final job = state.jobs[index];
                       final char = state.saveRecord?.characterRecord;
+                      final currentJobId = char?.job.ID;
+                      final isSelected = job.ID == currentJobId;
                       final hasFinIQ = (char?.finIQ ?? 0) >= job.minFinIQ;
                       final hasPoints = (char?.score ?? 0) >= job.minPoints;
                       final canAfford = hasFinIQ && hasPoints;
@@ -47,11 +49,18 @@ class JobChooserPage extends StatelessWidget {
                       return Opacity(
                         opacity: canAfford ? 1.0 : 0.5,
                         child: ActionCard(
+                          isSelected: isSelected,
                           title: job.getName(context),
+                          trailing: isSelected 
+                              ? Icon(Icons.check_circle, color: Theme.of(context).colorScheme.primary)
+                              : null,
                           leading: Container(
                             padding: const EdgeInsets.all(UiSpacing.sm),
                             decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primary.withValues(alpha: AppTheme.surfaceAlpha),
+                              color: (isSelected 
+                                      ? Theme.of(context).colorScheme.primary 
+                                      : Theme.of(context).colorScheme.primary)
+                                  .withValues(alpha: isSelected ? 0.2 : AppTheme.surfaceAlpha),
                               borderRadius: BorderRadius.circular(UiRadius.medium),
                             ),
                             child: Icon(
