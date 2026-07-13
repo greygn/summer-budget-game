@@ -20,25 +20,21 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static String m0(amount) => "Cost: ${amount}";
+  static String m0(day) => "Day ${day}";
 
-  static String m1(day) => "Day ${day}";
+  static String m1(count) => "Left: ${count}";
 
-  static String m2(count) => "Left: ${count}";
+  static String m2(amount) => "-${amount} energy";
 
-  static String m3(amount) => "-${amount} energy";
+  static String m3(amount) => "+${amount} happiness";
 
-  static String m4(amount) => "+${amount} happiness";
+  static String m4(skills) => "Insufficient: ${skills}";
 
-  static String m5(skills) => "Insufficient: ${skills}";
+  static String m5(goal) => "Goal: ${goal}";
 
-  static String m6(amount) => "Salary: ${amount}";
+  static String m6(amount) => "${amount} h.";
 
-  static String m7(goal) => "Goal: ${goal}";
-
-  static String m8(amount) => "${amount} h.";
-
-  static String m9(amount) => "Total Assets: ${amount}";
+  static String m7(amount) => "Total Assets: ${amount}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -56,22 +52,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "choose_action": MessageLookupByLibrary.simpleMessage("What to do?"),
     "choose_job": MessageLookupByLibrary.simpleMessage("Choose Job"),
     "continue_game": MessageLookupByLibrary.simpleMessage("Continue Game"),
-    "cost": m0,
-    "currency": MessageLookupByLibrary.simpleMessage("\$"),
-    "day_count": m1,
-    "day_left": m2,
+    "day_count": m0,
+    "day_left": m1,
     "defeat_desc": MessageLookupByLibrary.simpleMessage(
       "Unfortunately, it didn\'t work out this time. Try again!",
     ),
     "defeat_title": MessageLookupByLibrary.simpleMessage("Game Over"),
     "energy": MessageLookupByLibrary.simpleMessage("Energy"),
-    "energy_cost": m3,
+    "energy_cost": m2,
     "event_title": MessageLookupByLibrary.simpleMessage("Event"),
     "finIQ": MessageLookupByLibrary.simpleMessage("Financial IQ"),
     "final_stats": MessageLookupByLibrary.simpleMessage("Final Stats"),
     "happiness": MessageLookupByLibrary.simpleMessage("Happiness"),
-    "happiness_gain": m4,
-    "insufficientJobSkillsFailure": m5,
+    "happiness_gain": m3,
+    "insufficientJobSkillsFailure": m4,
     "insufficientTimeFailure": MessageLookupByLibrary.simpleMessage(
       "Not enough time to complete the action",
     ),
@@ -95,17 +89,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "no_jobs_available": MessageLookupByLibrary.simpleMessage(
       "No jobs available",
     ),
-    "salary": m6,
     "savings": MessageLookupByLibrary.simpleMessage("Savings"),
-    "savings_goal": m7,
+    "savings_goal": m5,
     "score": MessageLookupByLibrary.simpleMessage("Score"),
     "sprint_mode": MessageLookupByLibrary.simpleMessage("Sprint"),
     "sprint_mode_desc": MessageLookupByLibrary.simpleMessage(
       "Earn 100,000 in 30 days",
     ),
     "start_new_game": MessageLookupByLibrary.simpleMessage("Start New Game"),
-    "time_cost": m8,
-    "total_assets": m9,
+    "time_cost": m6,
+    "total_assets": m7,
     "unfoldingFailure": MessageLookupByLibrary.simpleMessage(
       "Error processing data",
     ),

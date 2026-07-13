@@ -81,16 +81,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get choose_action => 'Чем заняться?';
 
   @override
-  String salary(Object amount) {
-    return 'Зарплата: $amount';
-  }
-
-  @override
-  String cost(Object amount) {
-    return 'Цена: $amount';
-  }
-
-  @override
   String happiness_gain(Object amount) {
     return '+$amount счастья';
   }
@@ -172,9 +162,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String total_assets(Object amount) {
     return 'Общие активы: $amount';
   }
-
-  @override
-  String get currency => '₽';
 
   @override
   String get victory_title => 'Победа!';

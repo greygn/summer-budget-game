@@ -10,6 +10,9 @@ class GameState extends Equatable {
   final List<JobEntity> jobs;
   final bool isLoading;
   final Failure? failure;
+  final double goal;
+  final double progress;
+  final bool isEventBad;
 
   const GameState({
     this.saveRecord,
@@ -17,6 +20,9 @@ class GameState extends Equatable {
     this.jobs = const [],
     this.isLoading = false,
     this.failure,
+    this.goal = 0,
+    this.progress = 0,
+    this.isEventBad = false,
   });
 
   GameState copyWith({
@@ -25,6 +31,9 @@ class GameState extends Equatable {
     List<JobEntity>? jobs,
     bool? isLoading,
     Failure? failure,
+    double? goal,
+    double? progress,
+    bool? isEventBad,
   }) {
     return GameState(
       saveRecord: saveRecord ?? this.saveRecord,
@@ -32,6 +41,9 @@ class GameState extends Equatable {
       jobs: jobs ?? this.jobs,
       isLoading: isLoading ?? this.isLoading,
       failure: failure,
+      goal: goal ?? this.goal,
+      progress: progress ?? this.progress,
+      isEventBad: isEventBad ?? this.isEventBad,
     );
   }
 
@@ -42,5 +54,8 @@ class GameState extends Equatable {
         jobs,
         isLoading,
         failure,
+        goal,
+        progress,
+        isEventBad,
       ];
 }

@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui_kit.dart';
-import 'package:ui_kit/theme/app_theme.dart';
 import '../../../domain/entity/game_action_entity.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../bloc/game/game_bloc.dart';
@@ -21,55 +20,82 @@ class ActionChooserPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(t.choose_action),
       ),
-      body: BlocBuilder<GameBloc, GameState>(
-        builder: (context, state) {
-          if (state.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final adaptive = AdaptiveLayout.of(constraints);
 
-          if (state.actions.isEmpty) {
-             return Center(child: Text(t.no_actions_available));
-          }
+          return BlocBuilder<GameBloc, GameState>(
+            builder: (context, state) {
+              if (state.isLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-          return ListView.separated(
-            padding: const EdgeInsets.all(16.0),
-            itemCount: state.actions.length,
-            separatorBuilder: (context, index) => const SizedBox(height: 12),
-            itemBuilder: (context, index) {
-              final action = state.actions[index];
-              final isPositive = action.moneyDelta >= 0;
+              if (state.actions.isEmpty) {
+                return Center(child: Text(t.no_actions_available));
+              }
 
-              return ActionCard(
-                title: action.name,
-                subtitle: isPositive 
-                  ? t.salary(action.moneyDelta.toString()) 
-                  : t.cost((-action.moneyDelta).toString()),
-                leading: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: (isPositive ? Colors.green : Colors.orange).withValues(alpha: AppTheme.surfaceAlpha),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(
-                    _getActionIcon(action),
-                    color: isPositive ? Colors.green : Colors.orange,
+              return Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: UiWidths.medium),
+                  child: ListView.separated(
+                    padding: EdgeInsets.all(adaptive.padding),
+                    itemCount: state.actions.length,
+                    separatorBuilder: (context, index) => const SizedBox(height: UiSpacing.md),
+                    itemBuilder: (context, index) {
+                      final action = state.actions[index];
+                      final isPositive = action.moneyDelta >= 0;
+
+                      return ActionCard(
+                        title: action.name,
+                        leading: Container(
+                          padding: const EdgeInsets.all(UiSpacing.sm),
+                          decoration: BoxDecoration(
+                            color: (isPositive ? Colors.green : Colors.orange).withValues(alpha: AppTheme.surfaceAlpha),
+                            borderRadius: BorderRadius.circular(UiRadius.medium),
+                          ),
+                          child: Icon(
+                            _getActionIcon(action),
+                            color: isPositive ? Colors.green : Colors.orange,
+                            size: adaptive.iconSize,
+                          ),
+                        ),
+                        tags: [
+                          _buildTag(
+                            context,
+                            adaptive,
+                            '${action.moneyDelta > 0 ? '+' : ''}${action.moneyDelta}',
+                            Icons.currency_ruble,
+                            color: Colors.red,
+                          ),
+                          if (action.happinessDelta != 0)
+                            _buildTag(
+                              context, 
+                              adaptive,
+                              t.happiness_gain(action.happinessDelta.toString()), 
+                              Icons.sentiment_satisfied_alt, 
+                              color: Colors.orange
+                            ),
+                          _buildTag(
+                            context, 
+                            adaptive,
+                            t.time_cost(action.timeCost.toString()), 
+                            Icons.access_time
+                          ),
+                          _buildTag(
+                            context, 
+                            adaptive,
+                            _getCategoryName(context, action.category.name), 
+                            Icons.category_outlined
+                          ),
+                        ],
+                        onTap: () {
+                          context.read<GameBloc>().add(GameActionSelected(action));
+                          context.router.maybePop();
+                        },
+                      );
+                    },
                   ),
                 ),
-                tags: [
-                  if (action.happinessDelta != 0)
-                    _buildTag(
-                      context, 
-                      t.happiness_gain(action.happinessDelta.toString()), 
-                      Icons.sentiment_satisfied_alt, 
-                      color: Colors.orange
-                    ),
-                  _buildTag(context, t.time_cost(action.timeCost.toString()), Icons.access_time),
-                  _buildTag(context, _getCategoryName(context, action.category.name), Icons.category_outlined),
-                ],
-                onTap: () {
-                  context.read<GameBloc>().add(GameActionSelected(action));
-                  context.router.maybePop();
-                },
               );
             },
           );
@@ -101,26 +127,27 @@ class ActionChooserPage extends StatelessWidget {
     return Icons.star_border_rounded;
   }
 
-  Widget _buildTag(BuildContext context, String label, IconData icon, {Color? color}) {
+  Widget _buildTag(BuildContext context, AdaptiveLayout adaptive, String label, IconData icon, {Color? color}) {
     final theme = Theme.of(context);
     final effectiveColor = color ?? theme.colorScheme.onSurfaceVariant;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: UiSpacing.sm, vertical: UiSpacing.xs),
       decoration: BoxDecoration(
         color: effectiveColor.withValues(alpha: AppTheme.surfaceAlpha),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(UiRadius.small),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 14, color: effectiveColor),
-          const SizedBox(width: 4),
+          const SizedBox(width: UiSpacing.xs),
           Text(
             label,
             style: theme.textTheme.labelSmall?.copyWith(
               color: effectiveColor,
               fontWeight: FontWeight.bold,
+              fontSize: adaptive.labelTextSize,
             ),
           ),
         ],

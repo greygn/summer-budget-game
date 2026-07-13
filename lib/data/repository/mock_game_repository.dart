@@ -10,8 +10,8 @@ import 'package:summer_budget_game/domain/entity/leaderboard_record_entity.dart'
 import 'package:summer_budget_game/domain/repository/game_repository.dart';
 
 class MockGameRepository implements GameRepository {
-  SaveRecordEntity? _currentSave;
-  final List<LeaderboardRecordEntity> _leaderboard = [];
+  static SaveRecordEntity? _currentSave;
+  static final List<LeaderboardRecordEntity> _leaderboard = [];
 
   @override
   Future<Either<GameFailure, SaveRecordEntity>> readSaveRecord() async {

@@ -236,18 +236,6 @@ abstract class AppLocalizations {
   /// **'Чем заняться?'**
   String get choose_action;
 
-  /// No description provided for @salary.
-  ///
-  /// In ru, this message translates to:
-  /// **'Зарплата: {amount}'**
-  String salary(Object amount);
-
-  /// No description provided for @cost.
-  ///
-  /// In ru, this message translates to:
-  /// **'Цена: {amount}'**
-  String cost(Object amount);
-
   /// No description provided for @happiness_gain.
   ///
   /// In ru, this message translates to:
@@ -385,12 +373,6 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Общие активы: {amount}'**
   String total_assets(Object amount);
-
-  /// No description provided for @currency.
-  ///
-  /// In ru, this message translates to:
-  /// **'₽'**
-  String get currency;
 
   /// No description provided for @victory_title.
   ///

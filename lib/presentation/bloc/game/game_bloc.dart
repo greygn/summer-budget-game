@@ -8,6 +8,7 @@ import 'package:summer_budget_game/domain/use_case/recive_event_use_case.dart';
 import 'package:summer_budget_game/domain/use_case/select_game_action_use_case.dart';
 import 'package:summer_budget_game/domain/use_case/select_game_event_option.dart';
 import 'package:summer_budget_game/domain/use_case/select_job_use_case.dart';
+import 'package:summer_budget_game/domain/entity/game_mode.dart';
 import 'package:summer_budget_game/presentation/bloc/game/game_event.dart';
 import 'package:summer_budget_game/presentation/bloc/game/game_state.dart';
 
@@ -54,8 +55,25 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     saveResult.fold(
       (failure) => emit(state.copyWith(isLoading: false, failure: failure)),
       (saveRecord) {
+        final game = saveRecord.gameRecord;
+        final char = saveRecord.characterRecord;
+
+        final double goal = game.gameMode == GameMode.standard
+            ? CheckStateUseCase.standardBalanceGoal.toDouble()
+            : CheckStateUseCase.marathonBalanceGoal.toDouble();
+        final double progress = char.savings / goal;
+
+        final event = game.currentEvent;
+        final bool isEventBad = event.moneyDelta < 0 ||
+            event.happinessDelta < 0 ||
+            event.finIQDelta < 0 ||
+            event.pointsDelta < 0;
+
         emit(state.copyWith(
           saveRecord: saveRecord,
+          goal: goal,
+          progress: progress,
+          isEventBad: isEventBad,
           isLoading: false,
         ));
       },
@@ -83,8 +101,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     await result.fold(
       (failure) async => emit(state.copyWith(isLoading: false, failure: failure)),
       (saveRecord) async {
-        emit(state.copyWith(saveRecord: saveRecord, isLoading: false));
-        add(GameStarted()); 
+        await checkStateUseCase();
+        add(GameStarted());
       },
     );
   }
@@ -97,9 +115,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
     final result = await selectGameEventOptionUseCase(event.option);
 
-    result.fold(
-      (failure) => emit(state.copyWith(isLoading: false, failure: failure)),
-      (saveRecord) => emit(state.copyWith(saveRecord: saveRecord, isLoading: false)),
+    await result.fold(
+      (failure) async => emit(state.copyWith(isLoading: false, failure: failure)),
+      (saveRecord) async {
+        await checkStateUseCase();
+        add(GameStarted());
+      },
     );
   }
 
@@ -111,9 +132,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
     final result = await selectJobUseCase(event.job);
 
-    result.fold(
-      (failure) => emit(state.copyWith(isLoading: false, failure: failure)),
-      (saveRecord) => emit(state.copyWith(saveRecord: saveRecord, isLoading: false)),
+    await result.fold(
+      (failure) async => emit(state.copyWith(isLoading: false, failure: failure)),
+      (saveRecord) async {
+        await checkStateUseCase();
+        add(GameStarted());
+      },
     );
   }
 
@@ -128,10 +152,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     await result.fold(
       (failure) async => emit(state.copyWith(isLoading: false, failure: failure)),
       (saveRecord) async {
-        emit(state.copyWith(saveRecord: saveRecord));
-
         await reciveEventUseCase();
-
+        await checkStateUseCase();
         add(GameStarted());
       },
     );

@@ -81,16 +81,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get choose_action => 'What to do?';
 
   @override
-  String salary(Object amount) {
-    return 'Salary: $amount';
-  }
-
-  @override
-  String cost(Object amount) {
-    return 'Cost: $amount';
-  }
-
-  @override
   String happiness_gain(Object amount) {
     return '+$amount happiness';
   }
@@ -172,9 +162,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String total_assets(Object amount) {
     return 'Total Assets: $amount';
   }
-
-  @override
-  String get currency => '\$';
 
   @override
   String get victory_title => 'Victory!';

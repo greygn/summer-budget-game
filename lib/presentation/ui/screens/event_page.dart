@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_kit/ui_kit.dart';
-import '../../../domain/entity/game_event_entity.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../bloc/game/game_bloc.dart';
 import '../../bloc/game/game_event.dart';
@@ -31,104 +30,121 @@ class EventPage extends StatelessWidget {
           title: Text(t.event_title),
           automaticallyImplyLeading: false,
         ),
-        body: BlocBuilder<GameBloc, GameState>(
-          builder: (context, state) {
-            final event = state.saveRecord?.gameRecord.currentEvent;
-            if (event == null || event.ID == 0) {
-              return const Center(child: CircularProgressIndicator());
-            }
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            final adaptive = AdaptiveLayout.of(constraints);
 
-            final isBad = _isEventBad(event);
+            return BlocBuilder<GameBloc, GameState>(
+              builder: (context, state) {
+                final event = state.saveRecord?.gameRecord.currentEvent;
+                if (event == null || event.ID == 0) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-            return SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Column(
-                  children: [
-                    const Spacer(),
-                    AppHeroIcon(
-                      icon: isBad
-                          ? Icons.warning_rounded
-                          : Icons.auto_awesome_rounded,
-                      color: isBad
-                          ? theme.colorScheme.error
-                          : theme.colorScheme.primary,
-                      onColor: isBad
-                          ? theme.colorScheme.onError
-                          : theme.colorScheme.onPrimary,
-                      heroTag: 'event_icon',
-                    ),
-                    const SizedBox(height: 32),
-                    Text(
-                      event.title,
-                      style: theme.textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: theme.colorScheme.onSurface,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 16),
-                    AppInfoCard(
-                      text: event.description,
-                    ),
-                    const SizedBox(height: 16),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      alignment: WrapAlignment.center,
-                      children: [
-                        if (event.moneyDelta != 0)
-                          AppTag(
-                            label:
-                                '${event.moneyDelta > 0 ? '+' : ''}${event.moneyDelta} ${t.currency}',
-                            icon: Icons.payments_outlined,
-                            color:
-                                event.moneyDelta > 0 ? Colors.green : Colors.red,
+                return Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: UiWidths.compact),
+                    child: SingleChildScrollView(
+                      padding: EdgeInsets.all(adaptive.padding),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          AppHeroIcon(
+                            icon: state.isEventBad
+                                ? Icons.warning_rounded
+                                : Icons.auto_awesome_rounded,
+                            color: state.isEventBad
+                                ? theme.colorScheme.error
+                                : theme.colorScheme.primary,
+                            onColor: state.isEventBad
+                                ? theme.colorScheme.onError
+                                : theme.colorScheme.onPrimary,
+                            heroTag: 'event_icon',
                           ),
-                        if (event.happinessDelta != 0)
-                          AppTag(
-                            label:
-                                '${event.happinessDelta > 0 ? '+' : ''}${event.happinessDelta}',
-                            icon: Icons.sentiment_satisfied_alt,
-                            color: event.happinessDelta > 0
-                                ? Colors.orange
-                                : Colors.blueGrey,
-                          ),
-                        if (event.finIQDelta != 0)
-                          AppTag(
-                            label:
-                                'IQ ${event.finIQDelta > 0 ? '+' : ''}${event.finIQDelta}',
-                            icon: Icons.psychology_outlined,
-                            color: Colors.purple,
-                          ),
-                      ],
-                    ),
-                    const Spacer(),
-                    if (event.options.isEmpty)
-                      AppButton(
-                        label: t.accept,
-                        onPressed: () => context.router.maybePop(),
-                        isFullWidth: true,
-                        size: ButtonSize.large,
-                      )
-                    else
-                      ...event.options.map((option) => Padding(
-                            padding: const EdgeInsets.only(bottom: 12.0),
-                            child: AppButton(
-                              label: option.description,
-                              onPressed: () {
-                                context
-                                    .read<GameBloc>()
-                                    .add(GameEventOptionSelected(option));
-                                context.router.maybePop();
-                              },
-                              isFullWidth: true,
-                              style: ButtonVariant.secondary,
+                          SizedBox(height: UiSpacing.xl),
+                          Text(
+                            event.title,
+                            style: theme.textTheme.headlineMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: theme.colorScheme.onSurface,
+                              fontSize: adaptive.headlineTextSize,
                             ),
-                          )),
-                  ],
-                ),
-              ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: UiSpacing.lg),
+                          AppInfoCard(
+                            text: event.description,
+                          ),
+                          const SizedBox(height: UiSpacing.lg),
+                          Wrap(
+                            spacing: UiSpacing.sm,
+                            runSpacing: UiSpacing.sm,
+                            alignment: WrapAlignment.center,
+                            children: [
+                              if (event.moneyDelta != 0)
+                                _buildTag(
+                                  context,
+                                  adaptive,
+                                  '${event.moneyDelta > 0 ? '+' : ''}${event.moneyDelta} ₽',
+                                  Icons.currency_ruble,
+                                  color: event.moneyDelta > 0
+                                      ? Colors.green
+                                      : Colors.red,
+                                ),
+                              if (event.happinessDelta != 0)
+                                _buildTag(
+                                  context,
+                                  adaptive,
+                                  '${event.happinessDelta > 0 ? '+' : ''}${event.happinessDelta}',
+                                  Icons.sentiment_satisfied_alt,
+                                  color: event.happinessDelta > 0
+                                      ? Colors.orange
+                                      : Colors.blueGrey,
+                                ),
+                              if (event.finIQDelta != 0)
+                                _buildTag(
+                                  context,
+                                  adaptive,
+                                  'IQ ${event.finIQDelta > 0 ? '+' : ''}${event.finIQDelta}',
+                                  Icons.psychology_outlined,
+                                  color: Colors.purple,
+                                ),
+                            ],
+                          ),
+                          SizedBox(height: UiSpacing.xxl),
+                          if (event.options.isEmpty)
+                            AppButton(
+                              label: t.accept,
+                              onPressed: () => context.router.maybePop(),
+                              isFullWidth: true,
+                              size: (adaptive.isCompact || adaptive.isMedium)
+                                  ? ButtonSize.medium
+                                  : ButtonSize.large,
+                            )
+                          else
+                            ...event.options.map((option) => Padding(
+                                  padding: const EdgeInsets.only(bottom: UiSpacing.md),
+                                  child: AppButton(
+                                    label: option.description,
+                                    onPressed: () {
+                                      context
+                                          .read<GameBloc>()
+                                          .add(GameEventOptionSelected(option));
+                                      context.router.maybePop();
+                                    },
+                                    isFullWidth: true,
+                                    style: ButtonVariant.secondary,
+                                    size: (adaptive.isCompact || adaptive.isMedium)
+                                        ? ButtonSize.medium
+                                        : ButtonSize.large,
+                                  ),
+                                )),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
             );
           },
         ),
@@ -136,10 +152,31 @@ class EventPage extends StatelessWidget {
     );
   }
 
-  bool _isEventBad(GameEventEntity event) {
-    return event.moneyDelta < 0 ||
-        event.happinessDelta < 0 ||
-        event.finIQDelta < 0 ||
-        event.pointsDelta < 0;
+  Widget _buildTag(BuildContext context, AdaptiveLayout adaptive, String label, IconData icon, {Color? color}) {
+    final theme = Theme.of(context);
+    final effectiveColor = color ?? theme.colorScheme.onSurfaceVariant;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: UiSpacing.sm, vertical: UiSpacing.xs),
+      decoration: BoxDecoration(
+        color: effectiveColor.withValues(alpha: AppTheme.surfaceAlpha),
+        borderRadius: BorderRadius.circular(UiRadius.small),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 14, color: effectiveColor),
+          const SizedBox(width: UiSpacing.xs),
+          Text(
+            label,
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: effectiveColor,
+              fontWeight: FontWeight.bold,
+              fontSize: adaptive.labelTextSize,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

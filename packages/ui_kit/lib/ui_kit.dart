@@ -3,6 +3,15 @@ library ui_kit;
 // Theme
 export 'theme/app_theme.dart';
 
+// Adaptive
+export 'adaptive/ui_radius.dart';
+export 'adaptive/ui_spacing.dart';
+export 'adaptive/ui_widths.dart';
+export 'adaptive/ui_heights.dart';
+export 'adaptive/ui_icon_sizes.dart';
+export 'adaptive/ui_text_sizes.dart';
+export 'adaptive/adaptive_layout.dart';
+
 // Banners
 export 'widgets/banners/passive_income_banner.dart';
 export 'widgets/banners/status_banner.dart';

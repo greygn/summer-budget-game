@@ -20,25 +20,21 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'ru';
 
-  static String m0(amount) => "Цена: ${amount}";
+  static String m0(day) => "День ${day}";
 
-  static String m1(day) => "День ${day}";
+  static String m1(count) => "Осталось: ${count}";
 
-  static String m2(count) => "Осталось: ${count}";
+  static String m2(amount) => "-${amount} энергии";
 
-  static String m3(amount) => "-${amount} энергии";
+  static String m3(amount) => "+${amount} счастья";
 
-  static String m4(amount) => "+${amount} счастья";
+  static String m4(skills) => "Недостаточно: ${skills}";
 
-  static String m5(skills) => "Недостаточно: ${skills}";
+  static String m5(goal) => "Цель: ${goal}";
 
-  static String m6(amount) => "Зарплата: ${amount}";
+  static String m6(amount) => "${amount} ч.";
 
-  static String m7(goal) => "Цель: ${goal}";
-
-  static String m8(amount) => "${amount} ч.";
-
-  static String m9(amount) => "Общие активы: ${amount}";
+  static String m7(amount) => "Общие активы: ${amount}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -56,22 +52,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "choose_action": MessageLookupByLibrary.simpleMessage("Чем заняться?"),
     "choose_job": MessageLookupByLibrary.simpleMessage("Выбор работы"),
     "continue_game": MessageLookupByLibrary.simpleMessage("Продолжить игру"),
-    "cost": m0,
-    "currency": MessageLookupByLibrary.simpleMessage("₽"),
-    "day_count": m1,
-    "day_left": m2,
+    "day_count": m0,
+    "day_left": m1,
     "defeat_desc": MessageLookupByLibrary.simpleMessage(
       "К сожалению, в этот раз не получилось. Попробуйте еще раз!",
     ),
     "defeat_title": MessageLookupByLibrary.simpleMessage("Игра окончена"),
     "energy": MessageLookupByLibrary.simpleMessage("Энергия"),
-    "energy_cost": m3,
+    "energy_cost": m2,
     "event_title": MessageLookupByLibrary.simpleMessage("Событие"),
     "finIQ": MessageLookupByLibrary.simpleMessage("Фин. IQ"),
     "final_stats": MessageLookupByLibrary.simpleMessage("Финальная статистика"),
     "happiness": MessageLookupByLibrary.simpleMessage("Счастье"),
-    "happiness_gain": m4,
-    "insufficientJobSkillsFailure": m5,
+    "happiness_gain": m3,
+    "insufficientJobSkillsFailure": m4,
     "insufficientTimeFailure": MessageLookupByLibrary.simpleMessage(
       "Не хватает времени для выполнения действия",
     ),
@@ -97,17 +91,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "no_jobs_available": MessageLookupByLibrary.simpleMessage(
       "Нет доступных вакансий",
     ),
-    "salary": m6,
     "savings": MessageLookupByLibrary.simpleMessage("Сбережения"),
-    "savings_goal": m7,
+    "savings_goal": m5,
     "score": MessageLookupByLibrary.simpleMessage("Очки"),
     "sprint_mode": MessageLookupByLibrary.simpleMessage("Спринт"),
     "sprint_mode_desc": MessageLookupByLibrary.simpleMessage(
       "Заработай 100 000 за 30 дней",
     ),
     "start_new_game": MessageLookupByLibrary.simpleMessage("Начать новую игру"),
-    "time_cost": m8,
-    "total_assets": m9,
+    "time_cost": m6,
+    "total_assets": m7,
     "unfoldingFailure": MessageLookupByLibrary.simpleMessage(
       "Ошибка обработки данных",
     ),

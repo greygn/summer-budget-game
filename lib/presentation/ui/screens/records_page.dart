@@ -34,62 +34,80 @@ class _RecordsPageState extends State<RecordsPage> {
       ),
       body: BlocBuilder<LeaderboardBloc, LeaderboardState>(
         builder: (context, state) {
-          if (state.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              final adaptive = AdaptiveLayout.of(constraints);
+              final padding = adaptive.padding;
 
-          if (state.failure != null) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Text(
-                  'Error: ${state.failure}',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: theme.colorScheme.error),
-                ),
-              ),
-            );
-          }
+              if (state.isLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-          if (state.records.isEmpty) {
-            return Center(
-              child: Text(
-                'No records yet',
-                style: theme.textTheme.titleMedium,
-              ),
-            );
-          }
+              if (state.failure != null) {
+                return Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(padding),
+                    child: Text(
+                      'Error: ${state.failure}',
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        color: theme.colorScheme.error,
+                        fontSize: adaptive.bodyTextSize,
+                      ),
+                    ),
+                  ),
+                );
+              }
 
-          return ListView.separated(
-            padding: const EdgeInsets.all(16),
-            itemCount: state.records.length,
-            separatorBuilder: (context, index) => const SizedBox(height: 12),
-            itemBuilder: (context, index) {
-              final record = state.records[index];
-              return ExpressiveInfoTile(
-                title: record.name.isEmpty ? 'Player' : record.name,
-                value: record.score,
-                subtitle: '${t.finIQ}: ${record.finIQ} | ${record.time}',
-                icon: Icons.emoji_events,
-                color: _getRankColor(index, theme),
+              if (state.records.isEmpty) {
+                return Center(
+                  child: Text(
+                    'No records yet',
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontSize: adaptive.titleTextSize,
+                    ),
+                  ),
+                );
+              }
+
+              return ListView.separated(
+                padding: EdgeInsets.all(padding),
+                itemCount: state.records.length,
+                separatorBuilder: (context, index) =>
+                    SizedBox(height: padding * 0.75),
+                itemBuilder: (context, index) {
+                  final record = state.records[index];
+
+                  final Color rankColor;
+                  final IconData rankIcon;
+
+                  if (index == 0) {
+                    rankColor = const Color(0xFFFFD700);
+                    rankIcon = Icons.emoji_events;
+                  } else if (index == 1) {
+                    rankColor = const Color(0xFFC0C0C0);
+                    rankIcon = Icons.emoji_events;
+                  } else if (index == 2) {
+                    rankColor = const Color(0xFFCD7F32);
+                    rankIcon = Icons.emoji_events;
+                  } else {
+                    rankColor = theme.colorScheme.outline;
+                    rankIcon = Icons.military_tech;
+                  }
+
+                  return ExpressiveInfoTile(
+                    title: record.name.isEmpty ? 'Player' : record.name,
+                    value: record.score,
+                    subtitle: '${t.finIQ}: ${record.finIQ} | ${record.time}',
+                    icon: rankIcon,
+                    color: rankColor,
+                  );
+                },
               );
             },
           );
         },
       ),
     );
-  }
-
-  Color _getRankColor(int index, ThemeData theme) {
-    switch (index) {
-      case 0:
-        return const Color(0xFFFFD700);
-      case 1:
-        return const Color(0xFFC0C0C0);
-      case 2:
-        return const Color(0xFFCD7F32);
-      default:
-        return theme.colorScheme.outline;
-    }
   }
 }
