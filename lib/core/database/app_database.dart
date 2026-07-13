@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:injectable/injectable.dart';
 
 import 'connection.dart';
 
@@ -39,6 +40,7 @@ part 'app_database.g.dart';
     LeaderboardDao,
   ],
 )
+@lazySingleton
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(openConnection());
 

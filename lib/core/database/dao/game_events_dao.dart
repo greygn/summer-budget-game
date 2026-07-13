@@ -1,10 +1,12 @@
 import 'package:drift/drift.dart';
+import 'package:injectable/injectable.dart';
 
 import '../app_database.dart';
 import '../tables/game_events_table.dart';
 
 part 'game_events_dao.g.dart';
 
+@lazySingleton
 @DriftAccessor(tables: [GameEvents])
 class GameEventsDao extends DatabaseAccessor<AppDatabase>
     with _$GameEventsDaoMixin {
