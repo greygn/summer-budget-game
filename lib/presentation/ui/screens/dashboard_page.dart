@@ -44,171 +44,172 @@ class _DashboardPageState extends State<DashboardPage> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(),
-        body: LayoutBuilder(
-          builder: (context, constraints) {
-            final adaptive = AdaptiveLayout.of(constraints);
-            final padding = adaptive.padding;
+        body: SafeArea(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final adaptive = AdaptiveLayout.of(constraints);
+                final padding = adaptive.padding;
 
-            return BlocBuilder<GameBloc, GameState>(
-              builder: (context, state) {
-                if (state.isLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+                return BlocBuilder<GameBloc, GameState>(
+                  builder: (context, state) {
+                    if (state.isLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
 
-                final save = state.saveRecord;
-                if (save == null) {
-                  return const Center(child: Text('No game data found'));
-                }
+                    final save = state.saveRecord;
+                    if (save == null) {
+                      return const Center(child: Text('No game data found'));
+                    }
 
-                final char = save.characterRecord;
-                final game = save.gameRecord;
+                    final char = save.characterRecord;
+                    final game = save.gameRecord;
 
-                final double goal = state.goal;
-                final double progress = state.progress;
-                final totalAssets = char.balance + char.savings;
+                    final double goal = state.goal;
+                    final double progress = state.progress;
+                    final totalAssets = char.balance + char.savings;
 
-                final crossAxisCount = adaptive.statGridColumns;
-                final gridWidth = (constraints.maxWidth > UiWidths.expanded 
-                    ? UiWidths.expanded 
-                    : constraints.maxWidth) - (padding * 2);
-                final itemWidth = (gridWidth - (UiSpacing.md * (crossAxisCount - 1))) / crossAxisCount;
-                final childAspectRatio = itemWidth / adaptive.cardHeight;
+                    final crossAxisCount = adaptive.statGridColumns;
+                    final gridWidth = (constraints.maxWidth > UiWidths.expanded
+                        ? UiWidths.expanded
+                        : constraints.maxWidth) - (padding * 2);
+                    final itemWidth = (gridWidth - (UiSpacing.md * (crossAxisCount - 1))) / crossAxisCount;
+                    final childAspectRatio = itemWidth / adaptive.cardHeight;
 
-                return Center(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: UiWidths.expanded),
-                    child: SingleChildScrollView(
-                      padding: EdgeInsets.all(padding),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          GameProgressCard(
-                            modeTitle: game.gameMode == GameMode.standard
-                                ? t.sprint_mode
-                                : t.marathon_mode,
-                            dayText: t.day_count(game.currentDay),
-                            time: game.timeLeft,
-                            progress: progress,
-                            goalText: t.savings_goal(goal.toInt()),
-                            timeBadgeFontSize: adaptive.titleTextSize,
-                            timeBadgeIconSize: adaptive.iconSize,
-                          ),
-                          SizedBox(height: UiSpacing.lg),
-                          _AdaptiveInfoTiles(
-                            adaptive: adaptive,
-                            t: t,
-                            balance: char.balance,
-                            savings: char.savings,
-                            totalAssets: totalAssets,
-                            moneyGoal: game.gameMode == GameMode.standard
-                                ? CheckStateUseCase.standardBalanceGoal.toDouble()
-                                : CheckStateUseCase.marathonBalanceGoal.toDouble(),
-                          ),
-                          SizedBox(height: UiSpacing.lg),
-                          GridView.count(
-                            crossAxisCount: crossAxisCount,
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            mainAxisSpacing: UiSpacing.md,
-                            crossAxisSpacing: UiSpacing.md,
-                            childAspectRatio: childAspectRatio,
+                    return Center(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: UiWidths.expanded),
+                        child: SingleChildScrollView(
+                          padding: EdgeInsets.all(padding),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              ExpressiveStatCard(
-                                label: t.happiness,
-                                value: char.happiness.toString(),
-                                icon: Icons.sentiment_satisfied_alt,
-                                color: Colors.orange,
-                                iconSize: adaptive.iconSize,
-                                height: double.infinity,
-                                valueStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                      fontSize: adaptive.headlineTextSize,
-                                      fontWeight: FontWeight.w900,
-                                    ),
+                              GameProgressCard(
+                                modeTitle: game.gameMode == GameMode.standard
+                                    ? t.sprint_mode
+                                    : t.marathon_mode,
+                                dayText: t.day_count(game.currentDay),
+                                time: game.timeLeft,
+                                progress: progress,
+                                goalText: t.savings_goal(goal.toInt()),
+                                timeBadgeFontSize: adaptive.titleTextSize,
+                                timeBadgeIconSize: adaptive.iconSize,
                               ),
-                              ExpressiveStatCard(
-                                label: t.energy,
-                                value: char.energy.toString(),
-                                icon: Icons.bolt,
-                                color: Colors.blue,
-                                iconSize: adaptive.iconSize,
-                                height: double.infinity,
-                                valueStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                      fontSize: adaptive.headlineTextSize,
-                                      fontWeight: FontWeight.w900,
-                                    ),
+                              SizedBox(height: UiSpacing.lg),
+                              _AdaptiveInfoTiles(
+                                adaptive: adaptive,
+                                t: t,
+                                balance: char.balance,
+                                savings: char.savings,
+                                totalAssets: totalAssets,
+                                moneyGoal: game.gameMode == GameMode.standard
+                                    ? CheckStateUseCase.standardBalanceGoal.toDouble()
+                                    : CheckStateUseCase.marathonBalanceGoal.toDouble(),
                               ),
-                              ExpressiveStatCard(
-                                label: t.finIQ,
-                                value: char.finIQ.toString(),
-                                icon: Icons.psychology_outlined,
-                                color: Colors.purple,
-                                iconSize: adaptive.iconSize,
-                                height: double.infinity,
-                                valueStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                              SizedBox(height: UiSpacing.lg),
+                              GridView.count(
+                                crossAxisCount: crossAxisCount,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                mainAxisSpacing: UiSpacing.md,
+                                crossAxisSpacing: UiSpacing.md,
+                                childAspectRatio: childAspectRatio,
+                                children: [
+                                  ExpressiveStatCard(
+                                    label: t.happiness,
+                                    value: char.happiness.toString(),
+                                    icon: Icons.sentiment_satisfied_alt,
+                                    color: Colors.orange,
+                                    iconSize: adaptive.iconSize,
+                                    height: double.infinity,
+                                    valueStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
                                       fontSize: adaptive.headlineTextSize,
                                       fontWeight: FontWeight.w900,
                                     ),
+                                  ),
+                                  ExpressiveStatCard(
+                                    label: t.energy,
+                                    value: char.energy.toString(),
+                                    icon: Icons.bolt,
+                                    color: Colors.blue,
+                                    iconSize: adaptive.iconSize,
+                                    height: double.infinity,
+                                    valueStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                      fontSize: adaptive.headlineTextSize,
+                                      fontWeight: FontWeight.w900,
+                                    ),
+                                  ),
+                                  ExpressiveStatCard(
+                                    label: t.finIQ,
+                                    value: char.finIQ.toString(),
+                                    icon: Icons.psychology_outlined,
+                                    color: Colors.purple,
+                                    iconSize: adaptive.iconSize,
+                                    height: double.infinity,
+                                    valueStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                      fontSize: adaptive.headlineTextSize,
+                                      fontWeight: FontWeight.w900,
+                                    ),
+                                  ),
+                                  ExpressiveStatCard(
+                                    label: t.score,
+                                    value: char.score.toString(),
+                                    icon: Icons.star_outline,
+                                    color: Colors.amber,
+                                    iconSize: adaptive.iconSize,
+                                    height: double.infinity,
+                                    valueStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                      fontSize: adaptive.headlineTextSize,
+                                      fontWeight: FontWeight.w900,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              ExpressiveStatCard(
-                                label: t.score,
-                                value: char.score.toString(),
-                                icon: Icons.star_outline,
-                                color: Colors.amber,
-                                iconSize: adaptive.iconSize,
-                                height: double.infinity,
-                                valueStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                      fontSize: adaptive.headlineTextSize,
-                                      fontWeight: FontWeight.w900,
+                              SizedBox(height: UiSpacing.md),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: AppButton(
+                                      label: t.choose_job,
+                                      icon: Icons.work_outline,
+                                      style: ButtonVariant.secondary,
+                                      size: ButtonSize.large,
+                                      onPressed: () =>
+                                          context.router.pushPath('/job-chooser'),
                                     ),
+                                  ),
+                                  SizedBox(width: UiSpacing.sm),
+                                  Expanded(
+                                    child: AppButton(
+                                      label: t.choose_action,
+                                      icon: Icons.local_activity_outlined,
+                                      style: ButtonVariant.secondary,
+                                      size: ButtonSize.large,
+                                      onPressed: () =>
+                                          context.router.pushPath('/action-chooser'),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: UiSpacing.lg),
+                              _BouncingButton(
+                                child: AppButton(
+                                  label: t.next_day,
+                                  icon: Icons.skip_next_outlined,
+                                  onPressed: () =>
+                                      context.read<GameBloc>().add(EndDayPressed()),
+                                  size: ButtonSize.medium,
+                                  isFullWidth: true,
+                                ),
                               ),
                             ],
                           ),
-                          SizedBox(height: UiSpacing.md),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: AppButton(
-                                  label: t.choose_job,
-                                  icon: Icons.work_outline,
-                                  style: ButtonVariant.secondary,
-                                  size: ButtonSize.large,
-                                  onPressed: () =>
-                                      context.router.pushPath('/job-chooser'),
-                                ),
-                              ),
-                              SizedBox(width: UiSpacing.sm),
-                              Expanded(
-                                child: AppButton(
-                                  label: t.choose_action,
-                                  icon: Icons.local_activity_outlined,
-                                  style: ButtonVariant.secondary,
-                                  size: ButtonSize.large,
-                                  onPressed: () =>
-                                      context.router.pushPath('/action-chooser'),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: UiSpacing.lg),
-                          _BouncingButton(
-                            child: AppButton(
-                              label: t.next_day,
-                              icon: Icons.skip_next_outlined,
-                              onPressed: () =>
-                                  context.read<GameBloc>().add(EndDayPressed()),
-                              size: ButtonSize.medium,
-                              isFullWidth: true,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 );
               },
-            );
-          },
+            ),
         ),
       ),
     );
