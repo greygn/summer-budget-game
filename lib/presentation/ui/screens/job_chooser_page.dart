@@ -118,7 +118,6 @@ class JobChooserPage extends StatelessWidget {
                           ],
                           onTap: canAfford ? () {
                             context.read<GameBloc>().add(JobSelected(job));
-                            context.router.maybePop();
                           } : null,
                         ),
                       );
