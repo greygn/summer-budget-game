@@ -78,7 +78,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get choose_job => 'Выбрать работу';
 
   @override
-  String get choose_action => 'Чем займемся сегодня?';
+  String get choose_action => 'Чем займемся?';
 
   @override
   String happiness_gain(Object amount) {

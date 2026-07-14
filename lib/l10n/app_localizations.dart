@@ -233,7 +233,7 @@ abstract class AppLocalizations {
   /// No description provided for @choose_action.
   ///
   /// In ru, this message translates to:
-  /// **'Чем займемся сегодня?'**
+  /// **'Чем займемся?'**
   String get choose_action;
 
   /// No description provided for @happiness_gain.

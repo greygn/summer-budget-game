@@ -28,7 +28,7 @@
   "job": "Работа",
   "next_day": "Следующий день",
   "choose_job": "Выбрать работу",
-  "choose_action": "Чем займемся сегодня?",
+  "choose_action": "Чем займемся?",
   "happiness_gain": "+{amount} к счастью",
   "energy_cost": "-{amount} энергии",
   "time_cost": "{amount} часов",

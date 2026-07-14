@@ -117,9 +117,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "appTitle": MessageLookupByLibrary.simpleMessage("Бюджетно!"),
     "back_to_menu": MessageLookupByLibrary.simpleMessage("В главное меню"),
     "balance": MessageLookupByLibrary.simpleMessage("Наличные"),
-    "choose_action": MessageLookupByLibrary.simpleMessage(
-      "Чем займемся сегодня?",
-    ),
+    "choose_action": MessageLookupByLibrary.simpleMessage("Чем займемся?"),
     "choose_job": MessageLookupByLibrary.simpleMessage("Выбрать работу"),
     "continue_game": MessageLookupByLibrary.simpleMessage("Продолжить игру"),
     "day_count": m0,
