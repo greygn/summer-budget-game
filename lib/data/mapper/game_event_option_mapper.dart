@@ -6,8 +6,7 @@ import '../../domain/entity/game_event_option_entity.dart';
 extension GameEventOptionMapper on GameEventOption {
   GameEventOptionEntity toEntity() {
     return GameEventOptionEntity(
-      descriptionRu: descriptionRu,
-      descriptionEn: descriptionEn,
+      ID: id,
       moneyDelta: moneyDelta,
       energyDelta: energyDelta,
       happinessDelta: happinessDelta,
@@ -22,9 +21,8 @@ extension GameEventOptionEntityMapper on GameEventOptionEntity {
     required int eventId,
   }) {
     return GameEventOptionsCompanion.insert(
+      id: drift.Value(ID),
       eventId: eventId,
-      descriptionRu: descriptionRu,
-      descriptionEn: descriptionEn,
       moneyDelta: drift.Value(moneyDelta),
       energyDelta: drift.Value(energyDelta),
       happinessDelta: drift.Value(happinessDelta),

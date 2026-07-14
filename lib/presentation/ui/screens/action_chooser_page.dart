@@ -42,17 +42,11 @@ class ActionChooserPage extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               }
 
-              if (state.actions.isEmpty) {
+              if (state.groupedActions.isEmpty) {
                 return Center(child: Text(t.no_actions_available));
               }
 
-              final groupedActions = <int, List<GameActionEntity>>{};
-              for (final action in state.actions) {
-                final categoryId = action.category.ID;
-                groupedActions.putIfAbsent(categoryId, () => []).add(action);
-              }
-
-              final categories = groupedActions.keys.toList()..sort((a, b) {
+              final categories = state.groupedActions.keys.toList()..sort((a, b) {
                 if (a == 5) return -1;
                 if (b == 5) return 1;
                 return a.compareTo(b);
@@ -66,7 +60,7 @@ class ActionChooserPage extends StatelessWidget {
                     itemCount: categories.length,
                     itemBuilder: (context, catIndex) {
                       final categoryId = categories[catIndex];
-                      final actions = groupedActions[categoryId]!;
+                      final actions = state.groupedActions[categoryId]!;
                       final firstAction = actions.first;
 
                       return Column(
@@ -87,39 +81,16 @@ class ActionChooserPage extends StatelessWidget {
                             final char = state.saveRecord?.characterRecord;
                             final job = char?.job;
 
-                            int displayMoney = action.moneyDelta;
-                            int displayTime = action.timeCost;
-                            int displayHappiness = action.happinessDelta;
-                            int displayEnergy = action.energyDelta;
+                            final stats = action.getDisplayStats(job);
                             String actionName = action.getName(context);
-
-                            if (action.ID >= 100 && action.ID <= 102 && job != null) {
+                            if (action.isJobAction && job != null) {
                               actionName = "$actionName (${job.getName(context)})";
-                              
-                              double timeMult = 1.0;
-                              double moneyMult = 1.0;
-                              double effortMult = 1.0;
-
-                              if (action.ID == 100) {
-                                timeMult = 0.5;
-                                moneyMult = 0.4;
-                                effortMult = 0.4;
-                              } else if (action.ID == 102) {
-                                timeMult = 1.5;
-                                moneyMult = 2.0;
-                                effortMult = 1.5;
-                              }
-
-                              displayTime = (job.timeCost * timeMult).round();
-                              displayMoney = (job.salary * moneyMult).round();
-                              displayHappiness = (job.happinessCost * effortMult).round();
-                              displayEnergy = (job.energyCost * effortMult).round();
                             }
 
-                            final hasEnoughMoney = (char?.balance ?? 0) + displayMoney >= 0;
+                            final hasEnoughMoney = (char?.balance ?? 0) + stats.money >= 0;
                             final hasEnoughSavings = (char?.savings ?? 0) + action.savingsDelta >= 0;
-                            final canAfford = timeLeft >= displayTime && hasEnoughMoney && hasEnoughSavings;
-                            final isPositive = displayMoney >= 0;
+                            final canAfford = timeLeft >= stats.time && hasEnoughMoney && hasEnoughSavings;
+                            final isPositive = stats.money >= 0;
 
                             return Padding(
                               padding: const EdgeInsets.only(bottom: UiSpacing.md),
@@ -141,11 +112,11 @@ class ActionChooserPage extends StatelessWidget {
                                     ),
                                   ),
                                   tags: [
-                                    if (displayMoney != 0)
+                                    if (stats.money != 0)
                                       _buildTag(
                                         context,
                                         adaptive,
-                                        '${displayMoney > 0 ? '+' : ''}$displayMoney',
+                                        '${stats.money > 0 ? '+' : ''}${stats.money}',
                                         Icons.payments_outlined,
                                         color: isPositive ? Colors.green : (hasEnoughMoney ? Colors.red : Colors.grey),
                                       ),
@@ -157,19 +128,19 @@ class ActionChooserPage extends StatelessWidget {
                                         Icons.savings_outlined,
                                         color: action.savingsDelta > 0 ? Colors.teal : (hasEnoughSavings ? Colors.red : Colors.grey),
                                       ),
-                                    if (displayHappiness != 0)
+                                    if (stats.happiness != 0)
                                       _buildTag(
                                         context,
                                         adaptive,
-                                        '${displayHappiness > 0 ? '+' : ''}$displayHappiness',
+                                        '${stats.happiness > 0 ? '+' : ''}${stats.happiness}',
                                         Icons.sentiment_satisfied_alt,
                                         color: Colors.orange,
                                       ),
-                                    if (displayEnergy != 0)
+                                    if (stats.energy != 0)
                                       _buildTag(
                                         context,
                                         adaptive,
-                                        '${displayEnergy > 0 ? '+' : ''}$displayEnergy',
+                                        '${stats.energy > 0 ? '+' : ''}${stats.energy}',
                                         Icons.bolt,
                                         color: Colors.blue,
                                       ),
@@ -184,7 +155,7 @@ class ActionChooserPage extends StatelessWidget {
                                     _buildTag(
                                       context,
                                       adaptive,
-                                      t.time_cost(displayTime.toString()),
+                                      t.time_cost(stats.time.toString()),
                                       Icons.access_time,
                                       color: canAfford ? null : Colors.red,
                                     ),
@@ -222,8 +193,8 @@ class ActionChooserPage extends StatelessWidget {
     final categoryId = action.category.ID;
     if (categoryId == 1) return Icons.restaurant_rounded;
     if (categoryId == 2) return Icons.fitness_center_rounded;
-    if (categoryId == 5 || action.ID >= 100) return Icons.work_history_rounded;
-    if (categoryId == 8) return Icons.account_balance_rounded;
+    if (categoryId == 5 || action.isJobAction) return Icons.work_history_rounded;
+    if (categoryId == 7) return Icons.account_balance_rounded;
     if (categoryId == 3) return Icons.movie_creation_outlined;
     if (categoryId == 4) return Icons.school_rounded;
     if (categoryId == 6) return Icons.style_rounded;

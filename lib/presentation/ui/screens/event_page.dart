@@ -131,23 +131,27 @@ class EventPage extends StatelessWidget {
                                   : ButtonSize.large,
                             )
                           else
-                            ...event.options.map((option) => Padding(
-                                  padding: const EdgeInsets.only(bottom: UiSpacing.md),
-                                  child: AppButton(
-                                    label: option.getDescription(context),
-                                    onPressed: () {
-                                      context
-                                          .read<GameBloc>()
-                                          .add(GameEventOptionSelected(option));
-                                      context.router.maybePop();
-                                    },
-                                    isFullWidth: true,
-                                    style: ButtonVariant.secondary,
-                                    size: (adaptive.isCompact || adaptive.isMedium)
-                                        ? ButtonSize.medium
-                                        : ButtonSize.large,
-                                  ),
-                                )),
+                            ...event.options.asMap().entries.map((entry) {
+                              final index = entry.key;
+                              final option = entry.value;
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: UiSpacing.md),
+                                child: AppButton(
+                                  label: option.getLocalizedDescription(context, event.ID, index),
+                                  onPressed: () {
+                                    context
+                                        .read<GameBloc>()
+                                        .add(GameEventOptionSelected(option));
+                                    context.router.maybePop();
+                                  },
+                                  isFullWidth: true,
+                                  style: ButtonVariant.secondary,
+                                  size: (adaptive.isCompact || adaptive.isMedium)
+                                      ? ButtonSize.medium
+                                      : ButtonSize.large,
+                                ),
+                              );
+                            }),
                         ],
                       ),
                     ),

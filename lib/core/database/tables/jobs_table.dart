@@ -3,9 +3,6 @@ import 'package:drift/drift.dart';
 class Jobs extends Table {
   IntColumn get id => integer()();
 
-  TextColumn get nameRu => text()();
-  TextColumn get nameEn => text()();
-
   IntColumn get salary => integer().withDefault(const Constant(0))();
 
   IntColumn get energyCost => integer().withDefault(const Constant(0))();

@@ -5,8 +5,6 @@ extension GameActionCategoryMapper on GameActionCategory {
   GameActionCategoryEntity toEntity() {
     return GameActionCategoryEntity(
       ID: id,
-      nameRu: nameRu,
-      nameEn: nameEn,
     );
   }
 }

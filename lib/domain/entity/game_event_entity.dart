@@ -10,10 +10,6 @@ abstract class GameEventEntity with _$GameEventEntity{
 
   const factory GameEventEntity({
     required int ID,
-    @Default('') String titleRu,
-    @Default('') String titleEn,
-    @Default('') String descriptionRu,
-    @Default('') String descriptionEn,
     @Default(0) int moneyDelta,
     @Default(0) int energyDelta,
     @Default(0) int happinessDelta,

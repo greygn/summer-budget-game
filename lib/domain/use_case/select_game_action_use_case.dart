@@ -33,16 +33,16 @@ class SelectGameActionUseCase extends UseCase<SaveRecordEntity, GameActionEntity
         int effectiveEnergyDelta = gameAction.energyDelta;
         int effectiveHappinessDelta = gameAction.happinessDelta;
 
-        if (gameAction.ID >= 100 && gameAction.ID <= 102) {
+        if (gameAction.isJobAction) {
           double timeMult = 1.0;
           double moneyMult = 1.0;
           double effortMult = 1.0;
 
-          if (gameAction.ID == 100) {
+          if (gameAction.ID == GameActionEntity.gigId) {
             timeMult = 0.5;
             moneyMult = 0.4;
             effortMult = 0.4;
-          } else if (gameAction.ID == 102) {
+          } else if (gameAction.ID == GameActionEntity.overtimeId) {
             timeMult = 1.5;
             moneyMult = 2.0;
             effortMult = 1.5;

@@ -5,9 +5,6 @@ import 'game_action_categories_table.dart';
 class GameActions extends Table {
   IntColumn get id => integer()();
 
-  TextColumn get nameRu => text()();
-  TextColumn get nameEn => text()();
-
   IntColumn get categoryId =>
       integer().references(GameActionCategories, #id)();
 

@@ -10,10 +10,6 @@ extension GameEventMapper on GameEvent {
   }) {
     return GameEventEntity(
       ID: id,
-      titleRu: titleRu,
-      titleEn: titleEn,
-      descriptionRu: descriptionRu,
-      descriptionEn: descriptionEn,
       moneyDelta: moneyDelta,
       energyDelta: energyDelta,
       happinessDelta: happinessDelta,
@@ -28,10 +24,6 @@ extension GameEventEntityMapper on GameEventEntity {
   GameEventsCompanion toCompanion() {
     return GameEventsCompanion.insert(
       id: drift.Value(ID),
-      titleRu: titleRu,
-      titleEn: titleEn,
-      descriptionRu: descriptionRu,
-      descriptionEn: descriptionEn,
       moneyDelta: drift.Value(moneyDelta),
       energyDelta: drift.Value(energyDelta),
       happinessDelta: drift.Value(happinessDelta),

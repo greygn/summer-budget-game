@@ -8,8 +8,6 @@ abstract class JobEntity with _$JobEntity{
 
   const factory JobEntity({
     required int ID,
-    @Default('') String nameRu,
-    @Default('') String nameEn,
     @Default(0) int salary,
     @Default(0) int energyCost,
     @Default(0) int happinessCost,

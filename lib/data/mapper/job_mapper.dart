@@ -7,8 +7,6 @@ extension JobMapper on Job {
   JobEntity toEntity() {
     return JobEntity(
       ID: id,
-      nameRu: nameRu,
-      nameEn: nameEn,
       salary: salary,
       energyCost: energyCost,
       happinessCost: happinessCost,
@@ -23,8 +21,6 @@ extension JobEntityMapper on JobEntity {
   JobsCompanion toCompanion() {
     return JobsCompanion.insert(
       id: drift.Value(ID),
-      nameRu: nameRu,
-      nameEn: nameEn,
       salary: drift.Value(salary),
       energyCost: drift.Value(energyCost),
       happinessCost: drift.Value(happinessCost),

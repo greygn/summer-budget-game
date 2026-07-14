@@ -8,9 +8,6 @@ class GameEventOptions extends Table {
   IntColumn get eventId =>
       integer().references(GameEvents, #id)();
 
-  TextColumn get descriptionRu => text()();
-  TextColumn get descriptionEn => text()();
-
   IntColumn get moneyDelta =>
       integer().withDefault(const Constant(0))();
 
