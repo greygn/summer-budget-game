@@ -6,6 +6,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../bloc/game/game_bloc.dart';
 import '../../bloc/game/game_event.dart';
 import '../../bloc/game/game_state.dart';
+import '../utils/entity_localization.dart';
 
 @RoutePage()
 class JobChooserPage extends StatelessWidget {
@@ -39,6 +40,8 @@ class JobChooserPage extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final job = state.jobs[index];
                       final char = state.saveRecord?.characterRecord;
+                      final currentJobId = char?.job.ID;
+                      final isSelected = job.ID == currentJobId;
                       final hasFinIQ = (char?.finIQ ?? 0) >= job.minFinIQ;
                       final hasPoints = (char?.score ?? 0) >= job.minPoints;
                       final canAfford = hasFinIQ && hasPoints;
@@ -46,11 +49,18 @@ class JobChooserPage extends StatelessWidget {
                       return Opacity(
                         opacity: canAfford ? 1.0 : 0.5,
                         child: ActionCard(
-                          title: job.name,
+                          isSelected: isSelected,
+                          title: job.getName(context),
+                          trailing: isSelected 
+                              ? Icon(Icons.check_circle, color: Theme.of(context).colorScheme.primary)
+                              : null,
                           leading: Container(
                             padding: const EdgeInsets.all(UiSpacing.sm),
                             decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primary.withValues(alpha: AppTheme.surfaceAlpha),
+                              color: (isSelected 
+                                      ? Theme.of(context).colorScheme.primary 
+                                      : Theme.of(context).colorScheme.primary)
+                                  .withValues(alpha: isSelected ? 0.2 : AppTheme.surfaceAlpha),
                               borderRadius: BorderRadius.circular(UiRadius.medium),
                             ),
                             child: Icon(
@@ -73,20 +83,22 @@ class JobChooserPage extends StatelessWidget {
                               t.time_cost(job.timeCost.toString()),
                               Icons.access_time,
                             ),
-                            _buildTag(
-                              context,
-                              adaptive,
-                              '–${job.happinessCost}',
-                              Icons.sentiment_satisfied_alt,
-                              color: Colors.orange,
-                            ),
-                            _buildTag(
-                              context,
-                              adaptive,
-                              '–${job.energyCost}',
-                              Icons.bolt,
-                              color: Colors.blue,
-                            ),
+                            if (job.happinessCost != 0)
+                              _buildTag(
+                                context,
+                                adaptive,
+                                '${job.happinessCost > 0 ? '+' : ''}${job.happinessCost}',
+                                Icons.sentiment_satisfied_alt,
+                                color: Colors.orange,
+                              ),
+                            if (job.energyCost != 0)
+                              _buildTag(
+                                context,
+                                adaptive,
+                                '${job.energyCost > 0 ? '+' : ''}${job.energyCost}',
+                                Icons.bolt,
+                                color: Colors.blue,
+                              ),
                             if (job.minFinIQ > 0)
                               _buildTag(
                                 context,
@@ -106,7 +118,6 @@ class JobChooserPage extends StatelessWidget {
                           ],
                           onTap: canAfford ? () {
                             context.read<GameBloc>().add(JobSelected(job));
-                            context.router.maybePop();
                           } : null,
                         ),
                       );

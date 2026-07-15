@@ -5,8 +5,6 @@ import 'game_action_categories_table.dart';
 class GameActions extends Table {
   IntColumn get id => integer()();
 
-  TextColumn get name => text()();
-
   IntColumn get categoryId =>
       integer().references(GameActionCategories, #id)();
 
@@ -14,6 +12,9 @@ class GameActions extends Table {
       integer().withDefault(const Constant(0))();
 
   IntColumn get happinessDelta =>
+      integer().withDefault(const Constant(0))();
+
+  IntColumn get energyDelta =>
       integer().withDefault(const Constant(0))();
 
   IntColumn get finIQDelta =>

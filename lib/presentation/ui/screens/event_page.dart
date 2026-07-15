@@ -6,6 +6,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../bloc/game/game_bloc.dart';
 import '../../bloc/game/game_event.dart';
 import '../../bloc/game/game_state.dart';
+import '../utils/entity_localization.dart';
 
 @RoutePage()
 class EventPage extends StatelessWidget {
@@ -63,7 +64,7 @@ class EventPage extends StatelessWidget {
                           ),
                           SizedBox(height: UiSpacing.xl),
                           Text(
-                            event.title,
+                            event.getTitle(context),
                             style: theme.textTheme.headlineMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                               color: theme.colorScheme.onSurface,
@@ -73,7 +74,7 @@ class EventPage extends StatelessWidget {
                           ),
                           const SizedBox(height: UiSpacing.lg),
                           AppInfoCard(
-                            text: event.description,
+                            text: event.getDescription(context),
                           ),
                           const SizedBox(height: UiSpacing.lg),
                           Wrap(
@@ -109,6 +110,14 @@ class EventPage extends StatelessWidget {
                                   Icons.psychology_outlined,
                                   color: Colors.purple,
                                 ),
+                              if (event.energyDelta != 0)
+                                _buildTag(
+                                  context,
+                                  adaptive,
+                                  '${event.energyDelta > 0 ? '+' : ''}${event.energyDelta}',
+                                  Icons.bolt,
+                                  color: Colors.blue,
+                                ),
                             ],
                           ),
                           SizedBox(height: UiSpacing.xxl),
@@ -122,23 +131,27 @@ class EventPage extends StatelessWidget {
                                   : ButtonSize.large,
                             )
                           else
-                            ...event.options.map((option) => Padding(
-                                  padding: const EdgeInsets.only(bottom: UiSpacing.md),
-                                  child: AppButton(
-                                    label: option.description,
-                                    onPressed: () {
-                                      context
-                                          .read<GameBloc>()
-                                          .add(GameEventOptionSelected(option));
-                                      context.router.maybePop();
-                                    },
-                                    isFullWidth: true,
-                                    style: ButtonVariant.secondary,
-                                    size: (adaptive.isCompact || adaptive.isMedium)
-                                        ? ButtonSize.medium
-                                        : ButtonSize.large,
-                                  ),
-                                )),
+                            ...event.options.asMap().entries.map((entry) {
+                              final index = entry.key;
+                              final option = entry.value;
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: UiSpacing.md),
+                                child: AppButton(
+                                  label: option.getLocalizedDescription(context, event.ID, index),
+                                  onPressed: () {
+                                    context
+                                        .read<GameBloc>()
+                                        .add(GameEventOptionSelected(option));
+                                    context.router.maybePop();
+                                  },
+                                  isFullWidth: true,
+                                  style: ButtonVariant.secondary,
+                                  size: (adaptive.isCompact || adaptive.isMedium)
+                                      ? ButtonSize.medium
+                                      : ButtonSize.large,
+                                ),
+                              );
+                            }),
                         ],
                       ),
                     ),

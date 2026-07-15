@@ -142,26 +142,22 @@ class LocalDataSourceImpl implements LocalDataSource {
       return null;
     }
 
-    final job =
-        await jobsDao.getById(save.jobId);
+    final jobRow = await jobsDao.getById(save.jobId);
+    final job = jobRow?.toEntity() ?? JobEntity(ID: save.jobId);
 
-    final event =
-        await eventsDao.getById(save.currentEventId);
-
-    if (job == null || event == null) {
-      return null;
+    final eventRow = await eventsDao.getById(save.currentEventId);
+    
+    List<GameEventOptionEntity> eventOptions = [];
+    if (eventRow != null) {
+      final optionRows = await optionsDao.getByEventId(eventRow.id);
+      eventOptions = optionRows.map((e) => e.toEntity()).toList();
     }
-
-    final options =
-        await optionsDao.getByEventId(event.id);
+    
+    final event = eventRow?.toEntity(options: eventOptions) ?? GameEventEntity(ID: save.currentEventId);
 
     return save.toEntity(
-      job: job.toEntity(),
-      currentEvent: event.toEntity(
-        options: options
-            .map((e) => e.toEntity())
-            .toList(),
-      ),
+      job: job,
+      currentEvent: event,
     );
   }
 

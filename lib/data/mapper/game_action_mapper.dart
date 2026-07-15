@@ -10,10 +10,10 @@ extension GameActionMapper on GameAction {
   }) {
     return GameActionEntity(
       ID: id,
-      name: name,
       category: category,
       moneyDelta: moneyDelta,
       happinessDelta: happinessDelta,
+      energyDelta: energyDelta,
       finIQDelta: finIQDelta,
       savingsDelta: savingsDelta,
       pointsForAction: pointsForAction,
@@ -26,10 +26,10 @@ extension GameActionEntityMapper on GameActionEntity {
   GameActionsCompanion toCompanion() {
     return GameActionsCompanion.insert(
       id: drift.Value(ID),
-      name: name,
       categoryId: category.ID,
       moneyDelta: drift.Value(moneyDelta),
       happinessDelta: drift.Value(happinessDelta),
+      energyDelta: drift.Value(energyDelta),
       finIQDelta: drift.Value(finIQDelta),
       savingsDelta: drift.Value(savingsDelta),
       pointsForAction: drift.Value(pointsForAction),

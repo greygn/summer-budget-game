@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:injectable/injectable.dart';
 import 'package:summer_budget_game/core/failure/failure.dart';
 import 'package:summer_budget_game/core/use_case/use_case.dart';
 import 'package:summer_budget_game/domain/entity/game_event_entity.dart';
@@ -10,6 +11,7 @@ import '../repository/game_repository.dart';
 import 'check_state_use_case.dart';
 
 //Случайным образом выпадает GameEvent, применяется эффект, если нет options
+@lazySingleton
 class ReciveEventUseCase extends UseCaseNoPrarms<GameEventEntity> {
   final GameRepository gameRepository;
   final CheckStateUseCase checkStateUseCase;
@@ -37,6 +39,7 @@ class ReciveEventUseCase extends UseCaseNoPrarms<GameEventEntity> {
 
           bool hasNegative = _isAnyDeltaNegative(
             event.moneyDelta,
+            event.energyDelta,
             event.happinessDelta,
             event.finIQDelta,
             event.pointsDelta,
@@ -79,6 +82,7 @@ class ReciveEventUseCase extends UseCaseNoPrarms<GameEventEntity> {
               updatedRecord = updatedRecord.copyWith(
                 characterRecord: updatedRecord.characterRecord.copyWith(
                   balance: updatedRecord.characterRecord.balance + effectiveMoneyDelta,
+                  energy: (updatedRecord.characterRecord.energy + selectedEvent.energyDelta).clamp(-1, 100),
                   happiness: (updatedRecord.characterRecord.happiness + selectedEvent.happinessDelta).clamp(-1, 100),
                   finIQ: updatedRecord.characterRecord.finIQ + selectedEvent.finIQDelta,
                   score: updatedRecord.characterRecord.score + selectedEvent.pointsDelta,
@@ -99,7 +103,7 @@ class ReciveEventUseCase extends UseCaseNoPrarms<GameEventEntity> {
     );
   }
 
-  bool _isAnyDeltaNegative(int moneyDelta, int happinessDelta, int finIQDelta, int pointsDelta) {
-    return moneyDelta < 0 || happinessDelta < 0 || finIQDelta < 0 || pointsDelta < 0;
+  bool _isAnyDeltaNegative(int moneyDelta, int energyDelta, int happinessDelta, int finIQDelta, int pointsDelta) {
+    return moneyDelta < 0 || energyDelta < 0 || happinessDelta < 0 || finIQDelta < 0 || pointsDelta < 0;
   }
 }

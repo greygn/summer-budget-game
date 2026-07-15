@@ -9,6 +9,7 @@ import '../../../main.dart';
 import '../../bloc/main_menu/main_menu_bloc.dart';
 import '../../bloc/main_menu/main_menu_event.dart';
 import '../../bloc/main_menu/main_menu_state.dart';
+import '../utils/entity_localization.dart';
 
 @RoutePage()
 class HomePage extends StatefulWidget {
@@ -95,9 +96,21 @@ class _HomePageState extends State<HomePage> {
     final theme = Theme.of(context);
 
     return BlocListener<MainMenuBloc, MainMenuState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state.gameStarted) {
-          context.router.pushPath('/dashboard');
+          await context.router.pushPath('/dashboard');
+
+          if (context.mounted) {
+            context.read<MainMenuBloc>().add(MainMenuOpened());
+          }
+        }
+        if (state.unfoldingFailure != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.unfoldingFailure!.getLocalizedMessage(context)),
+              backgroundColor: theme.colorScheme.error,
+            ),
+          );
         }
       },
       child: Scaffold(

@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:injectable/injectable.dart';
 import 'package:summer_budget_game/core/failure/failure.dart';
 import 'package:summer_budget_game/core/use_case/use_case.dart';
 import 'package:summer_budget_game/domain/entity/job_entity.dart';
@@ -10,6 +11,7 @@ import '../failure/writing_failure.dart';
 import '../repository/game_repository.dart';
 
 //Выбор работы игрока, сохранение работы
+@lazySingleton
 class SelectJobUseCase extends UseCase<SaveRecordEntity, JobEntity>{
   final GameRepository gameRepository;
 

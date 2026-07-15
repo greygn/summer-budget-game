@@ -124,23 +124,19 @@ class _ResultsPageState extends State<ResultsPage> {
                               children: [
                                 Expanded(
                                   child: ExpressiveResultStat(
-                                    label: t.finIQ,
-                                    value: char.finIQ.toString(),
-                                    icon: Icons.psychology_outlined,
-                                    color: isVictory
-                                        ? Colors.purple
-                                        : theme.colorScheme.onSurface,
+                                    label: t.score,
+                                    value: char.score.toString(),
+                                    icon: Icons.star_outline,
+                                    color: Colors.amber,
                                   ),
                                 ),
                                 SizedBox(width: UiSpacing.md),
                                 Expanded(
                                   child: ExpressiveResultStat(
-                                    label: t.score,
-                                    value: char.score.toString(),
-                                    icon: Icons.star_outline,
-                                    color: isVictory
-                                        ? Colors.amber
-                                        : theme.colorScheme.onSurface,
+                                    label: t.finIQ,
+                                    value: char.finIQ.toString(),
+                                    icon: Icons.psychology_outlined,
+                                    color: Colors.purple,
                                   ),
                                 ),
                               ],

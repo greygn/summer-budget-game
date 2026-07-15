@@ -1,15 +1,19 @@
 import 'dart:math';
 
 import 'package:dartz/dartz.dart';
+import 'package:injectable/injectable.dart';
 import 'package:summer_budget_game/core/failure/failure.dart';
 import 'package:summer_budget_game/core/use_case/use_case.dart';
 import 'package:summer_budget_game/domain/entity/save_record_entity.dart';
 import 'package:summer_budget_game/domain/failure/unfolding_failure.dart';
 import 'package:summer_budget_game/domain/use_case/check_state_use_case.dart';
 
+import 'package:summer_budget_game/domain/entity/game_mode.dart';
+
 import '../repository/game_repository.dart';
 
 //Завершение дня, увеличение счётчика дней, увеличение энергии, проверка состояния
+@lazySingleton
 class EndDayUseCase extends UseCaseNoPrarms<SaveRecordEntity> {
   final GameRepository gameRepository;
   final CheckStateUseCase checkStateUseCase;
@@ -32,7 +36,7 @@ class EndDayUseCase extends UseCaseNoPrarms<SaveRecordEntity> {
       record,
     ) async {
       var effectiveInflationLevel = record.gameRecord.inflationLevel;
-      if (record.gameRecord.gameMode == .marathon && record.gameRecord.currentDay % 7 == 0){
+      if (record.gameRecord.gameMode == GameMode.marathon && record.gameRecord.currentDay % 7 == 0){
         effectiveInflationLevel *= inflationIncrement;
       }
 

@@ -14,6 +14,7 @@ class ActionCard extends StatelessWidget {
     this.trailing,
     this.tags = const [],
     this.onTap,
+    this.isSelected = false,
   });
 
   final String title;
@@ -26,6 +27,8 @@ class ActionCard extends StatelessWidget {
 
   final VoidCallback? onTap;
 
+  final bool isSelected;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -34,7 +37,7 @@ class ActionCard extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final layout = AdaptiveLayout.of(constraints);
-
+        // ... (existing layout logic)
         final padding = layout.value(
           compact: EdgeInsets.all(UiSpacing.md),
           medium: EdgeInsets.all(UiSpacing.lg),
@@ -65,19 +68,28 @@ class ActionCard extends StatelessWidget {
 
         final titleStyle = theme.textTheme.titleMedium?.copyWith(
           fontSize: layout.titleTextSize,
+          fontWeight: isSelected ? FontWeight.bold : null,
+          color: isSelected ? colorScheme.primary : null,
         );
 
         return Container(
           decoration: BoxDecoration(
-            color: colorScheme.surface,
+            color: isSelected 
+                ? colorScheme.primary.withValues(alpha: 0.05)
+                : colorScheme.surface,
             borderRadius: BorderRadius.circular(UiRadius.extraLarge),
             border: Border.all(
-              color: colorScheme.outlineVariant.withValues(alpha: AppTheme.emphasisAlpha),
+              color: isSelected 
+                  ? colorScheme.primary 
+                  : colorScheme.outlineVariant.withValues(alpha: AppTheme.emphasisAlpha),
+              width: isSelected ? 2.0 : 1.0,
             ),
             boxShadow: [
               BoxShadow(
-                color: colorScheme.shadow.withValues(alpha: AppTheme.surfaceAlpha),
-                blurRadius: 12,
+                color: isSelected
+                    ? colorScheme.primary.withValues(alpha: 0.1)
+                    : colorScheme.shadow.withValues(alpha: AppTheme.surfaceAlpha),
+                blurRadius: isSelected ? 16 : 12,
                 offset: const Offset(0, 6),
               ),
             ],

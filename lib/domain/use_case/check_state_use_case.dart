@@ -1,12 +1,15 @@
 import 'package:dartz/dartz.dart';
+import 'package:injectable/injectable.dart';
 import 'package:summer_budget_game/core/failure/failure.dart';
 import 'package:summer_budget_game/core/use_case/use_case.dart';
 import 'package:summer_budget_game/domain/failure/unfolding_failure.dart';
 
+import 'package:summer_budget_game/domain/entity/game_mode.dart';
 import '../repository/game_repository.dart';
 
 
 //Проверка на то, выполнены ли условия для окончания игры (победы или поражения)
+@lazySingleton
 class CheckStateUseCase extends UseCaseNoPrarms<void> {
   final GameRepository gameRepository;
 
@@ -34,21 +37,21 @@ class CheckStateUseCase extends UseCaseNoPrarms<void> {
         );
         return Right(null);
       }
-      if (record.gameRecord.gameMode == .standard &&
+      if (record.gameRecord.gameMode == GameMode.standard &&
           record.gameRecord.currentDay > record.gameRecord.allowedDays) {
         await gameRepository.writeSaveRecord(
           record.copyWith(gameRecord: record.gameRecord.copyWith(isOver: true)),
         );
         return Right(null);
       }
-      if (record.gameRecord.gameMode == .standard &&
+      if (record.gameRecord.gameMode == GameMode.standard &&
       record.characterRecord.balance + record.characterRecord.savings >= standardBalanceGoal){
         await gameRepository.writeSaveRecord(
           record.copyWith(gameRecord: record.gameRecord.copyWith(isOver: true)),
         );
         return Right(null);
       }
-      if (record.gameRecord.gameMode == .marathon &&
+      if (record.gameRecord.gameMode == GameMode.marathon &&
           record.characterRecord.balance + record.characterRecord.savings >= marathonBalanceGoal){
         await gameRepository.writeSaveRecord(
           record.copyWith(gameRecord: record.gameRecord.copyWith(isOver: true)),

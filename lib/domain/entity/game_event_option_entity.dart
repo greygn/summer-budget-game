@@ -7,8 +7,9 @@ abstract class GameEventOptionEntity with _$GameEventOptionEntity{
   const GameEventOptionEntity._();
 
   const factory GameEventOptionEntity({
-    @Default('') String description,
+    required int ID,
     @Default(0) int moneyDelta,
+    @Default(0) int energyDelta,
     @Default(0) int happinessDelta,
     @Default(0) int finIQDelta,
     @Default(0) int pointsDelta

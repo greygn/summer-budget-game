@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:injectable/injectable.dart';
 import 'package:summer_budget_game/core/failure/failure.dart';
 import 'package:summer_budget_game/core/use_case/use_case.dart';
 import 'package:summer_budget_game/domain/entity/game_action_entity.dart';
@@ -8,6 +9,7 @@ import 'package:summer_budget_game/domain/use_case/get_save_info_use_case.dart';
 import '../repository/game_repository.dart';
 
 //Получение списка действий
+@lazySingleton
 class GetGameActionsUseCase extends UseCaseNoPrarms<List<GameActionEntity>> {
   final GameRepository gameRepository;
   final GetSaveInfoUseCase getSaveInfoUseCase;
