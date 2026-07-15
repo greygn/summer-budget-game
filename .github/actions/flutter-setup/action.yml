@@ -1,4 +1,4 @@
-rname: Flutter setup
+name: Flutter setup
 description: Setup Flutter and install dependencies
 runs:
   using: composite
@@ -10,3 +10,4 @@ runs:
 
     - name: Install dependencies
       run: flutter pub get
+      shell: bash
