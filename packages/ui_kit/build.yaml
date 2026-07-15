@@ -1,0 +1,9 @@
+targets:
+  $default:
+    builders:
+      widgetbook_generator:
+        options:
+          input_file: lib/widgetbook/main.dart
+          output_file: lib/widgetbook/main.directories.g.dart
+        generate_for:
+          - lib/widgetbook/main.dart
