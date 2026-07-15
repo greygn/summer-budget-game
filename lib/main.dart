@@ -1,13 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:summer_budget_game/app_router.dart';
+import 'package:summer_budget_game/presentation/bloc/game/game_bloc.dart';
+import 'package:summer_budget_game/presentation/bloc/leaderboard/leaderboard_bloc.dart';
+import 'package:summer_budget_game/presentation/bloc/main_menu/main_menu_bloc.dart';
+import 'package:talker_flutter/talker_flutter.dart';
+import 'core/di/injection.dart';
 import 'l10n/app_localizations.dart';
+import 'package:ui_kit/theme/app_theme.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await configureDependencies();
+
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => getIt<MainMenuBloc>(),
+        ),
+        BlocProvider(
+          create: (context) => getIt<LeaderboardBloc>(),
+        ),
+        BlocProvider(
+          create: (context) => getIt<GameBloc>(),
+        ),
+      ],
+      child: MyApp(router: getIt<AppRouter>()),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  final AppRouter router;
+  const MyApp({super.key, required this.router});
 
   @override
   State<MyApp> createState() => MyAppState();
@@ -27,7 +54,11 @@ class MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      routerConfig: widget.router.config(
+          navigatorObservers: () => [TalkerRouteObserver(getIt<Talker>())]
+      ),
       locale: _locale,
       localizationsDelegates: const [
         AppLocalizations.delegate,
@@ -36,55 +67,10 @@ class MyAppState extends State<MyApp> {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      title: 'Flutter Demo',
-      theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
-      home: const MyHomePage(title: 'Summer Budget Game'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    final t = AppLocalizations.of(context)!;
-
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: .center,
-          children: [
-            Text(
-              t.languageIntroduction,
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                MyApp.of(context)?.setLocale(const Locale('en'));
-              },
-              child: Text("English"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                MyApp.of(context)?.setLocale(const Locale('ru'));
-              },
-              child: Text("Русский"),
-            ),
-          ],
-        ),
-      ),
+      title: 'Summer Budget Game',
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
+      themeMode: ThemeMode.system,
     );
   }
 }
