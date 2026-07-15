@@ -1,11 +1,8 @@
-name: Flutter setup
-description: Checkout, setup Flutter and install dependencies
+rname: Flutter setup
+description: Setup Flutter and install dependencies
 runs:
   using: composite
   steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
